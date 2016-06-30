@@ -60,7 +60,7 @@ public class LoginPanel extends JPanel {
         passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (passwordField.getText().length() == 16) {
+                if (passwordField.getText().length() == Constant) {
                     e.consume();
                     getToolkit().beep();
                 }
