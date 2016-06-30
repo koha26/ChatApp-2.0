@@ -1,5 +1,7 @@
 package gui;
 
+import logic.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,8 +17,7 @@ public class LoginPanel extends JPanel {
     private final ImageIcon loginButIconEntered = new ImageIcon("images/loginform/loginbut_entered.png");
 
     public LoginPanel() {
-        setBounds(25, 25, 940, 425);
-        setBackground(new Color(0, 0, 0, 170));
+        setBounds(25, 25, 940, 480);
         setOpaque(false);
         setLayout(null);
 
@@ -33,7 +34,7 @@ public class LoginPanel extends JPanel {
         add(nickLabel);
 
         nickField = new JTextField();
-        nickField.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        nickField.setFont(Fonts.typingFont);
         nickField.setBounds(480, 180, 240, 30);
         nickField.setHorizontalAlignment(JTextField.CENTER);
         nickField.addKeyListener(new KeyAdapter() {
@@ -54,13 +55,13 @@ public class LoginPanel extends JPanel {
         add(passwordLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        passwordField.setBounds(480, 240, 240, 35);
+        passwordField.setFont(Fonts.typingFont);
+        passwordField.setBounds(480, 240, 240, 30);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
         passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (passwordField.getText().length() == Constant) {
+                if (passwordField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
@@ -96,7 +97,7 @@ public class LoginPanel extends JPanel {
         add(loginButton);
 
         exitButton = new JButton("Exit ChatApp");
-        exitButton.setBounds(405, 385, 120, 30);
+        exitButton.setBounds(410, 385, 120, 30);
         exitButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
         exitButton.setContentAreaFilled(false);
         exitButton.setBorder(null);
