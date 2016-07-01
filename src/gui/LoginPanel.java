@@ -3,6 +3,7 @@ package gui;
 import logic.Constants;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -35,12 +36,13 @@ public class LoginPanel extends JPanel {
 
         nickField = new JTextField();
         nickField.setFont(Fonts.typingFont);
+        nickField.setBorder(null);
         nickField.setBounds(480, 180, 240, 30);
         nickField.setHorizontalAlignment(JTextField.CENTER);
         nickField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (nickField.getText().length() == 16) {
+                if (nickField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
@@ -55,6 +57,7 @@ public class LoginPanel extends JPanel {
         add(passwordLabel);
 
         passwordField = new JPasswordField();
+        passwordField.setBorder(null);
         passwordField.setFont(Fonts.typingFont);
         passwordField.setBounds(480, 240, 240, 30);
         passwordField.setHorizontalAlignment(JTextField.CENTER);
