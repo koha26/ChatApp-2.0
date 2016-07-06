@@ -10,7 +10,7 @@ public class User {
     private String  nickname;
     private String password;
     private InetAddress ipAddress;
-    private long uniqueID;
+    private int uniqueID;
 
     public User()  {
         this.nickname = "";
@@ -20,14 +20,14 @@ public class User {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        //TODO uniqueID
+        this.uniqueID = -1;
     }
 
-    public User(String nickname, String password, InetAddress ipAddress, long uniqueID) {
+    public User(String nickname, String password, InetAddress ipAddress, int uniqueID) {
         this.nickname = nickname;
         this.password = password;
         this.ipAddress = ipAddress;
-        //TODO this.uniqueID = uniqueID;
+        this.uniqueID = uniqueID;
     }
 
     public String getNickname() {
@@ -54,11 +54,12 @@ public class User {
         this.ipAddress = ipAddress;
     }
 
-    public long getUniqueID() {
+    public int getUniqueID() {
         return uniqueID;
     }
 
-    public void setUniqueID(long uniqueID) {
+    public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
     }
+
 }

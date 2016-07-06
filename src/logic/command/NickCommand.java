@@ -4,35 +4,20 @@ package logic.command;
  * Created by demo on 12.06.16.
  */
 public class NickCommand extends Command {
-    private String nickname;
+    private int uniqueID;
     private String version;
-    private boolean isBusy;
 
-    public NickCommand(String nickname, String version, boolean isBusy) {
-        this.nickname = nickname;
+    public NickCommand(int uniqueID, String version) {
+        this.uniqueID = uniqueID;
         this.version = version;
-        this.isBusy = isBusy;
     }
 
-    public NickCommand(){
-        this.nickname = "";
-        this.version = "";
+    public int getUniqueID() {
+        return uniqueID;
     }
 
-    public boolean isBusy() {
-        return isBusy;
-    }
-
-    public void setBusy(boolean isBusy) {
-        this.isBusy = isBusy;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUniqueID(int uniqueID) {
+        this.uniqueID = uniqueID;
     }
 
     public String getVersion() {
@@ -46,9 +31,8 @@ public class NickCommand extends Command {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("NickCommand{");
-        sb.append("nickname='").append(nickname).append('\'');
+        sb.append("uniqueID=").append(uniqueID);
         sb.append(", version='").append(version).append('\'');
-        sb.append(", isBusy=").append(isBusy);
         sb.append('}');
         return sb.toString();
     }
