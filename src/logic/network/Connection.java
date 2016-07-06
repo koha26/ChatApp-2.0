@@ -33,19 +33,19 @@ public class Connection {
         return true;
     }
 
-    public void sendNickCommand(String nick) throws IOException {
+    public void sendNickCommand(int uniqueID) throws IOException {
         OutputStream os = socket.getOutputStream();
         outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(nick, Constants.VERSION_ID, false);
+        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID, false);
         outputStream.writeObject(nickCommand);
         outputStream.flush();
         outputStream.close();
     }
 
-    public void sendNickCommandBusy(String nick) throws IOException {
+    public void sendNickCommandBusy(int uniqueID) throws IOException {
         OutputStream os = socket.getOutputStream();
         outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(nick, Constants.VERSION_ID, true);
+        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID, true);
         outputStream.writeObject(nickCommand);
         outputStream.flush();
         outputStream.close();
@@ -63,7 +63,7 @@ public class Connection {
     public void sendAccept() throws IOException {
         OutputStream os = socket.getOutputStream();
         outputStream = new ObjectOutputStream(os);
-        outputStream.writeObject(new AcceptConectionCommand());
+        outputStream.writeObject(new AcceptConnectionCommand());
         outputStream.flush();
         outputStream.close();
     }
