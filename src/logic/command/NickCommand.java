@@ -9,7 +9,7 @@ public class NickCommand extends Command {
     private String version;
     private boolean isBusy;
 
-    public NickCommand(int uniqueID, String version, boolean isBusy) {
+    public NickCommand(int uniqueID, String version) {
         this.uniqueID = uniqueID;
         this.version = version;
         this.isBusy = isBusy;

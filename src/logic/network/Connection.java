@@ -36,7 +36,7 @@ public class Connection {
     public void sendNickCommand(int uniqueID) throws IOException {
         OutputStream os = socket.getOutputStream();
         outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID, false);
+        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID);
         outputStream.writeObject(nickCommand);
         outputStream.flush();
         outputStream.close();
@@ -45,7 +45,7 @@ public class Connection {
     public void sendNickCommandBusy(int uniqueID) throws IOException {
         OutputStream os = socket.getOutputStream();
         outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID, true);
+        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID);
         outputStream.writeObject(nickCommand);
         outputStream.flush();
         outputStream.close();
