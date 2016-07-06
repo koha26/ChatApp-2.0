@@ -83,7 +83,7 @@ public class LoginPanel extends JPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(passwordField.getPassword());
+                setVisible(false);
             }
         });
         loginButton.addMouseListener(new MouseAdapter() {

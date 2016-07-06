@@ -28,7 +28,7 @@ public class PopUpMenu extends PopupMenu {
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                System.exit(-1);
             }
         });
         add(exitItem);
