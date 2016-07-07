@@ -40,7 +40,6 @@ public class Database {
             return 0;
         } else {
             int lastID = userMap.size();
-            userMap.get(lastID).getUniqueID();
             return lastID;
         }
     }
