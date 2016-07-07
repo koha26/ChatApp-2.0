@@ -62,4 +62,10 @@ public class User {
         this.uniqueID = uniqueID;
     }
 
+    @Override
+    public String toString() {
+        String st = "";
+        st += "nick = " + nickname + " password = " + password + " IP = " + ipAddress.toString() + " ID = " + uniqueID;
+        return st;
+    }
 }

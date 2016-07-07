@@ -7,12 +7,10 @@ public class NickCommand extends Command {
 
     private int uniqueID;
     private String version;
-    private boolean isBusy;
 
     public NickCommand(int uniqueID, String version) {
         this.uniqueID = uniqueID;
         this.version = version;
-        this.isBusy = isBusy;
     }
 
     public int getUniqueID() {
@@ -29,14 +27,6 @@ public class NickCommand extends Command {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public boolean isBusy() {
-        return isBusy;
-    }
-
-    public void setBusy(boolean busy) {
-        isBusy = busy;
     }
 
     @Override

@@ -51,7 +51,7 @@ public class LoginPanel extends JPanel {
         add(nickField);
 
         passwordLabel = new JLabel("Enter your password");
-        passwordLabel.setBounds(120, 240, 340, 35);
+        passwordLabel.setBounds(120, 235, 340, 35);
         passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
         passwordLabel.setForeground(Color.WHITE);
         add(passwordLabel);
