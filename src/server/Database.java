@@ -4,17 +4,20 @@ import logic.RegistrationModel;
 import logic.User;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeMap;
 
 public class Database {
 
     private Map<Integer, User> userMap;
+    private Map<User, Socket> userSocketMap;
 
     public Database() {
-        userMap = new HashMap<Integer, User>();
+        this.userMap = new HashMap<Integer, User>();
+        this.userSocketMap = new TreeMap<User, Socket>(new SortedByUniqueID());
     }
 
     public void addUser(RegistrationModel regModel) throws UnknownHostException {
@@ -24,6 +27,17 @@ public class Database {
             userMap.put(uniqueID, newUser);
             System.out.println("User registered: " + newUser.toString());
         }
+    }
+
+    public User registerUser(RegistrationModel regModel) throws UnknownHostException {
+        if (isNickAvailable(regModel.getNick())) { // FIXME by Koha: 10.07.2016
+            int uniqueID = getLastUserId() + 1;
+            User newUser = new User(regModel.getNick(), regModel.getPassword(), InetAddress.getLocalHost(), uniqueID);//+regModel
+            userMap.put(uniqueID, newUser);
+            return newUser;
+            //System.out.println("User registered: " + newUser.toString());
+        } else
+            return null;
     }
 
     public boolean isNickAvailable(String nick) {
@@ -46,6 +60,10 @@ public class Database {
 
     public User getUserById(int uniqueID) {
         return userMap.get(uniqueID);
+    }
+
+    public Map<User, Socket> getUserSocketMap() {
+        return userSocketMap;
     }
 
     public static void main(String[] args) throws UnknownHostException {

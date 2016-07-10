@@ -4,36 +4,37 @@ import logic.User;
 import logic.command.*;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Created by demo on 05.07.16.
  */
 public class Server {
-    private Map<User,Socket> userSocketMap;
+
     private int connectionsNumber;
     private ServerSocket serverSocket;
     private ArrayList<ClientThread> clientThreads;
     private Thread mainThread;
+    private Database database;
+    private BlockingQueue<ClientThread> clients;
 
     private final static int SERVER_PORT = 35770;
     private static InetAddress INET_ADDRESS;
 
-    public Server(int port){
+    public Server(int port) {
         try {
-            this.userSocketMap = new TreeMap<User, Socket>(new SortedByUniqueID());
             this.connectionsNumber = 0;
             this.serverSocket = new ServerSocket(port);
             INET_ADDRESS = serverSocket.getInetAddress();
-            clientThreads = new ArrayList<ClientThread>();
+            this.clientThreads = new ArrayList<ClientThread>();
+            this.database = new Database();
+            clients = new LinkedBlockingDeque<ClientThread>();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -41,23 +42,23 @@ public class Server {
         }
     }
 
-    public void run(){
+    public void run() {
         mainThread = Thread.currentThread();
-        while (true){
+        while (true) {
             try {
-                Socket newSocket = serverSocket.accept();
-                if (mainThread.isInterrupted()){
+                Socket newSocket = getNewConn();
+                if (mainThread.isInterrupted()) {
                     break;
-                }
-                else if (newSocket != null){
-                    ClientThread clThread = new ClientThread(newSocket);
-                    Thread thread = new Thread(clThread);
+                } else if (newSocket != null) {
+                    final ClientThread clThread = new ClientThread(newSocket);
+                    final Thread thread = new Thread(clThread);
 
                     thread.setDaemon(true);
                     thread.setPriority(Thread.NORM_PRIORITY);
                     thread.start();
 
-                    clientThreads.add(clThread);
+                    //clientThreads.add(clThread);
+                    clients.add(clThread);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -65,35 +66,41 @@ public class Server {
         }
     }
 
-    public void addUser(User newUser, Socket newSocket){
-        userSocketMap.put(newUser,newSocket);
+    private Socket getNewConn() {
+        Socket s = null;
+        try {
+            s = serverSocket.accept();
+        } catch (IOException e) {
+            // если ошибка в момент приема - "гасим" сервер
+        }
+        return s;
+    }
+
+    public void addUser(User newUser, Socket newSocket) {
+        database.getUserSocketMap().put(newUser, newSocket);
         incConnectionNumber();
     }
 
-    public void deleteUser(int uniqueID){
+    /*public void deleteUser(int uniqueID) {
         User comparatedUser = new User();
         comparatedUser.setUniqueID(uniqueID);
 
-        if (userSocketMap.containsKey(comparatedUser)){
+        if (userSocketMap.containsKey(comparatedUser)) {
             userSocketMap.remove(comparatedUser);
             decConnectionNumber();
         }
-    }
+    }*/
 
-    private void incConnectionNumber(){
+    private void incConnectionNumber() {
         this.connectionsNumber++;
     }
 
-    private void decConnectionNumber(){
+    private void decConnectionNumber() {
         this.connectionsNumber--;
     }
 
     public int getConnectionsNumber() {
         return connectionsNumber;
-    }
-
-    public Map<User, Socket> getUserSocketMap() {
-        return userSocketMap;
     }
 
     public ServerSocket getServerSocket() {
@@ -115,75 +122,80 @@ public class Server {
         new Server(45000).run();
     }
 
-/**
-Этот класс для выделения определнного потока для каждого
-нового клиента.
-*/
-    private class ClientThread implements Runnable{
-        private Socket socket;
-        private ObjectInputStream inputStream;
-        private ObjectOutputStream outputStream;
+    /**
+     * Этот класс для выделения определнного потока для каждого
+     * нового клиента.
+     */
+    private class ClientThread implements Runnable {
         private Command lastCommand;
         private int uniqueID_client;
+        private Connection connection;
 
-        public ClientThread(Socket socket){
-            try {
-                this.socket = socket;
-                this.inputStream = new ObjectInputStream(socket.getInputStream());
-                this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+        public ClientThread(Socket socket) throws IOException {
+            this.connection = new Connection(socket);
+        }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        public Connection getConnection() {
+            return connection;
+        }
+
+        public int getUniqueID_client() {
+            return uniqueID_client;
         }
 
         @Override
         public void run() { //очень сырой
-            while (!socket.isClosed()){
+            while (connection.isOpen()) {
                 try {
-                    Object receiveObject = inputStream.readObject();
+                    lastCommand = connection.receiveCommand();
 
-                    if (receiveObject instanceof Command){
-                        lastCommand = (Command) receiveObject;
+                    if (lastCommand != null) {
+                        if (lastCommand instanceof RegistrationCommand){
+
+                            RegistrationCommand rCommand = (RegistrationCommand) lastCommand;
+                            RegistrationStatusCommand rsCommand;
+                            if (database.isNickAvailable(rCommand.getRegModel().getNick())){
+                                User registeredUser = database.registerUser(rCommand.getRegModel());
+                                 rsCommand = new RegistrationStatusCommand(true, registeredUser);
+
+                            } else
+                                rsCommand = new RegistrationStatusCommand(false);
+                                connection.sendCommand(rsCommand);
+
+                        } else if (lastCommand instanceof NickCommand) {
+
+                            NickCommand nCommand = (NickCommand) lastCommand;
+                            uniqueID_client = nCommand.getUniqueID();
+
+                            User u = new User();
+                            u.setUniqueID(nCommand.getUniqueID());
+                            /*if (!userSocketMap.containsKey(u)) {
+                                close();
+                            }*/
+
+                        } else if (lastCommand instanceof SessionRequestCommand) {
+                            SessionRequestCommand crCommand = (SessionRequestCommand) lastCommand;
+
+                            User u = new User();
+                            u.setUniqueID(crCommand.getUniqueID_To());
+
+                            /*if (userSocketMap.containsKey(u)) {
+                                send(crCommand.getUniqueID_To(), crCommand);
+                            }*/
+
+                        } else if (lastCommand instanceof MessageCommand) {
+
+                            MessageCommand mCommand = (MessageCommand) lastCommand;
+                            send(mCommand.getUniqueID_To(), mCommand);
+
+                        } else if (lastCommand instanceof AcceptConnectionCommand) {
+
+                            AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
+                            send(acCommand.getUniqueID_To(), acCommand);
+
+                        }
                     } else close();
 
-                    if (lastCommand instanceof NickCommand){
-
-                        NickCommand nCommand = (NickCommand)lastCommand;
-                        uniqueID_client = nCommand.getUniqueID();
-
-                        User u = new User();
-                        u.setUniqueID(nCommand.getUniqueID());
-                        if (!userSocketMap.containsKey(u)){
-                           close();
-                        }
-
-                    } else if (lastCommand instanceof SessionRequestCommand){
-                        SessionRequestCommand crCommand = (SessionRequestCommand) lastCommand;
-
-                        User u = new User();
-                        u.setUniqueID(crCommand.getUniqueID_To());
-
-                        if (userSocketMap.containsKey(u)){
-                            send(crCommand.getUniqueID_To(), crCommand);
-                        }
-
-                    } else if (lastCommand instanceof MessageCommand){
-
-                        MessageCommand mCommand = (MessageCommand) lastCommand;
-                        send(mCommand.getUniqueID_To(), mCommand);
-
-                    } else if (lastCommand instanceof AcceptConnectionCommand){
-
-                        AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
-                        send(acCommand.getUniqueID_To(),acCommand);
-
-                    } else if (lastCommand instanceof RegistrationCommand){
-
-                        RegistrationCommand rCommand = (RegistrationCommand) lastCommand;
-                        addUser(rCommand.getUser(),socket);
-
-                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
@@ -192,12 +204,11 @@ public class Server {
             }
         }
 
-        public synchronized void send(int uniqueID_client, Command сommand){
-            for (ClientThread clientThread: clientThreads){
-                if (clientThread.uniqueID_client == uniqueID_client){
+        public synchronized void send(int uniqueID_client, Command command) {
+            for (ClientThread clientThread : clientThreads) {
+                if (clientThread.getUniqueID_client() == uniqueID_client) {
                     try {
-                        clientThread.outputStream.writeObject(сommand);
-                        clientThread.outputStream.flush();
+                        clientThread.getConnection().sendCommand(command);
                     } catch (IOException e) {
                         close();
                     }
@@ -205,15 +216,15 @@ public class Server {
             }
         }
 
-        public synchronized void close(){
+        public synchronized void close() {
             clientThreads.remove(this);
-            if (!socket.isClosed()){
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                connection.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
+
+
 }

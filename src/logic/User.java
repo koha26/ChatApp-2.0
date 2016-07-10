@@ -1,12 +1,13 @@
 package logic;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
  * Created by demo on 12.06.16.
  */
-public class User {
+public class User implements Serializable{
     private String  nickname;
     private String password;
     private InetAddress ipAddress;
