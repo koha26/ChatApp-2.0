@@ -1,6 +1,8 @@
 package logic;
 
-public class RegistrationModel {
+import java.io.Serializable;
+
+public class RegistrationModel implements Serializable{
 
     private String nick;
     private String password;

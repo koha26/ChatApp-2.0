@@ -13,4 +13,8 @@ public class RegistrationCommand extends Command {
     public RegistrationCommand(String nick, String password) {
         regModel = new RegistrationModel(nick, password);
     }
+
+    public RegistrationModel getRegModel() {
+        return regModel;
+    }
 }

@@ -1,37 +1,33 @@
 package server;
 
-import logic.Constants;
 import logic.User;
 import logic.command.*;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.rmi.UnknownHostException;
 import java.util.ArrayList;
 
 /**
  * Created by demo on 05.07.16.
  */
 public class Client {
-    private Socket socket;
-    private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
-    private BufferedReader userInput;
+    final BufferedReader userInput;
     private static int num = 0;
     private ArrayList<User> users = new ArrayList<User>();
     private Command lastCommand;
+    private User user;
+    private Connection connection;
 
-    public Client(String host, int port) {
-        try {
-            socket = new Socket(host, port);
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            userInput = new BufferedReader(new InputStreamReader(System.in));
-            new Thread(new Receiver()).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Client(String host, int port) throws IOException {
+        Socket socket = new Socket(host, port);
+        OutputStream os = socket.getOutputStream();
+        InputStream is = socket.getInputStream();
+        this.connection = new Connection(socket,os,is);
+
+        userInput = new BufferedReader(new InputStreamReader(System.in));
+        new Thread(new Receiver()).start();
 
     }
 
@@ -40,15 +36,15 @@ public class Client {
             num++;
             User user = new User("koha26", "1111", InetAddress.getLocalHost(), num);
             users.add(user);
-            RegistrationCommand rCommand = new RegistrationCommand();
-            rCommand.setUser(user);
-            objectOutputStream.writeObject(rCommand);
-            objectOutputStream.flush();
-            NickCommand nCommand = new NickCommand(user.getUniqueID(), Constants.VERSION_ID);
-            objectOutputStream.writeObject(nCommand);
-            objectOutputStream.flush();
+            RegistrationCommand rCommand = new RegistrationCommand("Kostya", "asdas");
+            //rCommand.setUser(user);
+            connection.sendCommand(rCommand); //для теста
 
-            if (num > 2) {
+            /*NickCommand nCommand = new NickCommand(user.getUniqueID(), Constants.VERSION_ID);
+            objectOutputStream.writeObject(nCommand);
+            objectOutputStream.flush();*/
+
+            /*if (num > 2) {
                 SessionRequestCommand srCommand = new SessionRequestCommand();
                 srCommand.setUniqueID_From(user.getUniqueID());
                 srCommand.setUniqueID_To(num - 2);
@@ -101,20 +97,18 @@ public class Client {
                         close();
                     }
                 }
-            }
+            }*/
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public synchronized void close() {
-        if (!socket.isClosed()) {
+        if (connection.isOpen()) {
             try {
-                socket.close();
+                connection.close();
                 System.exit(0);
             } catch (IOException ignored) {
                 ignored.printStackTrace();
@@ -123,29 +117,38 @@ public class Client {
     }
 
     public static void main(String[] args) {
-        new Client("localhost", 45000).run();
+        try {
+            new Client("localhost", 45000).run();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class Receiver implements Runnable {
 
         public void run() {
-            while (!socket.isClosed()) {
-                Object receiveObject = null;
+            while (connection.isOpen()) {
+
                 try {
-                    receiveObject = objectInputStream.readObject();
+                    lastCommand = connection.receiveCommand();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                if (lastCommand != null) {
 
-                if (receiveObject instanceof Command) {
-                    lastCommand = (Command) receiveObject;
-                } else close();
-
-                if (lastCommand instanceof MessageCommand) {
-                    MessageCommand mCommand = (MessageCommand) lastCommand;
-                    System.out.println(mCommand.getMessageText());
+                    if (lastCommand instanceof RegistrationStatusCommand) {
+                        RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) lastCommand;
+                        if (rsCommand.isRegistered()) {
+                            user = rsCommand.getUser();
+                            System.out.println(user);
+                        }
+                    }
+                    if (lastCommand instanceof MessageCommand) {
+                        MessageCommand mCommand = (MessageCommand) lastCommand;
+                        System.out.println(mCommand.getMessageText());
+                    }
                 }
             }
         }
