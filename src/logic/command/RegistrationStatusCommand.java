@@ -8,13 +8,14 @@ import logic.User;
 public class RegistrationStatusCommand extends Command {
     private boolean isRegistered;
     private User user;
+    private String exceptionDescription;
 
     public RegistrationStatusCommand(boolean isRegistered, User user){
         this.isRegistered = isRegistered;
         this.user = user;
     }
 
-    public RegistrationStatusCommand(boolean isRegistered){
+    public RegistrationStatusCommand(boolean isRegistered, String mesException){
         this.isRegistered = isRegistered;
         if (!isRegistered){
             this.user = null;
@@ -22,6 +23,11 @@ public class RegistrationStatusCommand extends Command {
             this.isRegistered = false;
             this.user = null;
         }
+        this.exceptionDescription = mesException;
+    }
+
+    public String getExceptionDescription() {
+        return exceptionDescription;
     }
 
     public boolean isRegistered() {

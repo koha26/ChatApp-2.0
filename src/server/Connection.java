@@ -1,14 +1,10 @@
 package server;
 
-import logic.Constants;
 import logic.command.*;
 
 import java.io.*;
 import java.net.Socket;
 
-/**
- * Created by demo on 12.06.16.
- */
 public class Connection {
     private Socket socket;
     private ObjectInputStream inputStream;
@@ -65,56 +61,6 @@ public class Connection {
             }
         }
         return true;
-    }
-
-    public void sendNickCommand(int uniqueID) throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID);
-        outputStream.writeObject(nickCommand);
-        outputStream.flush();
-        outputStream.close();
-    }
-
-    public void sendNickCommandBusy(int uniqueID) throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        NickCommand nickCommand = new NickCommand(uniqueID, Constants.VERSION_ID);
-        outputStream.writeObject(nickCommand);
-        outputStream.flush();
-        outputStream.close();
-    }
-
-    public void sendMessage(String messageText) throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        MessageCommand messageCommand = new MessageCommand(messageText);
-        outputStream.writeObject(messageCommand);
-        outputStream.flush();
-        outputStream.close();
-    }
-
-    public void sendAccept() throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        outputStream.writeObject(new AcceptConnectionCommand());
-        outputStream.flush();
-        outputStream.close();
-    }
-    public void sendReject() throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        outputStream.writeObject(new RejectCommand());
-        outputStream.flush();
-        outputStream.close();
-    }
-
-    public void sendDisconnect() throws IOException {
-        OutputStream os = socket.getOutputStream();
-        outputStream = new ObjectOutputStream(os);
-        outputStream.writeObject(new DisconnectCommand());
-        outputStream.flush();
-        outputStream.close();
     }
 
     public void sendCommand(Command command) throws IOException {

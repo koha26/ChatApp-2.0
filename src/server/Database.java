@@ -4,49 +4,71 @@ import logic.RegistrationModel;
 import logic.User;
 
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Database {
 
-    private Map<Integer, User> userMap;
-    private Map<User, Socket> userSocketMap;
+    private Map<String, User> userMap; // все пользователи
+    private Map<User, Connection> userOnline; // пользователи, которые онлайн
 
     public Database() {
-        this.userMap = new HashMap<Integer, User>();
-        this.userSocketMap = new TreeMap<User, Socket>(new SortedByUniqueID());
+        this.userMap = new HashMap<String , User>();
+        this.userOnline = new TreeMap<User, Connection>(new SortedByUniqueID());
     }
 
-    public void addUser(RegistrationModel regModel) throws UnknownHostException {
-        if (isNickAvailable(regModel.getNick())) { // FIXME: 07.07.2016
-            int uniqueID = getLastUserId() + 1;
-            User newUser = new User(regModel.getNick(), regModel.getPassword(), InetAddress.getLocalHost(), uniqueID);
-            userMap.put(uniqueID, newUser);
-            System.out.println("User registered: " + newUser.toString());
+    public void goOnline(User user, Connection connection){
+        if (connection.isOpen()){
+            this.userOnline.put(user,connection);
         }
+    }
+
+    public void goOffline(User user){
+        if (!userOnline.get(user).isOpen()){
+            this.userOnline.put(user,null);
+        }
+    }
+
+    public User checkUser(String nickname, String password){
+        for (User u: userMap.values()) {
+            if (u!= null && u.getNickname().equals(nickname) && u.getPassword().equals(password)){
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean isExist(String nickname){
+        return userMap.containsKey(nickname);
+    }
+
+    public boolean isOnline(String nickname){
+        if (userOnline.get(userMap.get(nickname)) != null){
+            return true;
+        } else
+            return false;
+    }
+
+    public void deleteUser(User user){
+        this.userMap.remove(user.getNickname());
+        this.userOnline.remove(user);
     }
 
     public User registerUser(RegistrationModel regModel) throws UnknownHostException {
         if (isNickAvailable(regModel.getNick())) { // FIXME by Koha: 10.07.2016
             int uniqueID = getLastUserId() + 1;
             User newUser = new User(regModel.getNick(), regModel.getPassword(), InetAddress.getLocalHost(), uniqueID);//+regModel
-            userMap.put(uniqueID, newUser);
+            userMap.put(regModel.getNick(), newUser);
             return newUser;
-            //System.out.println("User registered: " + newUser.toString());
         } else
             return null;
     }
 
-    public boolean isNickAvailable(String nick) {
-        boolean b = true;
-        for (Map.Entry<Integer, User> entry : userMap.entrySet()) {
-            if (entry.getValue().getNickname().equals(nick))
-                b = false;
-        }
-        return b;
+    public boolean isNickAvailable(String nickname) {
+        return !userMap.containsKey(nickname);
     }
 
     public int getLastUserId() {
@@ -59,18 +81,23 @@ public class Database {
     }
 
     public User getUserById(int uniqueID) {
-        return userMap.get(uniqueID);
+        for (Map.Entry entry :userMap.entrySet()) {
+            if (((User)entry.getValue()).getUniqueID() == uniqueID){
+                return (User) entry.getValue();
+            }
+        }
+        return null;
     }
 
-    public Map<User, Socket> getUserSocketMap() {
-        return userSocketMap;
+    public ArrayList<User> getUsersOnline() {
+        return (ArrayList<User>) userMap.values();
     }
 
     public static void main(String[] args) throws UnknownHostException {
         RegistrationModel rm1 = new RegistrationModel("Bob", "morcos");
         RegistrationModel rm2 = new RegistrationModel("koha", "iloveNIGGERS");
         Database db = new Database();
-        db.addUser(rm1);
-        db.addUser(rm2);
+        db.registerUser(rm1);
+        db.registerUser(rm2);
     }
 }

@@ -1,21 +1,20 @@
 package server;
 
+import logic.Constants;
+import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
 
-import java.io.*;
-import java.net.InetAddress;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
-import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Scanner;
 
-/**
- * Created by demo on 05.07.16.
- */
-public class Client {
-    final BufferedReader userInput;
-    private static int num = 0;
-    private ArrayList<User> users = new ArrayList<User>();
+public class Client extends Observable{
+
     private Command lastCommand;
     private User user;
     private Connection connection;
@@ -26,78 +25,74 @@ public class Client {
         InputStream is = socket.getInputStream();
         this.connection = new Connection(socket,os,is);
 
-        userInput = new BufferedReader(new InputStreamReader(System.in));
         new Thread(new Receiver()).start();
 
     }
 
-    public void run() {
+    /**
+     * Методы для отправки конкретных комманд, которые разрешены клиенту.
+     * Сделано для того, чтобы в пользовательском интерфейсе и обработчиках не было взаимодействия с коммандами напрямую.
+     **/
+    public void sendAcceptConnectionCommand(String nickname_To, String nickname_From, boolean isAccept){
+        AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+        acCommand.setNickname_From(nickname_From);
+        acCommand.setNickname_To(nickname_To);
+        acCommand.setAccept(isAccept);
+        send(acCommand);
+    }
+
+    public void sendMessageCommand(String nickname_To, String nickname_From, String messageText){
+        MessageCommand mCommand = new MessageCommand();
+        mCommand.setMessageText(messageText);
+        mCommand.setNickname_From(nickname_From);
+        mCommand.setNickname_To(nickname_To);
+        send(mCommand);
+    }
+
+    public void sendLoginCommand(String nickname, String password){
+        LoginCommand lCommand = new LoginCommand(nickname, password, Constants.VERSION_ID);
+        send(lCommand);
+    }
+
+    public void sendRegistrationCommand(RegistrationModel registrationModel){
+        RegistrationCommand rCommand = new RegistrationCommand(registrationModel);
+        send(rCommand);
+    }
+
+    public void sendRegistrationCommand(String nickname, String password){
+        RegistrationCommand rCommand = new RegistrationCommand(nickname, password);
+        send(rCommand);
+    }
+
+    public void sendSessionRequestCommand(String nickname_To, String nickname_From){
+        SessionRequestCommand srCommand = new SessionRequestCommand();
+        srCommand.setNickname_From(nickname_From);
+        srCommand.setNickname_To(nickname_To);
+        send(srCommand);
+    }
+
+    public void sendDisconnectCommand(){
+        send(new DisconnectCommand());
+    }
+
+    private void send(Command command) { // м-д для отправки комманд между сервером и к-том
         try {
-            num++;
-            User user = new User("koha26", "1111", InetAddress.getLocalHost(), num);
-            users.add(user);
-            RegistrationCommand rCommand = new RegistrationCommand("Kostya", "asdas");
-            //rCommand.setUser(user);
+            this.connection.sendCommand(command);
+        } catch (IOException e) {
+            System.out.println("Ошибка отправки!");
+        }
+    }
+
+    public void run() { // для тестов
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("nick: ");
+            String nick = sc.nextLine();
+            System.out.println("pass: ");
+            String pass = sc.nextLine();
+            RegistrationCommand rCommand = new RegistrationCommand(nick,pass);
+
             connection.sendCommand(rCommand); //для теста
-
-            /*NickCommand nCommand = new NickCommand(user.getUniqueID(), Constants.VERSION_ID);
-            objectOutputStream.writeObject(nCommand);
-            objectOutputStream.flush();*/
-
-            /*if (num > 2) {
-                SessionRequestCommand srCommand = new SessionRequestCommand();
-                srCommand.setUniqueID_From(user.getUniqueID());
-                srCommand.setUniqueID_To(num - 2);
-                objectOutputStream.writeObject(srCommand);
-                objectOutputStream.flush();
-            }
-            while (true) {
-                Object receiveObject = objectInputStream.readObject();
-
-                if (receiveObject instanceof Command) {
-                    lastCommand = (Command) receiveObject;
-                } else close();
-
-                if (lastCommand instanceof AcceptConnectionCommand) {
-                    AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
-                    if (acCommand.isAccept() && acCommand.getUniqueID_To() == user.getUniqueID()) {
-                        break;
-                    }
-                } else if (lastCommand instanceof SessionRequestCommand) {
-                    SessionRequestCommand crCommand = (SessionRequestCommand) lastCommand;
-                    AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
-                    acCommand.setUniqueID_To(crCommand.getUniqueID_From());
-                    acCommand.setUniqueID_From(crCommand.getUniqueID_To());
-
-                    objectOutputStream.writeObject(acCommand);
-                    objectOutputStream.flush();
-                }
-            }
-
-
-            System.out.println("Type phrase(s):");
-            while (true) {
-                String userString = null;
-                try {
-                    userString = userInput.readLine();
-                } catch (IOException ignored) {
-                }
-                if (userString == null || userString.length() == 0 || socket.isClosed()) {
-                    close();
-                    break;
-                } else {
-                    try {
-                        MessageCommand mCommand = new MessageCommand();
-                        mCommand.setUniqueID_From(user.getUniqueID());
-                        mCommand.setUniqueID_To(num-2);
-                        mCommand.setMessageText(userString);
-                        objectOutputStream.writeObject(mCommand);
-                        objectOutputStream.flush();
-                    } catch (IOException e) {
-                        close();
-                    }
-                }
-            }*/
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -105,20 +100,11 @@ public class Client {
         }
     }
 
-    public synchronized void close() {
-        if (connection.isOpen()) {
-            try {
-                connection.close();
-                System.exit(0);
-            } catch (IOException ignored) {
-                ignored.printStackTrace();
-            }
-        }
-    }
 
     public static void main(String[] args) {
         try {
             new Client("localhost", 45000).run();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -143,13 +129,92 @@ public class Client {
                         if (rsCommand.isRegistered()) {
                             user = rsCommand.getUser();
                             System.out.println(user);
+
+                            setChanged();
+                            notifyObservers(user);
+
+
+                            /*if (user.getNickname().equals("Kostya2")){
+                                SessionRequestCommand srCommand = new SessionRequestCommand();
+                                srCommand.setNickname_To("Kostya1");
+                                srCommand.setNickname_From(user.getNickname());
+                                try {
+                                    connection.sendCommand(srCommand);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }*/
                         }
-                    }
-                    if (lastCommand instanceof MessageCommand) {
+                    } else if (lastCommand instanceof MessageCommand) {
+
                         MessageCommand mCommand = (MessageCommand) lastCommand;
-                        System.out.println(mCommand.getMessageText());
+
+                        setChanged();
+                        notifyObservers(mCommand);
+
+                        /*System.out.println(mCommand.getNickname_From()+": "+mCommand.getMessageText());
+                        mCommand.setNickname_To(mCommand.getNickname_From());
+                        mCommand.setNickname_From(user.getNickname());
+                        mCommand.setMessageText("Хай. А я "+user.getNickname());
+                        try {
+                            connection.sendCommand(mCommand);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }*/
+
+                    } else if (lastCommand instanceof AcceptConnectionCommand){
+
+                        AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(acCommand);
+
+                        /*if (acCommand.isAccept()){
+                            System.out.println("мы начинает общение! =)");
+
+                            MessageCommand mCommand = new MessageCommand();
+                            mCommand.setNickname_From(user.getNickname());
+                            mCommand.setNickname_To(acCommand.getNickname_From());
+                            mCommand.setMessageText("Привет, меня зовут "+user.getNickname());
+
+                            try {
+                                connection.sendCommand(mCommand);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }*/
+
+                    } else if (lastCommand instanceof SessionRequestCommand){
+
+                        SessionRequestCommand srCommand = (SessionRequestCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(srCommand);
+
+                        /*AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+                        acCommand.setAccept(true);
+                        acCommand.setNickname_From(srCommand.getNickname_To());
+                        acCommand.setNickname_To(srCommand.getNickname_From());
+                        try {
+                            connection.sendCommand(acCommand);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }*/
+                    } else if (lastCommand instanceof DisconnectCommand){
+                        close();
                     }
+
                 }
+            }
+        }
+        public synchronized void close() {
+            try {
+                connection.close();
+            } catch (IOException e) {
+                //TODO
+            } finally {
+                user = null;
             }
         }
     }

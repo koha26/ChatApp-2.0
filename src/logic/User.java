@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * Created by demo on 12.06.16.
- */
 public class User implements Serializable{
     private String  nickname;
     private String password;
@@ -69,4 +66,18 @@ public class User implements Serializable{
         st += "nick = " + nickname + " password = " + password + " IP = " + ipAddress.toString() + " ID = " + uniqueID;
         return st;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (uniqueID != user.uniqueID) return false;
+
+        return true;
+    }
+
+
 }

@@ -4,9 +4,7 @@ import logic.User;
 
 import java.util.Comparator;
 
-/**
- * Created by demo on 05.07.16.
- */
+
 public class SortedByUniqueID implements Comparator<User> {
     @Override
     public int compare(User u1, User u2) {

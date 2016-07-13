@@ -11,18 +11,16 @@ import java.util.Date;
 public class MessageCommand extends Command {
     private String messageText;
     private Date date;
-    private int uniqueID_To;
-    private int uniqueID_From;
+    private String nickname_To;
+    private String nickname_From;
 
     public MessageCommand(){
         super();
         this.messageText = "";
-        this.date = new Date();
     }
     public MessageCommand(String messageText){
         super();
         this.messageText = messageText;
-        this.date = new Date();
     }
 
     public String getMessageText() {
@@ -33,20 +31,20 @@ public class MessageCommand extends Command {
         this.messageText = messageText;
     }
 
-    public int getUniqueID_To() {
-        return uniqueID_To;
+    public String getNickname_To() {
+        return nickname_To;
     }
 
-    public void setUniqueID_To(int uniqueID_To) {
-        this.uniqueID_To = uniqueID_To;
+    public void setNickname_To(String nickname_To) {
+        this.nickname_To = nickname_To;
     }
 
-    public int getUniqueID_From() {
-        return uniqueID_From;
+    public String getNickname_From() {
+        return nickname_From;
     }
 
-    public void setUniqueID_From(int uniqueID_From) {
-        this.uniqueID_From = uniqueID_From;
+    public void setNickname_From(String nickname_From) {
+        this.nickname_From = nickname_From;
     }
 
     public Date getDate() {
@@ -67,8 +65,7 @@ public class MessageCommand extends Command {
     public static void main(String[] args) {
         MessageCommand mCommand = new MessageCommand("Hidsfsdfsdfsdfsdfsdfs");
         mCommand.setDate(new Date());
-        mCommand.setUniqueID_From(123);
-        mCommand.setUniqueID_To(12);
+
 
         try {
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("ex.txt"));
