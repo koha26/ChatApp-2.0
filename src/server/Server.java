@@ -49,7 +49,8 @@ public class Server {
                     clients.add(clThread); //добавляем в очередь
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                //TODO
+
             }
         }
     }
@@ -99,7 +100,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        new Server(45000).run();
+        new Server(8621).run();
     }
 
     /**
@@ -138,6 +139,7 @@ public class Server {
                             RegistrationStatusCommand rsCommand;
                             user = registerUser(rCommand.getRegModel()); //рега через Database
                             if (user != null){ //если рега успешна - отправка полученого объекта User
+                                user.setIpAddress(connection.getSocket().getInetAddress());
                                 rsCommand = new RegistrationStatusCommand(true, user);
                                 goOnline(user,connection);
                             } else { //если не успешна - то отправляем причину
@@ -174,6 +176,11 @@ public class Server {
 
                                 sendTo(srCommand.getNickname_To(),srCommand);
 
+                            } else {
+                                AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+                                acCommand.setAccept(false);
+
+                                send(acCommand);
                             }
 
                         } else if (lastCommand instanceof AcceptConnectionCommand) { //получает принятие/отказ от запрашиваемого кл-та на д-г

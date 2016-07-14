@@ -8,6 +8,7 @@ import logic.command.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
 import java.util.Observable;
@@ -20,7 +21,8 @@ public class Client extends Observable{
     private Connection connection;
 
     public Client(String host, int port) throws IOException {
-        Socket socket = new Socket(host, port);
+        InetAddress address = InetAddress.getByName(host);
+        Socket socket = new Socket(address, port);
         OutputStream os = socket.getOutputStream();
         InputStream is = socket.getInputStream();
         this.connection = new Connection(socket,os,is);
@@ -103,8 +105,8 @@ public class Client extends Observable{
 
     public static void main(String[] args) {
         try {
-            new Client("localhost", 45000).run();
-
+            //new Client("localhost", 8621).run();
+            new Client("109.87.26.248",3580).run();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,14 +126,21 @@ public class Client extends Observable{
                 }
                 if (lastCommand != null) {
 
-                    if (lastCommand instanceof RegistrationStatusCommand) {
+                    if (lastCommand instanceof LoginStatusCommand){
+
+                        LoginStatusCommand lsCommand = (LoginStatusCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(lsCommand);
+
+                    } else if (lastCommand instanceof RegistrationStatusCommand) {
                         RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) lastCommand;
                         if (rsCommand.isRegistered()) {
                             user = rsCommand.getUser();
                             System.out.println(user);
 
                             setChanged();
-                            notifyObservers(user);
+                            notifyObservers(rsCommand);
 
 
                             /*if (user.getNickname().equals("Kostya2")){
@@ -144,6 +153,9 @@ public class Client extends Observable{
                                     e.printStackTrace();
                                 }
                             }*/
+                        } else {
+                            setChanged();
+                            notifyObservers(rsCommand);
                         }
                     } else if (lastCommand instanceof MessageCommand) {
 

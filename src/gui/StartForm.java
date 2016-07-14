@@ -1,6 +1,7 @@
 package gui;
 
 import logic.Constants;
+import logic.RegistrationModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class StartForm extends JFrame {
     private JPasswordField regPasswordField, regRepeatPasswordField;
     private JButton backButton, regRegistrationButton;
 
+    private int mode; // 0 - logicMode; 1 - registrationMode;
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -159,6 +161,8 @@ public class StartForm extends JFrame {
             }
         });
         add(exitButton);
+
+        mode = 0;
 
         // КОМПОНЕНТЫ ДЛЯ РЕГИСТРАЦИИ
 
@@ -316,6 +320,8 @@ public class StartForm extends JFrame {
         add(backButton);
         backButton.setVisible(false);
 
+        mode = 1;
+
         setLoginMode();
     }
 
@@ -344,6 +350,7 @@ public class StartForm extends JFrame {
         backButton.setVisible(false);
         registrationButton.setVisible(true);
         setTitle("ChatApp - Login");
+        mode = 0;
     }
 
     void setRegistrationMode() {
@@ -366,5 +373,63 @@ public class StartForm extends JFrame {
         registrationButton.setVisible(false);
         setTitle("ChatApp - Registration");
         backButton.setVisible(true);
+        mode = 1;
     }
+
+    public JButton getLoginButton() {
+        return loginButton;
+    }
+
+    public JButton getRegRegistrationButton() {
+        return regRegistrationButton;
+    }
+
+    public boolean isFieldFilled() {
+        if (mode == 0) {
+            if (!nickField.getText().equals("") && nickField.getText().length() >= 6 &&
+                    passwordField.getPassword().length >= 6) {
+                return true;
+            } else
+                return false;
+        } else {
+            if (!regNickTextField.getText().equals("") && regNickTextField.getText().length() >=6 &&
+                    regPasswordField.getPassword().length>=6 && regRepeatPasswordField.getPassword().length>=6 &&
+                        isPasswordsEquals()){
+                return true;
+            } else
+                return false;
+        }
+    }
+
+    private boolean isPasswordsEquals(){
+        if (regRepeatPasswordField.getPassword().length == regPasswordField.getPassword().length){
+            for (int i = 0; i < regPasswordField.getPassword().length; i++) {
+                if (regPasswordField.getPassword()[i] != regRepeatPasswordField.getPassword()[i]){
+                    return false;
+                }
+            }
+            return true;
+        } else
+            return false;
+    }
+
+    public RegistrationModel getRegistrationModel(){
+        RegistrationModel regModel;
+        if (mode == 1 && isFieldFilled() && isPasswordsEquals()){
+            regModel = new RegistrationModel(regNickTextField.getText(),String.valueOf(regPasswordField.getPassword()));
+            regModel.setName(regNameTextField.getName());
+            regModel.setSurname(regSurnameTextField.getText());
+            return regModel;
+        } else if (mode == 0 && isFieldFilled()) {
+            regModel = new RegistrationModel(nickField.getText(), String.valueOf(passwordField.getPassword()));
+            return regModel;
+        } else
+            return null;
+    }
+
+    public void showInfoMessage(String text){
+        JOptionPane.showMessageDialog(this,text);
+    }
+
+
 }

@@ -60,6 +60,7 @@ public class Database {
     public User registerUser(RegistrationModel regModel) throws UnknownHostException {
         if (isNickAvailable(regModel.getNick())) { // FIXME by Koha: 10.07.2016
             int uniqueID = getLastUserId() + 1;
+            Config.changeID(uniqueID);
             User newUser = new User(regModel.getNick(), regModel.getPassword(), InetAddress.getLocalHost(), uniqueID);//+regModel
             userMap.put(regModel.getNick(), newUser);
             return newUser;
@@ -72,12 +73,13 @@ public class Database {
     }
 
     public int getLastUserId() {
-        if (userMap.isEmpty()) {
+        /*if (userMap.isEmpty()) {
             return 0;
         } else {
             int lastID = userMap.size();
             return lastID;
-        }
+        }*/
+        return Config.UNIQUE_ID;
     }
 
     public User getUserById(int uniqueID) {
@@ -99,5 +101,8 @@ public class Database {
         Database db = new Database();
         db.registerUser(rm1);
         db.registerUser(rm2);
+
+        //db.changeID(db.getLastUserId());
+
     }
 }
