@@ -2,10 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class MainFormVisualisation {
     public static MainFormVisualisation window;
@@ -37,27 +34,28 @@ public class MainFormVisualisation {
         messageArea.setLineWrap(true);
         messageArea.setBackground(Color.LIGHT_GRAY);
         messageArea.setWrapStyleWord(true);
-        messageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        messageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        messageScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         mainFrame.setBounds(screenWidth / 4, screenHeight / 4, screenWidth / 2, screenHeight / 2);
 
-       /* mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setOpaque(false);/*
-        mainPanel.setBackground(Color.BLACK);*/
+        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setOpaque(false);
+        mainPanel.setBackground(Color.BLACK);
         mainFrame.setLayout(new GridBagLayout());
-        mainFrame.add(settingsButton, new GridBagConstraints(0, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainFrame.add(contactsButton, new GridBagConstraints(1, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainFrame.add(exitButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainFrame.add(friendsNick, new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 100), 0, 0));
+        mainPanel.add(settingsButton, new GridBagConstraints(0, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(contactsButton, new GridBagConstraints(1, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(exitButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(friendsNick, new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 100), 0, 0));
         JPanel lastPanel = new JPanel();
         lastPanel.setBackground(new Color(0, 0, 0, 150));
         lastPanel.setLayout(new GridBagLayout());
-        lastPanel.add(messageArea, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 100, 5, 100), 0, 0));
+        lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 100, 5, 100), 0, 0));
 
-        mainFrame.add(messageView, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainFrame.add(lastPanel, new GridBagConstraints(0, 2, GridBagConstraints.REMAINDER, 1, 1, 0.2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(messageView, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(lastPanel, new GridBagConstraints(0, 2, GridBagConstraints.REMAINDER, 1, 1, 0.2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
-       // mainFrame.add(mainPanel);
+        mainFrame.add(mainPanel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
         mainFrame.setVisible(true);
 
         exitButton.addActionListener(new ActionListener() {
@@ -74,7 +72,6 @@ public class MainFormVisualisation {
                     messageArea.setText("");
                 }
             }
-
         });
     }
 
