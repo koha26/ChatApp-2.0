@@ -11,7 +11,7 @@ public class MainFormVisualisation {
     private JButton settingsButton = new JButton("SETTINGS");
     private JButton contactsButton = new JButton("CONTACTS");
     private JButton exitButton = new JButton("EXIT");
-    private JLabel friendsNick = new JLabel("NICK");
+    private JLabel friendsNick = new JLabel("BOB_MORCOS");
     private JTextArea messageArea = new JTextArea();
     private JScrollPane messageScrollPane = new JScrollPane(messageArea);
     private MessageView messageView = new MessageView();
@@ -43,16 +43,20 @@ public class MainFormVisualisation {
         mainPanel.setOpaque(false);
         mainPanel.setBackground(Color.BLACK);
         mainFrame.setLayout(new GridBagLayout());
-        mainPanel.add(settingsButton, new GridBagConstraints(0, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainPanel.add(contactsButton, new GridBagConstraints(1, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainPanel.add(exitButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        mainPanel.add(friendsNick, new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 100), 0, 0));
+        mainPanel.add(settingsButton, new GridBagConstraints(0, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 75, 15, 2), 0, 0));
+        mainPanel.add(contactsButton, new GridBagConstraints(1, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 2), 0, 0));
+        mainPanel.add(exitButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 2), 0, 0));
+        mainPanel.add(friendsNick, new GridBagConstraints(3, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 85), 0, 0));
         JPanel lastPanel = new JPanel();
-        lastPanel.setBackground(new Color(0, 0, 0, 150));
+        lastPanel.setBackground(new Color(0, 0, 0, 0));
         lastPanel.setLayout(new GridBagLayout());
-        lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 100, 5, 100), 0, 0));
 
-        mainPanel.add(messageView, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        messageArea.setBackground(new Color(0, 0, 0, 150));
+        messageScrollPane.setOpaque(false);
+        messageScrollPane.getViewport().setOpaque(false);
+        lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 175, 5, 175), 0, 0));
+
+        mainPanel.add(messageView, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 75, 2, 75), 0, 0));
         mainPanel.add(lastPanel, new GridBagConstraints(0, 2, GridBagConstraints.REMAINDER, 1, 1, 0.2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
         mainFrame.add(mainPanel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
@@ -69,7 +73,10 @@ public class MainFormVisualisation {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
                     messageView.sendMessage(messageArea.getText());
+                    messageView.getMessage("Боб Моркос охуенный");
                     messageArea.setText("");
+                    mainPanel.repaint();
+                    mainPanel.revalidate();
                 }
             }
         });
