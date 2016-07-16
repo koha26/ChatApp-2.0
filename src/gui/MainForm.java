@@ -1,5 +1,6 @@
 package gui;
 
+import logic.Constants;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.LoginStatusCommand;
@@ -25,7 +26,9 @@ public class MainForm extends JFrame implements Observer {
         startForm = new StartForm();
 
         try {
-            client = new Client("37.115.230.165", 8621);
+            client = new Client(Constants.HOST, Constants.PORT);
+            client.start();
+
             //client = new Client("localhost", 8621);
         } catch (IOException e) {
             //TODO

@@ -14,28 +14,36 @@ import java.rmi.UnknownHostException;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class Client extends Observable{
+public class Client extends Observable {
 
     private Command lastCommand;
     private User user;
     private Connection connection;
+    private String host;
+    private int port;
 
-    public Client(String host, int port) throws IOException {
+    public Client(String host, int port) {
+        this.host = host;
+        this.port = port;
+        //через Properties получаем HOST & PORT server'a
+        //но пока так
+    }
+
+    public void start() throws IOException {
         InetAddress address = InetAddress.getByName(host);
         Socket socket = new Socket(address, port);
         OutputStream os = socket.getOutputStream();
         InputStream is = socket.getInputStream();
-        this.connection = new Connection(socket,os,is);
+        this.connection = new Connection(socket, os, is);
 
         new Thread(new Receiver()).start();
-
     }
 
     /**
      * Методы для отправки конкретных комманд, которые разрешены клиенту.
      * Сделано для того, чтобы в пользовательском интерфейсе и обработчиках не было взаимодействия с коммандами напрямую.
-     **/
-    public void sendAcceptConnectionCommand(String nickname_To, String nickname_From, boolean isAccept){
+     */
+    public void sendAcceptConnectionCommand(String nickname_To, String nickname_From, boolean isAccept) {
         AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
         acCommand.setNickname_From(nickname_From);
         acCommand.setNickname_To(nickname_To);
@@ -43,7 +51,7 @@ public class Client extends Observable{
         send(acCommand);
     }
 
-    public void sendMessageCommand(String nickname_To, String nickname_From, String messageText){
+    public void sendMessageCommand(String nickname_To, String nickname_From, String messageText) {
         MessageCommand mCommand = new MessageCommand();
         mCommand.setMessageText(messageText);
         mCommand.setNickname_From(nickname_From);
@@ -51,29 +59,29 @@ public class Client extends Observable{
         send(mCommand);
     }
 
-    public void sendLoginCommand(String nickname, String password){
+    public void sendLoginCommand(String nickname, String password) {
         LoginCommand lCommand = new LoginCommand(nickname, password, Constants.VERSION_ID);
         send(lCommand);
     }
 
-    public void sendRegistrationCommand(RegistrationModel registrationModel){
+    public void sendRegistrationCommand(RegistrationModel registrationModel) {
         RegistrationCommand rCommand = new RegistrationCommand(registrationModel);
         send(rCommand);
     }
 
-    public void sendRegistrationCommand(String nickname, String password){
+    public void sendRegistrationCommand(String nickname, String password) {
         RegistrationCommand rCommand = new RegistrationCommand(nickname, password);
         send(rCommand);
     }
 
-    public void sendSessionRequestCommand(String nickname_To, String nickname_From){
+    public void sendSessionRequestCommand(String nickname_To, String nickname_From) {
         SessionRequestCommand srCommand = new SessionRequestCommand();
         srCommand.setNickname_From(nickname_From);
         srCommand.setNickname_To(nickname_To);
         send(srCommand);
     }
 
-    public void sendDisconnectCommand(){
+    public void sendDisconnectCommand() {
         send(new DisconnectCommand());
     }
 
@@ -92,7 +100,7 @@ public class Client extends Observable{
             String nick = sc.nextLine();
             System.out.println("pass: ");
             String pass = sc.nextLine();
-            RegistrationCommand rCommand = new RegistrationCommand(nick,pass);
+            RegistrationCommand rCommand = new RegistrationCommand(nick, pass);
 
             connection.sendCommand(rCommand); //для теста
         } catch (UnknownHostException e) {
@@ -106,7 +114,9 @@ public class Client extends Observable{
     public static void main(String[] args) {
         try {
             //new Client("localhost", 8621).run();
-            new Client("109.87.26.248",3580).run();
+            Client client = new Client(Constants.HOST, Constants.PORT);
+            client.start();
+            client.run();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,7 +136,7 @@ public class Client extends Observable{
                 }
                 if (lastCommand != null) {
 
-                    if (lastCommand instanceof LoginStatusCommand){
+                    if (lastCommand instanceof LoginStatusCommand) {
 
                         LoginStatusCommand lsCommand = (LoginStatusCommand) lastCommand;
 
@@ -174,7 +184,7 @@ public class Client extends Observable{
                             e.printStackTrace();
                         }*/
 
-                    } else if (lastCommand instanceof AcceptConnectionCommand){
+                    } else if (lastCommand instanceof AcceptConnectionCommand) {
 
                         AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
 
@@ -197,7 +207,7 @@ public class Client extends Observable{
 
                         }*/
 
-                    } else if (lastCommand instanceof SessionRequestCommand){
+                    } else if (lastCommand instanceof SessionRequestCommand) {
 
                         SessionRequestCommand srCommand = (SessionRequestCommand) lastCommand;
 
@@ -213,13 +223,14 @@ public class Client extends Observable{
                         } catch (IOException e) {
                             e.printStackTrace();
                         }*/
-                    } else if (lastCommand instanceof DisconnectCommand){
+                    } else if (lastCommand instanceof DisconnectCommand) {
                         close();
                     }
 
                 }
             }
         }
+
         public synchronized void close() {
             try {
                 connection.close();

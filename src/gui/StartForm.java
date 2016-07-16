@@ -27,7 +27,7 @@ public class StartForm extends JFrame {
     private JPasswordField regPasswordField, regRepeatPasswordField;
     private JButton backButton, regRegistrationButton;
 
-    private int mode; // 0 - logicMode; 1 - registrationMode;
+    private Mode mode; // LOGIN_ON - logicMode; REGISTRATION_ON - registrationMode;
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -113,12 +113,6 @@ public class StartForm extends JFrame {
         loginButton.setBorder(null);
         loginButton.setFocusPainted(false);
         loginButton.setContentAreaFilled(false);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -162,7 +156,7 @@ public class StartForm extends JFrame {
         });
         add(exitButton);
 
-        mode = 0;
+        mode = Mode.LOGIN_ON;
 
         // КОМПОНЕНТЫ ДЛЯ РЕГИСТРАЦИИ
 
@@ -320,7 +314,7 @@ public class StartForm extends JFrame {
         add(backButton);
         backButton.setVisible(false);
 
-        mode = 1;
+        mode = Mode.REGISTRATION_ON;
 
         setLoginMode();
     }
@@ -350,7 +344,7 @@ public class StartForm extends JFrame {
         backButton.setVisible(false);
         registrationButton.setVisible(true);
         setTitle("ChatApp - Login");
-        mode = 0;
+        mode = Mode.LOGIN_ON;
     }
 
     void setRegistrationMode() {
@@ -373,7 +367,7 @@ public class StartForm extends JFrame {
         registrationButton.setVisible(false);
         setTitle("ChatApp - Registration");
         backButton.setVisible(true);
-        mode = 1;
+        mode = Mode.REGISTRATION_ON;
     }
 
     public JButton getLoginButton() {
@@ -385,7 +379,7 @@ public class StartForm extends JFrame {
     }
 
     public boolean isFieldFilled() {
-        if (mode == 0) {
+        if (mode == Mode.LOGIN_ON) {
             if (!nickField.getText().equals("") && nickField.getText().length() >= 6 &&
                     passwordField.getPassword().length >= 6) {
                 return true;
@@ -415,16 +409,24 @@ public class StartForm extends JFrame {
 
     public RegistrationModel getRegistrationModel(){
         RegistrationModel regModel;
-        if (mode == 1 && isFieldFilled() && isPasswordsEquals()){
+        if (mode == Mode.REGISTRATION_ON && isFieldFilled() && isPasswordsEquals()){
             regModel = new RegistrationModel(regNickTextField.getText(),String.valueOf(regPasswordField.getPassword()));
             regModel.setName(regNameTextField.getName());
             regModel.setSurname(regSurnameTextField.getText());
             return regModel;
-        } else if (mode == 0 && isFieldFilled()) {
+        } else if (mode == Mode.LOGIN_ON && isFieldFilled()) {
             regModel = new RegistrationModel(nickField.getText(), String.valueOf(passwordField.getPassword()));
             return regModel;
         } else
             return null;
+    }
+
+    public void setMode(Mode mode){
+        if (mode == Mode.LOGIN_ON){
+            setLoginMode();
+        } else if (mode == Mode.REGISTRATION_ON){
+            setRegistrationMode();
+        }
     }
 
     public void showInfoMessage(String text){
