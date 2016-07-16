@@ -52,6 +52,7 @@ public class MainFormVisualisation {
         lastPanel.setLayout(new GridBagLayout());
 
         messageArea.setBackground(new Color(0, 0, 0, 150));
+        messageArea.setForeground(Color.WHITE);
         messageScrollPane.setOpaque(false);
         messageScrollPane.getViewport().setOpaque(false);
         lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 175, 5, 175), 0, 0));
@@ -61,6 +62,9 @@ public class MainFormVisualisation {
 
         mainFrame.add(mainPanel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
         mainFrame.setVisible(true);
+        RepaintPanel repaintPanel = new RepaintPanel(mainPanel);
+        Thread repaintThread = new Thread(repaintPanel);
+        repaintThread.start();
 
         exitButton.addActionListener(new ActionListener() {
             @Override
