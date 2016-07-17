@@ -50,7 +50,7 @@ public class MainForm extends JFrame implements Observer {
             }
         });
 
-        startForm.getRegRegistrationButton().addActionListener(new ActionListener() {
+        startForm.getReg_registrationButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (startForm.isFieldFilled()) {

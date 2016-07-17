@@ -74,7 +74,7 @@ public class Application implements Observer{
             }
         });
 
-        this.startForm.getRegRegistrationButton().addActionListener(new ActionListener() {
+        this.startForm.getReg_registrationButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 

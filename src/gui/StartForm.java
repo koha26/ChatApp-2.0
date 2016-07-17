@@ -6,28 +6,35 @@ import logic.RegistrationModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class StartForm extends JFrame {
 
     private PopUpMenu popUpMenu;
 
-    private JLabel titleLabel, nickLabel, passwordLabel;
-    private JTextField nickField;
-    private JPasswordField passwordField;
-    private JButton loginButton, exitButton, registrationButton;
+    /*
+            Поля с приставкой log - для логин мода
+            Поля с приставкой reg - для регистрации
+     */
+
+    private JLabel helloLabel;
+    private JLabel log_nickLabel, log_passwordLabel;
+    private JLabel reg_nickLabel, reg_passwordLabel, reg_confirmPasswordLabel, reg_ageLabel,
+            reg_countryLabel, reg_nameLabel, reg_surnameLabel;
+    private JTextField log_nickField;
+    private JTextField reg_nickField, reg_nameField, reg_surnameField;
+    private JPasswordField log_passwordField;
+    private JPasswordField reg_passwordField, reg_confirmPasswordField;
+    private JButton loginButton, exitButton, registrationButton; // общие кнопки
+    private JButton reg_backButton, reg_registrationButton;
+    private JComboBox reg_yearComboBox, reg_monthComboBox, reg_dayComboBox;
 
     private final ImageIcon loginButIcon = new ImageIcon("images/loginform/loginbut.png");
     private final ImageIcon loginButIconEntered = new ImageIcon("images/loginform/loginbut_entered.png");
     private final ImageIcon regButIcon = new ImageIcon("images/loginform/regbut.png");
     private final ImageIcon regButIconEntered = new ImageIcon("images/loginform/regbut_entered.png");
 
-    private JLabel regNickLabel, regPasswordLabel, regRepeatPasswordLabel, regAgeLabel,
-            regCountryLabel, regNameLabel, regSurnameLabel;
-    private JTextField regNickTextField, regNameTextField, regSurnameTextField;
-    private JPasswordField regPasswordField, regRepeatPasswordField;
-    private JButton backButton, regRegistrationButton;
-
-    private Mode mode; // LOGIN_ON - logicMode; REGISTRATION_ON - registrationMode;
+    private Mode mode; // LOGIN_ON - loginMode; REGISTRATION_ON - registrationMode;
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -42,68 +49,70 @@ public class StartForm extends JFrame {
     public StartForm() {
         super("ChatApp - Login");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1000, 500);
-        setLocationRelativeTo(null);
+        setSize(1000, 500); // размер, можно потом поменять мб
+        setLocationRelativeTo(null); // окно при запуске появляется по центру монитора
         setResizable(false);
-        setContentPane(new JLabel(Images.backgroundImage));
-        //setUndecorated(true);
-        setIconImage(Images.appIcon.getImage());
+        setContentPane(new JLabel(Images.backgroundImage)); // установка фона
+        //setUndecorated(true); // метод, который убирает виндосоуские кнопки (свернуть, выход и т.д.)
+        setIconImage(Images.appIcon.getImage()); // иконка фрейма
         setLayout(null);
 
         popUpMenu = new PopUpMenu();
         popUpMenu.setPopUpMenu();
 
-        // КОМПОНЕНТЫ ДЛЯ ЛОГИНА
+        /*
+                Компоненты для логин мода
+         */
 
-        titleLabel = new JLabel("Hello!");
-        titleLabel.setBounds(370, 25, 300, 90);
-        titleLabel.setFont(new Font("Century Gothic", Font.PLAIN, 72));
-        titleLabel.setForeground(Color.WHITE);
-        add(titleLabel);
+        helloLabel = new JLabel("Hello!");
+        helloLabel.setBounds(370, 25, 300, 90);
+        helloLabel.setFont(new Font("Century Gothic", Font.PLAIN, 72));
+        helloLabel.setForeground(Color.WHITE);
+        add(helloLabel);
 
-        nickLabel = new JLabel("Enter your nick");
-        nickLabel.setBounds(165, 180, 250, 30);
-        nickLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
-        nickLabel.setForeground(Color.WHITE);
-        add(nickLabel);
+        log_nickLabel = new JLabel("Enter your nick");
+        log_nickLabel.setBounds(165, 180, 250, 30);
+        log_nickLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
+        log_nickLabel.setForeground(Color.WHITE);
+        add(log_nickLabel);
 
-        nickField = new JTextField();
-        nickField.setFont(Fonts.typingFont);
-        nickField.setBorder(null);
-        nickField.setBounds(480, 180, 240, 30);
-        nickField.setHorizontalAlignment(JTextField.CENTER);
-        nickField.addKeyListener(new KeyAdapter() {
+        log_nickField = new JTextField();
+        log_nickField.setFont(Fonts.typingFont);
+        log_nickField.setBorder(null);
+        log_nickField.setBounds(480, 180, 240, 30);
+        log_nickField.setHorizontalAlignment(JTextField.CENTER);
+        log_nickField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (nickField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (log_nickField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(nickField);
+        add(log_nickField);
 
-        passwordLabel = new JLabel("Enter your password");
-        passwordLabel.setBounds(120, 235, 340, 35);
-        passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
-        passwordLabel.setForeground(Color.WHITE);
-        add(passwordLabel);
+        log_passwordLabel = new JLabel("Enter your password");
+        log_passwordLabel.setBounds(120, 235, 340, 35);
+        log_passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
+        log_passwordLabel.setForeground(Color.WHITE);
+        add(log_passwordLabel);
 
-        passwordField = new JPasswordField();
-        passwordField.setBorder(null);
-        passwordField.setFont(Fonts.typingFont);
-        passwordField.setBounds(480, 240, 240, 30);
-        passwordField.setHorizontalAlignment(JTextField.CENTER);
-        passwordField.addKeyListener(new KeyAdapter() {
+        log_passwordField = new JPasswordField();
+        log_passwordField.setBorder(null);
+        log_passwordField.setFont(Fonts.typingFont);
+        log_passwordField.setBounds(480, 240, 240, 30);
+        log_passwordField.setHorizontalAlignment(JTextField.CENTER);
+        log_passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (passwordField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (log_passwordField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(passwordField);
+        add(log_passwordField);
 
         loginButton = new JButton();
         loginButton.setBounds(380, 300, 185, 50);
@@ -158,215 +167,254 @@ public class StartForm extends JFrame {
 
         mode = Mode.LOGIN_ON;
 
-        // КОМПОНЕНТЫ ДЛЯ РЕГИСТРАЦИИ
+        /*
+                Компоненты для регистрационного мода
+         */
 
-        regNickLabel = new JLabel("Nickname");
-        regNickLabel.setBounds(90, 150, 180, 30);
-        regNickLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        regNickLabel.setForeground(Color.WHITE);
-        add(regNickLabel);
+        reg_nickLabel = new JLabel("Nickname");
+        reg_nickLabel.setBounds(90, 150, 180, 30);
+        reg_nickLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_nickLabel.setForeground(Color.WHITE);
+        add(reg_nickLabel);
 
 
-        regNickTextField = new JTextField();
-        regNickTextField.setFont(Fonts.typingFont);
-        regNickTextField.setBorder(null);
-        regNickTextField.setBounds(180, 150, 240, 30);
-        regNickTextField.setHorizontalAlignment(JTextField.CENTER);
-        regNickTextField.addKeyListener(new KeyAdapter() {
+        reg_nickField = new JTextField();
+        reg_nickField.setFont(Fonts.typingFont);
+        reg_nickField.setBorder(null);
+        reg_nickField.setBounds(180, 150, 240, 30);
+        reg_nickField.setHorizontalAlignment(JTextField.CENTER);
+        reg_nickField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (regNickTextField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (reg_nickField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(regNickTextField);
+        add(reg_nickField);
 
-        regNameLabel = new JLabel("Name");
-        regNameLabel.setBounds(120, 200, 100, 30);
-        regNameLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        regNameLabel.setForeground(Color.WHITE);
-        add(regNameLabel);
+        reg_nameLabel = new JLabel("Name");
+        reg_nameLabel.setBounds(120, 200, 100, 30);
+        reg_nameLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_nameLabel.setForeground(Color.WHITE);
+        add(reg_nameLabel);
 
-        regNameTextField = new JTextField();
-        regNameTextField.setFont(Fonts.typingFont);
-        regNameTextField.setBorder(null);
-        regNameTextField.setBounds(180, 200, 240, 30);
-        regNameTextField.setHorizontalAlignment(JTextField.CENTER);
-        regNameTextField.addKeyListener(new KeyAdapter() {
+        reg_nameField = new JTextField();
+        reg_nameField.setFont(Fonts.typingFont);
+        reg_nameField.setBorder(null);
+        reg_nameField.setBounds(180, 200, 240, 30);
+        reg_nameField.setHorizontalAlignment(JTextField.CENTER);
+        reg_nameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (regNameTextField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (reg_nameField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(regNameTextField);
+        add(reg_nameField);
 
-        regSurnameLabel = new JLabel("Surname");
-        regSurnameLabel.setBounds(100, 250, 100, 30);
-        regSurnameLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        regSurnameLabel.setForeground(Color.WHITE);
-        add(regSurnameLabel);
+        reg_surnameLabel = new JLabel("Surname");
+        reg_surnameLabel.setBounds(100, 250, 100, 30);
+        reg_surnameLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_surnameLabel.setForeground(Color.WHITE);
+        add(reg_surnameLabel);
 
-        regSurnameTextField = new JTextField();
-        regSurnameTextField.setFont(Fonts.typingFont);
-        regSurnameTextField.setBorder(null);
-        regSurnameTextField.setBounds(180, 250, 240, 30);
-        regSurnameTextField.setHorizontalAlignment(JTextField.CENTER);
-        regSurnameTextField.addKeyListener(new KeyAdapter() {
+        reg_surnameField = new JTextField();
+        reg_surnameField.setFont(Fonts.typingFont);
+        reg_surnameField.setBorder(null);
+        reg_surnameField.setBounds(180, 250, 240, 30);
+        reg_surnameField.setHorizontalAlignment(JTextField.CENTER);
+        reg_surnameField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (regSurnameTextField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (reg_surnameField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(regSurnameTextField);
+        add(reg_surnameField);
 
-        regPasswordLabel = new JLabel("Password");
-        regPasswordLabel.setBounds(500, 150, 180, 30);
-        regPasswordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        regPasswordLabel.setForeground(Color.WHITE);
-        add(regPasswordLabel);
+        reg_passwordLabel = new JLabel("Password");
+        reg_passwordLabel.setBounds(500, 150, 180, 30);
+        reg_passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_passwordLabel.setForeground(Color.WHITE);
+        add(reg_passwordLabel);
 
-        regPasswordField = new JPasswordField();
-        regPasswordField.setBorder(null);
-        regPasswordField.setFont(Fonts.typingFont);
-        regPasswordField.setBounds(585, 150, 240, 30);
-        regPasswordField.setHorizontalAlignment(JTextField.CENTER);
-        regPasswordField.addKeyListener(new KeyAdapter() {
+        reg_passwordField = new JPasswordField();
+        reg_passwordField.setBorder(null);
+        reg_passwordField.setFont(Fonts.typingFont);
+        reg_passwordField.setBounds(585, 150, 240, 30);
+        reg_passwordField.setHorizontalAlignment(JTextField.CENTER);
+        reg_passwordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (regPasswordField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (reg_passwordField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(regPasswordField);
+        add(reg_passwordField);
 
-        regRepeatPasswordLabel = new JLabel("Confirm password");
-        regRepeatPasswordLabel.setBounds(435, 200, 180, 30);
-        regRepeatPasswordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        regRepeatPasswordLabel.setForeground(Color.WHITE);
-        add(regRepeatPasswordLabel);
+        reg_confirmPasswordLabel = new JLabel("Confirm password");
+        reg_confirmPasswordLabel.setBounds(435, 200, 180, 30);
+        reg_confirmPasswordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_confirmPasswordLabel.setForeground(Color.WHITE);
+        add(reg_confirmPasswordLabel);
 
-        regRepeatPasswordField = new JPasswordField();
-        regRepeatPasswordField.setBorder(null);
-        regRepeatPasswordField.setFont(Fonts.typingFont);
-        regRepeatPasswordField.setBounds(585, 200, 240, 30);
-        regRepeatPasswordField.setHorizontalAlignment(JTextField.CENTER);
-        regRepeatPasswordField.addKeyListener(new KeyAdapter() {
+        reg_confirmPasswordField = new JPasswordField();
+        reg_confirmPasswordField.setBorder(null);
+        reg_confirmPasswordField.setFont(Fonts.typingFont);
+        reg_confirmPasswordField.setBounds(585, 200, 240, 30);
+        reg_confirmPasswordField.setHorizontalAlignment(JTextField.CENTER);
+        reg_confirmPasswordField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (regRepeatPasswordField.getText().length() == Constants.MAX_NICK_LENGTH) {
+                if (reg_confirmPasswordField.getText().length() == Constants.MAX_NICK_LENGTH) {
                     e.consume();
                     getToolkit().beep();
                 }
             }
         });
-        add(regRepeatPasswordField);
+        add(reg_confirmPasswordField);
 
-        regRegistrationButton = new JButton();
-        regRegistrationButton.setBounds(380, 300, 185, 50);
-        regRegistrationButton.setBackground(new Color(0, 0, 0, 0));
-        regRegistrationButton.setOpaque(false);
-        regRegistrationButton.setIcon(regButIcon);
-        regRegistrationButton.setBorder(null);
-        regRegistrationButton.setFocusPainted(false);
-        regRegistrationButton.setContentAreaFilled(false);
-        regRegistrationButton.addActionListener(new ActionListener() {
+        reg_registrationButton = new JButton();
+        reg_registrationButton.setBounds(380, 300, 185, 50);
+        reg_registrationButton.setBackground(new Color(0, 0, 0, 0));
+        reg_registrationButton.setOpaque(false);
+        reg_registrationButton.setIcon(regButIcon);
+        reg_registrationButton.setBorder(null);
+        reg_registrationButton.setFocusPainted(false);
+        reg_registrationButton.setContentAreaFilled(false);
+        reg_registrationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setLoginMode();
+                isDateCorrect(reg_monthComboBox.getSelectedItem(), reg_dayComboBox.getSelectedItem());
             }
         });
-        regRegistrationButton.addMouseListener(new MouseAdapter() {
+        reg_registrationButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                regRegistrationButton.setIcon(regButIconEntered);
+                reg_registrationButton.setIcon(regButIconEntered);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                regRegistrationButton.setIcon(regButIcon);
+                reg_registrationButton.setIcon(regButIcon);
             }
         });
-        add(regRegistrationButton);
+        add(reg_registrationButton);
 
-        backButton = new JButton("Back to login form");
-        backButton.setBounds(277, 360, 380, 30);
-        backButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
-        backButton.setContentAreaFilled(false);
-        backButton.setBorder(null);
-        backButton.setFocusPainted(false);
-        backButton.setForeground(Color.WHITE);
-        backButton.addActionListener(new ActionListener() {
+        reg_backButton = new JButton("Back to login form");
+        reg_backButton.setBounds(277, 360, 380, 30);
+        reg_backButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
+        reg_backButton.setContentAreaFilled(false);
+        reg_backButton.setBorder(null);
+        reg_backButton.setFocusPainted(false);
+        reg_backButton.setForeground(Color.WHITE);
+        reg_backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setLoginMode();
             }
         });
-        add(backButton);
-        backButton.setVisible(false);
+        add(reg_backButton);
 
-        mode = Mode.REGISTRATION_ON;
+        reg_ageLabel = new JLabel("Date of birth");
+        reg_ageLabel.setBounds(475, 250, 150, 30);
+        reg_ageLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        reg_ageLabel.setForeground(Color.WHITE);
+        add(reg_ageLabel);
 
-        setLoginMode();
+        ArrayList<Integer> yearsList = new ArrayList<Integer>(); // модель для комбобокса годов
+        for (int year = 1950; year < 2017; year++)
+            yearsList.add(year);
+
+        String[] monthsList = { "January", "February", "March", "April", "May", "June", "July", "August",
+                "September", "October", "November", "December" }; // модель для комбобоса месяцев
+
+        ArrayList<Integer> daysList = new ArrayList<Integer>(); // модель для комбобокса дней
+        for (int day = 1; day < 32; day++)
+            daysList.add(day);
+
+        reg_yearComboBox = new JComboBox(new DefaultComboBoxModel(yearsList.toArray()));
+        reg_yearComboBox.setBounds(585, 250, 70, 30);
+        reg_yearComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        add(reg_yearComboBox);
+
+        reg_monthComboBox = new JComboBox(monthsList);
+        reg_monthComboBox.setBounds(670, 250, 90, 30);
+        reg_monthComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        add(reg_monthComboBox);
+
+        reg_dayComboBox = new JComboBox(daysList.toArray());
+        reg_dayComboBox.setBounds(775, 250, 50, 30);
+        reg_dayComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        add(reg_dayComboBox);
+
+        setMode(Mode.LOGIN_ON);
     }
 
     void setLoginMode() {
-        nickLabel.setVisible(true);
-        nickField.setVisible(true);
-        passwordLabel.setVisible(true);
-        passwordField.setVisible(true);
+        log_nickLabel.setVisible(true);
+        log_nickField.setVisible(true);
+        log_passwordLabel.setVisible(true);
+        log_passwordField.setVisible(true);
         loginButton.setVisible(true);
-        regNickLabel.setVisible(false);
-        regNickTextField.setVisible(false);
-        regPasswordLabel.setVisible(false);
-        regPasswordField.setVisible(false);
-        regRepeatPasswordField.setVisible(false);
-        regRepeatPasswordLabel.setVisible(false);
-        regNameLabel.setVisible(false);
-        regNameTextField.setVisible(false);
-        regSurnameLabel.setVisible(false);
-        regSurnameTextField.setVisible(false);
-        regRegistrationButton.setVisible(false);
-        regNickTextField.setText(null);
-        regSurnameTextField.setText(null);
-        regNameTextField.setText(null);
-        regPasswordField.setText(null);
-        regRepeatPasswordField.setText(null);
-        backButton.setVisible(false);
+        reg_nickLabel.setVisible(false);
+        reg_nickField.setVisible(false);
+        reg_passwordLabel.setVisible(false);
+        reg_passwordField.setVisible(false);
+        reg_confirmPasswordField.setVisible(false);
+        reg_confirmPasswordLabel.setVisible(false);
+        reg_nameLabel.setVisible(false);
+        reg_nameField.setVisible(false);
+        reg_surnameLabel.setVisible(false);
+        reg_surnameField.setVisible(false);
+        reg_registrationButton.setVisible(false);
+        reg_nickField.setText(null);
+        reg_surnameField.setText(null);
+        reg_nameField.setText(null);
+        reg_passwordField.setText(null);
+        reg_confirmPasswordField.setText(null);
+        reg_backButton.setVisible(false);
         registrationButton.setVisible(true);
+        reg_dayComboBox.setVisible(false);
+        reg_monthComboBox.setVisible(false);
+        reg_yearComboBox.setVisible(false);
+        reg_ageLabel.setVisible(false);
         setTitle("ChatApp - Login");
         mode = Mode.LOGIN_ON;
     }
 
     void setRegistrationMode() {
-        nickLabel.setVisible(false);
-        nickField.setVisible(false);
-        passwordLabel.setVisible(false);
-        passwordField.setVisible(false);
+        log_nickLabel.setVisible(false);
+        log_nickField.setVisible(false);
+        log_passwordLabel.setVisible(false);
+        log_passwordField.setVisible(false);
         loginButton.setVisible(false);
-        regNickLabel.setVisible(true);
-        regNickTextField.setVisible(true);
-        regPasswordLabel.setVisible(true);
-        regPasswordField.setVisible(true);
-        regRepeatPasswordField.setVisible(true);
-        regRepeatPasswordLabel.setVisible(true);
-        regNameLabel.setVisible(true);
-        regNameTextField.setVisible(true);
-        regSurnameLabel.setVisible(true);
-        regSurnameTextField.setVisible(true);
-        regRegistrationButton.setVisible(true);
+        reg_nickLabel.setVisible(true);
+        reg_nickField.setVisible(true);
+        reg_passwordLabel.setVisible(true);
+        reg_passwordField.setVisible(true);
+        reg_confirmPasswordField.setVisible(true);
+        reg_confirmPasswordLabel.setVisible(true);
+        reg_nameLabel.setVisible(true);
+        reg_nameField.setVisible(true);
+        reg_surnameLabel.setVisible(true);
+        reg_surnameField.setVisible(true);
+        reg_registrationButton.setVisible(true);
         registrationButton.setVisible(false);
         setTitle("ChatApp - Registration");
-        backButton.setVisible(true);
+        reg_backButton.setVisible(true);
+        reg_dayComboBox.setVisible(true);
+        reg_monthComboBox.setVisible(true);
+        reg_yearComboBox.setVisible(true);
+        reg_ageLabel.setVisible(true);
         mode = Mode.REGISTRATION_ON;
     }
 
@@ -374,20 +422,20 @@ public class StartForm extends JFrame {
         return loginButton;
     }
 
-    public JButton getRegRegistrationButton() {
-        return regRegistrationButton;
+    public JButton getReg_registrationButton() {
+        return reg_registrationButton;
     }
 
     public boolean isFieldFilled() {
         if (mode == Mode.LOGIN_ON) {
-            if (!nickField.getText().equals("") && nickField.getText().length() >= 6 &&
-                    passwordField.getPassword().length >= 6) {
+            if (!log_nickField.getText().equals("") && log_nickField.getText().length() >= 6 &&
+                    log_passwordField.getPassword().length >= 6) {
                 return true;
             } else
                 return false;
         } else {
-            if (!regNickTextField.getText().equals("") && regNickTextField.getText().length() >=6 &&
-                    regPasswordField.getPassword().length>=6 && regRepeatPasswordField.getPassword().length>=6 &&
+            if (!reg_nickField.getText().equals("") && reg_nickField.getText().length() >=6 &&
+                    reg_passwordField.getPassword().length>=6 && reg_confirmPasswordField.getPassword().length>=6 &&
                         isPasswordsEquals()){
                 return true;
             } else
@@ -396,9 +444,9 @@ public class StartForm extends JFrame {
     }
 
     private boolean isPasswordsEquals(){
-        if (regRepeatPasswordField.getPassword().length == regPasswordField.getPassword().length){
-            for (int i = 0; i < regPasswordField.getPassword().length; i++) {
-                if (regPasswordField.getPassword()[i] != regRepeatPasswordField.getPassword()[i]){
+        if (reg_confirmPasswordField.getPassword().length == reg_passwordField.getPassword().length){
+            for (int i = 0; i < reg_passwordField.getPassword().length; i++) {
+                if (reg_passwordField.getPassword()[i] != reg_confirmPasswordField.getPassword()[i]){
                     return false;
                 }
             }
@@ -410,12 +458,15 @@ public class StartForm extends JFrame {
     public RegistrationModel getRegistrationModel(){
         RegistrationModel regModel;
         if (mode == Mode.REGISTRATION_ON && isFieldFilled() && isPasswordsEquals()){
-            regModel = new RegistrationModel(regNickTextField.getText(),String.valueOf(regPasswordField.getPassword()));
-            regModel.setName(regNameTextField.getName());
-            regModel.setSurname(regSurnameTextField.getText());
+            regModel = new RegistrationModel(reg_nickField.getText(),String.valueOf(reg_passwordField.getPassword()));
+            regModel.setName(reg_nameField.getName());
+            regModel.setSurname(reg_surnameField.getText());
+            if (isDateCorrect(reg_monthComboBox.getSelectedItem(), reg_dayComboBox.getSelectedItem()));
+                regModel.setAge((String) reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
+                    + " " + reg_dayComboBox.getSelectedItem());
             return regModel;
         } else if (mode == Mode.LOGIN_ON && isFieldFilled()) {
-            regModel = new RegistrationModel(nickField.getText(), String.valueOf(passwordField.getPassword()));
+            regModel = new RegistrationModel(log_nickField.getText(), String.valueOf(log_passwordField.getPassword()));
             return regModel;
         } else
             return null;
@@ -429,9 +480,21 @@ public class StartForm extends JFrame {
         }
     }
 
-    public void showInfoMessage(String text){
-        JOptionPane.showMessageDialog(this,text);
+    public void showInfoMessage(String text) {
+        JOptionPane.showMessageDialog(this, text);
     }
 
+    public void showErrorMessage(String text) {
+        JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
+    public boolean isDateCorrect(Object month, Object day) {
+        boolean isCorrect = true;
+        if (((month.equals("April") | month.equals("June") | month.equals("September") | month.equals("November")
+                && (Integer) day > 30) | (month.equals("February") && (Integer) day > 28))) {
+            isCorrect = false;
+            showErrorMessage("Введите дату корректно");
+        }
+        return isCorrect;
+    }
 }
