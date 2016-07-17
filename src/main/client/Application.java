@@ -6,14 +6,15 @@ import gui.StartForm;
 import logic.Constants;
 import logic.RegistrationModel;
 import logic.User;
-import logic.command.LoginStatusCommand;
-import logic.command.RegistrationStatusCommand;
+import logic.command.*;
 import server.Client;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Observable;
@@ -108,6 +109,25 @@ public class Application implements Observer{
                 }
             }
         });
+
+        this.mainForm.getMessageArea().addKeyListener(new KeyAdapter() { //TODELETE
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                    String text = mainForm.getMessageArea().getText();
+
+                    mainForm.sendMessage();
+                    mainForm.getMessageArea().setText("");
+                    mainForm.repaintAndRevalidate();
+
+                    if (user.getNickname().equals("AAAAAAA")){
+                        client.sendMessageCommand("MAXMAXMAX","AAAAAAA",text);
+                    } else if (user.getNickname().equals("MAXMAXMAX")){
+                        client.sendMessageCommand("AAAAAAA","MAXMAXMAX",text);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -142,13 +162,16 @@ public class Application implements Observer{
                 @Override
                 public void run() {
                     if (mode == Mode.STARTFROM_ON && Application.this.mode!=Mode.STARTFROM_ON){
+                        Application.this.mode = mode;
                         startForm.setVisible(true); //становится видна логин форма
                         mainForm =  new MainFormVisualisation(); //создаем новую МейнФорму, удаляя старые данные с нее
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode!=Mode.MAINFROM_ON){
+                        Application.this.mode = mode;
                         mainForm.setVisible(true); //становится видна старт форма
-                        startForm = new StartForm(); // создаем новую старт форму, удалялл данный с нее
-                        startForm.setVisible(false); // оставляеем ее невидимой
+                        startForm.dispose();
+                        //startForm = new StartForm(); // создаем новую старт форму, удалялл данный с нее
+                        //startForm.setVisible(false); // оставляеем ее невидимой
                     }
                 }
             });
@@ -177,6 +200,11 @@ public class Application implements Observer{
                 showInfoMessage(startForm, "Вы выполнили вход! Ваш ид " + user.getUniqueID());
 
                 setMode(Mode.MAINFROM_ON); // есди вошли удачно - то меняем режим работы на мейн форм
+
+                //kostyl
+                if (user.getNickname().equals("MAXMAXMAX"))
+                    client.sendSessionRequestCommand("AAAAAAA","MAXMAXMAX"); //to delete
+
             } else {
                 showInfoMessage(startForm, lsCommand.getExceptionDescription());
             }
@@ -193,6 +221,24 @@ public class Application implements Observer{
                 showInfoMessage(startForm, "Пожалуйста, войдите под своим логинов и паролем.");
             } else {
                 showInfoMessage(startForm, rsCommand.getExceptionDescription());
+            }
+        } else if (arg instanceof MessageCommand) {
+
+            MessageCommand mCommand = (MessageCommand) arg;
+            this.mainForm.getMessage(mCommand.getMessageText());
+
+        } else if (arg instanceof SessionRequestCommand){//TODELETE
+
+            SessionRequestCommand srCommand = (SessionRequestCommand) arg;
+
+            if (user.getNickname().equals("AAAAAAA"))
+                client.sendAcceptConnectionCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
+
+        } else if (arg instanceof AcceptConnectionCommand){ //TODELETE
+
+            AcceptConnectionCommand acCommand = (AcceptConnectionCommand) arg;
+            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()){
+                showInfoMessage(mainForm, "Соеседник принял ваше предложение. Начинайте общение!");
             }
         }
     }

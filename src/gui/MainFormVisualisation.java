@@ -156,7 +156,7 @@ public class MainFormVisualisation extends JFrame{
                 System.exit(0);
             }
         });
-        messageArea.addKeyListener(new KeyAdapter() {
+        /*messageArea.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
@@ -167,7 +167,24 @@ public class MainFormVisualisation extends JFrame{
                     mainPanel.revalidate();
                 }
             }
-        });
+        });*/
+    }
+
+    public JTextArea getMessageArea() {
+        return messageArea;
+    }
+
+    public void sendMessage(){
+        messageView.sendMessage(messageArea.getText());
+    }
+
+    public void getMessage(String text){
+        messageView.getMessage(text);
+    }
+
+    public void repaintAndRevalidate(){
+        mainPanel.repaint();
+        mainPanel.revalidate();
     }
 
     public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {

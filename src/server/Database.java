@@ -117,11 +117,12 @@ public class Database {
         if (checkDataPath() && checkClientsDataFile() && clientsDataFile.isFile() && clientsDataFile.length() > 0) { //если файл не пустой
 
             XStream xmlStream = new XStream(new DomDriver()); //поток для управлением сериалации/десереализации объектов в .xml
+            xmlStream.alias("user", User.class);
 
             try {
                 FileInputStream inputStream = new FileInputStream(clientsDataFile);
 
-                xmlStream.fromXML(inputStream, userMap);
+                userMap = (HashMap<String, User>) xmlStream.fromXML(inputStream);
             } catch (FileNotFoundException e) {
                 // ex
             }
