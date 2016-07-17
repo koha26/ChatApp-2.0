@@ -8,7 +8,7 @@ public class RegistrationModel implements Serializable{
     private String password;
     private String country;
     private String city;
-    private int age;
+    private String age;
     private String name;
     private String surname;
 
@@ -33,12 +33,12 @@ public class RegistrationModel implements Serializable{
         this.city = city;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
     public void setAge(String age) {
-        this.age = Integer.parseInt(age);
+        this.age = age;
     }
 
     public String getName() {

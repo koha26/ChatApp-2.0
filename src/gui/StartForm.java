@@ -35,6 +35,7 @@ public class StartForm extends JFrame {
     private final ImageIcon regButIconEntered = new ImageIcon("images/loginform/regbut_entered.png");
 
     private Mode mode; // LOGIN_ON - loginMode; REGISTRATION_ON - registrationMode;
+    private Point mouseDownCompCoords;
 
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -52,11 +53,25 @@ public class StartForm extends JFrame {
         setSize(1000, 500); // размер, можно потом поменять мб
         setLocationRelativeTo(null); // окно при запуске появляется по центру монитора
         setResizable(false);
+        setUndecorated(true);
         setContentPane(new JLabel(Images.backgroundImage)); // установка фона
-        //setUndecorated(true); // метод, который убирает виндосоуские кнопки (свернуть, выход и т.д.)
+        setUndecorated(true); // метод, который убирает виндосоуские кнопки (свернуть, выход и т.д.)
         setIconImage(Images.appIcon.getImage()); // иконка фрейма
         setLayout(null);
-
+        addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                mouseDownCompCoords = null;
+            }
+            public void mousePressed(MouseEvent e) {
+                mouseDownCompCoords = e.getPoint();
+            }
+        });
+        addMouseMotionListener(new MouseAdapter(){
+            public void mouseDragged(MouseEvent e) {
+                Point currCoords = e.getLocationOnScreen();
+                setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+            }
+        });
         popUpMenu = new PopUpMenu();
         popUpMenu.setPopUpMenu();
 
@@ -342,16 +357,19 @@ public class StartForm extends JFrame {
             daysList.add(day);
 
         reg_yearComboBox = new JComboBox(new DefaultComboBoxModel(yearsList.toArray()));
+        reg_yearComboBox.setBackground(Color.WHITE);
         reg_yearComboBox.setBounds(585, 250, 70, 30);
         reg_yearComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
         add(reg_yearComboBox);
 
         reg_monthComboBox = new JComboBox(monthsList);
+        reg_monthComboBox.setBackground(Color.WHITE);
         reg_monthComboBox.setBounds(670, 250, 90, 30);
         reg_monthComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
         add(reg_monthComboBox);
 
         reg_dayComboBox = new JComboBox(daysList.toArray());
+        reg_dayComboBox.setBackground(Color.WHITE);
         reg_dayComboBox.setBounds(775, 250, 50, 30);
         reg_dayComboBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
         add(reg_dayComboBox);
@@ -462,7 +480,7 @@ public class StartForm extends JFrame {
             regModel.setName(reg_nameField.getName());
             regModel.setSurname(reg_surnameField.getText());
             if (isDateCorrect(reg_monthComboBox.getSelectedItem(), reg_dayComboBox.getSelectedItem()));
-                regModel.setAge((String) reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
+                regModel.setAge(reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
                     + " " + reg_dayComboBox.getSelectedItem());
             return regModel;
         } else if (mode == Mode.LOGIN_ON && isFieldFilled()) {

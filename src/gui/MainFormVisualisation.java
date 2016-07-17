@@ -170,7 +170,8 @@ public class MainFormVisualisation extends JFrame{
         });
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
