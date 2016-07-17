@@ -67,8 +67,8 @@ public class Server {
 
     /**Контроллеры для взаимодействия с объектом класса Database*/
 
-    public User registerUser(RegistrationModel regModel) throws UnknownHostException { //для регистрации
-        return this.database.registerUser(regModel);
+    public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException { //для регистрации
+        return this.database.registerUser(regModel,connection);
     }
 
     public void goOnline(User user, Connection connection) { // для хранения онлайн клиентов
@@ -137,7 +137,7 @@ public class Server {
 
                             RegistrationCommand rCommand = (RegistrationCommand) lastCommand;
                             RegistrationStatusCommand rsCommand;
-                            user = registerUser(rCommand.getRegModel()); //рега через Database
+                            user = registerUser(rCommand.getRegModel(), connection); //рега через Database
                             if (user != null){ //если рега успешна - отправка полученого объекта User
                                 user.setIpAddress(connection.getSocket().getInetAddress());
                                 rsCommand = new RegistrationStatusCommand(true, user);
