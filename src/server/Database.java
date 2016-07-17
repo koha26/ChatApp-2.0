@@ -181,8 +181,8 @@ public class Database {
         FilenameFilter filter = new FilenameFilter() { //фильтр поиска папки с даным названием
             @Override
             public boolean accept(File dir, String name) {
-                File dirName = new File(dir + "/" + name);
-                if (dir.isDirectory() && name.equals(dirName) && dirName.isDirectory()) {
+                File dirNameCompared = new File(dir + "/" + name);
+                if (dir.isDirectory() && name.equals(dirName) && dirNameCompared.isDirectory()) {
                     return true;
                 } else
                     return false;
@@ -192,7 +192,7 @@ public class Database {
         String[] files = dataPath.list(filter);
 
         if (files.length == 0) { // если не нашло такой папки, то создаем ее
-            File newDirectory = new File(dataPath + dirName + "/history");
+            File newDirectory = new File(dataPath + "/" + dirName + "/history");
 
             while (true) {
                 if (newDirectory.mkdirs()) {
@@ -222,9 +222,14 @@ public class Database {
             }
         });
 
-        if (files.length == 0) {
-            File newDirectory = new File(Config.DATA_PATH + "/" + dirName);
-            newDirectory.mkdir();
+        if (files.length == 0) { // если не нашло такой папки, то создаем ее
+            File newDirectory = new File(Config.DATA_PATH + dirName + "/history");
+
+            while (true) {
+                if (newDirectory.mkdirs()) {
+                    break;
+                }
+            }
         }
 
         //db.changeID(db.getLastUserId());
