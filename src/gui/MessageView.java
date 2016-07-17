@@ -24,7 +24,11 @@ public class MessageView extends JPanel {
         this.setBackground(new Color(0, 0, 0, 150));
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(null);
         this.add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        /*RepaintPanel repaintPanel = new RepaintPanel(this);
+        Thread repaintThread = new Thread(repaintPanel);
+        repaintThread.start();*/
     }
 
 
