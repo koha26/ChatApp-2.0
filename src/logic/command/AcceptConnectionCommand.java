@@ -1,8 +1,5 @@
 package logic.command;
 
-/**
- * Created by demo on 12.06.16.
- */
 public class AcceptConnectionCommand  extends Command {
     private String nickname_To;
     private String nickname_From;

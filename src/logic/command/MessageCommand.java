@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Date;
 
-/**
- * Created by demo on 12.06.16.
- */
 public class MessageCommand extends Command {
     private String messageText;
     private Date date;

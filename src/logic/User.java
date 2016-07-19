@@ -3,14 +3,16 @@ package logic;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 
-public class User implements Serializable{
-    private String  nickname;
+public class User implements Serializable {
+    private String nickname;
     private String password;
     private InetAddress ipAddress;
     private int uniqueID;
+    private Date dateOfReg;
 
-    public User()  {
+    public User() {
         this.nickname = "";
         this.password = "";
         try {
@@ -71,13 +73,8 @@ public class User implements Serializable{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
         if (uniqueID != user.uniqueID) return false;
-
         return true;
     }
-
-
 }

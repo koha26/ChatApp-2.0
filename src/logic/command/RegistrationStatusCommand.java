@@ -2,9 +2,6 @@ package logic.command;
 
 import logic.User;
 
-/**
- * Created by demo on 10.07.16.
- */
 public class RegistrationStatusCommand extends Command {
     private boolean isRegistered;
     private User user;

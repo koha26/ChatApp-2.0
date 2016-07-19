@@ -1,8 +1,5 @@
 package logic.command;
 
-/**
- * Created by demo on 05.07.16.
- */
 public class SessionRequestCommand extends Command {
     private String nickname_To;
     private String nickname_From;
