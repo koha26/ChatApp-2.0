@@ -11,6 +11,7 @@ public class PopUpMenu extends PopupMenu {
 
     private final ImageIcon icon = new ImageIcon("images/popup.png");
 
+    private Menu menu;
     private MenuItem exitItem;
 
     public void setPopUpMenu() {
@@ -24,6 +25,9 @@ public class PopUpMenu extends PopupMenu {
             e.printStackTrace();
         }
 
+        menu = new Menu();
+        add(menu);
+
         exitItem = new MenuItem("Exit");
         exitItem.addActionListener(new ActionListener() {
             @Override
@@ -31,7 +35,8 @@ public class PopUpMenu extends PopupMenu {
                 System.exit(-1);
             }
         });
-        add(exitItem);
+        menu.add(exitItem);
+
 
         trayIcon.displayMessage(Constants.VERSION_ID, "ChatApp started.", TrayIcon.MessageType.INFO);
     }

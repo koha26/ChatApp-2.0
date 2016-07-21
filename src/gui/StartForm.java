@@ -1,9 +1,11 @@
 package gui;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import logic.Constants;
 import logic.RegistrationModel;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class StartForm extends JFrame {
     private JButton loginButton, exitButton, registrationButton; // общие кнопки
     private JButton reg_backButton, reg_registrationButton;
     private JComboBox reg_yearComboBox, reg_monthComboBox, reg_dayComboBox;
+
+    private static JTextField errorTextField; // лейбл, который будет отображать ошибку в случае некорректного ввода данных
 
     private final ImageIcon loginButIcon = new ImageIcon("images/loginform/loginbut.png");
     private final ImageIcon loginButIconEntered = new ImageIcon("images/loginform/loginbut_entered.png");
@@ -72,7 +76,7 @@ public class StartForm extends JFrame {
                 Компоненты для логин мода
          */
 
-        helloLabel = GUIStandartOperations.LabelStartOperation("Hello!", new Rectangle(370, 25, 300, 90), new Font("Century Gothic", Font.PLAIN, 72), Color.WHITE);
+        helloLabel = GUIStandartOperations.LabelStartOperation("Hello!", new Rectangle(390, 15, 300, 90), new Font("Century Gothic", Font.PLAIN, 72), Color.WHITE);
         log_nickLabel = GUIStandartOperations.LabelStartOperation("Enter your nick", new Rectangle(165, 180, 250, 30), new Font("Century Gothic", Font.PLAIN, 32), Color.WHITE);
         log_passwordLabel = GUIStandartOperations.LabelStartOperation("Enter your password", new Rectangle(120, 235, 340, 35), new Font("Century Gothic", Font.PLAIN, 32), Color.WHITE);
         add(helloLabel);
@@ -119,6 +123,9 @@ public class StartForm extends JFrame {
         registrationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                errorTextField.setVisible(false);
+                reg_passwordField.setBorder(null);
+                reg_confirmPasswordField.setBorder(null);
                 setRegistrationMode();
             }
         });
@@ -143,12 +150,28 @@ public class StartForm extends JFrame {
                 Компоненты для регистрационного мода
          */
 
+
+        //errorLabel = GUIStandartOperations.LabelStartOperation("", new Rectangle(340, 75, 300, 90), new Font("Century Gothic", Font.PLAIN, 16), Color.RED);
+        // TODO: 21.07.2016 ПРОЗРАЧНЫЙ ФОН, ПОКА ЧТО РАЗБИРАЮСЬ С БАГОМ, СЕЙЧАС СТОИТ СТАРЫЙ ВАРИАНТ С РАМКОЙ
+        errorTextField = new JTextField();
+        errorTextField.setBounds(0, 100, 1000, 35);
+        errorTextField.setFont(Fonts.typingFont);
+        errorTextField.setBorder(new LineBorder(Color.YELLOW, 2));
+        errorTextField.setHorizontalAlignment(JTextField.CENTER);
+        errorTextField.setOpaque(false);
+        errorTextField.setEditable(false);
+        errorTextField.setFocusable(false);
+        errorTextField.setForeground(Color.YELLOW);
+        //errorTextField.setBorder(null);
+
         reg_nickLabel = GUIStandartOperations.LabelStartOperation("Nickname", new Rectangle(90, 150, 180, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_nameLabel = GUIStandartOperations.LabelStartOperation("Name", new Rectangle(120, 200, 100, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_surnameLabel = GUIStandartOperations.LabelStartOperation("Surname", new Rectangle(100, 250, 100, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_passwordLabel = GUIStandartOperations.LabelStartOperation("Password", new Rectangle(500, 150, 180, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_confirmPasswordLabel = GUIStandartOperations.LabelStartOperation("Confirm password", new Rectangle(435, 200, 180, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_ageLabel = GUIStandartOperations.LabelStartOperation("Date of birth", new Rectangle(475, 250, 150, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
+        errorTextField.setVisible(false);
+        add(errorTextField);
         add(reg_nickLabel);
         add(reg_nameLabel);
         add(reg_surnameLabel);
@@ -237,6 +260,9 @@ public class StartForm extends JFrame {
         reg_backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                reg_passwordField.setBorder(null);
+                reg_confirmPasswordField.setBorder(null);
+                errorTextField.setVisible(false);
                 setLoginMode("");
             }
         });
@@ -340,6 +366,18 @@ public class StartForm extends JFrame {
         return reg_registrationButton;
     }
 
+    public JPasswordField getReg_passwordField() {
+        return reg_passwordField;
+    }
+
+    public JPasswordField getReg_confirmPasswordField() {
+        return reg_confirmPasswordField;
+    }
+
+    public static JTextField getErrorTextField() {
+        return errorTextField;
+    }
+
     public boolean isFieldFilled() {
         if (mode == Mode.LOGIN_ON) {
             String login = log_nickField.getText().replaceAll(" ", ""); //TODO: оповещение пользователя о пробелах в нике, переделать с помощью split() поиск пробелов
@@ -352,14 +390,14 @@ public class StartForm extends JFrame {
             String login = reg_nickField.getText().replaceAll(" ", ""); //TODO: оповещение пользователя о пробелах в нике, переделать с помощью split() поиск пробелов
             String password = new String(reg_passwordField.getPassword());
             String confirmPassword = new String(reg_confirmPasswordField.getPassword());
-            if (login.length() >= 6 && password.length() >= 6 && confirmPassword.length() >= 6 && isPasswordsEquals()) {
+            if (login.length() >= 6 && password.length() >= 6 && confirmPassword.length() >= 6) {
                 return true;
             } else
                 return false;
         }
     }
 
-    private boolean isPasswordsEquals() {
+    public boolean isPasswordsEquals() {
         if (reg_confirmPasswordField.getPassword().length == reg_passwordField.getPassword().length) {
             for (int i = 0; i < reg_passwordField.getPassword().length; i++) {
                 if (reg_passwordField.getPassword()[i] != reg_confirmPasswordField.getPassword()[i]) {
@@ -404,6 +442,12 @@ public class StartForm extends JFrame {
 
     public void showErrorMessage(String text) {
         JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showErrorLabel(String errorText) {
+        errorTextField.setText(errorText);
+        errorTextField.setVisible(true);
+        errorTextField.revalidate();
     }
 
     public boolean isDateCorrect(Object month, Object day) {

@@ -10,6 +10,7 @@ import logic.command.*;
 import server.Client;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,10 +59,10 @@ public class Application implements Observer {
                         try {
                             client.start();
                         } catch (UnknownHostException e1) {
-                            showInfoMessage(startForm, "Сервер недоступен!");
+                            StartForm.showErrorLabel("Сервер не доступен");
                             return;
                         } catch (IOException e1) {
-                            showInfoMessage(startForm, "Невозможно подключится к серверу!");
+                            StartForm.showErrorLabel("Невозможно подключиться к серверу");
                             return;
                         }
                     }
@@ -70,7 +71,7 @@ public class Application implements Observer {
                         client.sendLoginCommand(regModel.getNick(), regModel.getPassword()); // получение с нее лог и пас и отправка
                     }
                 } else {
-                    showInfoMessage(startForm, "Заполните главные поля!");
+                    StartForm.showErrorLabel("Неверный логин или пароль");
                 }
             }
         });
@@ -78,7 +79,7 @@ public class Application implements Observer {
         this.startForm.getReg_registrationButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (startForm.isFieldFilled()) {
+                if (startForm.isFieldFilled() && startForm.isPasswordsEquals()) {
                     if (client == null) { // если еще не создано соединение через клиента, то создаем его
                         /**НА ЭТОМ МОМЕНТЕ НУЖНО СДЕЛАТЬ ИЛИ ЗАГРУЗКУ СЕРВЕРА С НОРМАЛЬНОЙ РАБОТОЙ ФОРМЫ
                          * ИЛИ ЗАРАНЕЕ ПОДКЛЮЧАТЬСЯ К СЕРВЕРУ И ПРИ ОТПРАВЛЕНИИ УЖЕ КАК-ТО РЕАГИРОВАТЬ ПРИ ОТСУТСВИИ ИНТЕРНЕТА.
@@ -89,10 +90,10 @@ public class Application implements Observer {
                         try {
                             client.start();
                         } catch (UnknownHostException e1) {
-                            showInfoMessage(startForm, "Сервер недоступен!");
+                            StartForm.showErrorLabel("Сервер не доступен");
                             return;
                         } catch (IOException e1) {
-                            showInfoMessage(startForm, "Невозможно подключится к серверу!");
+                            StartForm.showErrorLabel("Невозможно подключиться к серверу");
                             return;
                         }
                     }
@@ -100,8 +101,13 @@ public class Application implements Observer {
                     if (regModel != null) {
                         client.sendRegistrationCommand(regModel); // отправка рег комманды
                     }
-                } else {
-                    showInfoMessage(startForm, "Заполните главные поля!");
+                } else if (! startForm.isFieldFilled()){
+                    //showInfoMessage(startForm, "Заполните главные поля!");
+                    StartForm.showErrorLabel("Заполните главные поля!");
+                } else if (startForm.isFieldFilled() && !startForm.isPasswordsEquals()) {
+                    StartForm.showErrorLabel("Пароли не совпадают!");
+                    startForm.getReg_passwordField().setBorder(new LineBorder(Color.RED, 2));
+                    startForm.getReg_confirmPasswordField().setBorder(new LineBorder(Color.RED, 2));
                 }
             }
         });
