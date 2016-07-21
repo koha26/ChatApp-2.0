@@ -156,13 +156,14 @@ public class StartForm extends JFrame {
         errorTextField = new JTextField();
         errorTextField.setBounds(0, 100, 1000, 35);
         errorTextField.setFont(Fonts.typingFont);
-        errorTextField.setBorder(new LineBorder(Color.YELLOW, 2));
+        //errorTextField.setBorder(new LineBorder(Color.YELLOW, 2));
         errorTextField.setHorizontalAlignment(JTextField.CENTER);
-        errorTextField.setOpaque(false);
+        //errorTextField.setOpaque(false);
+        errorTextField.setBackground(new Color(0, 0, 0, 150));
         errorTextField.setEditable(false);
         errorTextField.setFocusable(false);
-        errorTextField.setForeground(Color.YELLOW);
-        //errorTextField.setBorder(null);
+        errorTextField.setForeground(Color.RED);
+        errorTextField.setBorder(null);
 
         reg_nickLabel = GUIStandartOperations.LabelStartOperation("Nickname", new Rectangle(90, 150, 180, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);
         reg_nameLabel = GUIStandartOperations.LabelStartOperation("Name", new Rectangle(120, 200, 100, 30), new Font("Century Gothic", Font.PLAIN, 16), Color.WHITE);

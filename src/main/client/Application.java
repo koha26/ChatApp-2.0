@@ -71,7 +71,7 @@ public class Application implements Observer {
                         client.sendLoginCommand(regModel.getNick(), regModel.getPassword()); // получение с нее лог и пас и отправка
                     }
                 } else {
-                    StartForm.showErrorLabel("Невозможно подключиться к серверу");
+                    StartForm.showErrorLabel("Заполните поля входа");
                 }
             }
         });
