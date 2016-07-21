@@ -71,7 +71,7 @@ public class Application implements Observer {
                         client.sendLoginCommand(regModel.getNick(), regModel.getPassword()); // получение с нее лог и пас и отправка
                     }
                 } else {
-                    StartForm.showErrorLabel("Неверный логин или пароль");
+                    StartForm.showErrorLabel("Невозможно подключиться к серверу");
                 }
             }
         });
@@ -167,7 +167,7 @@ public class Application implements Observer {
                 showInfoMessage(startForm, "You entered as " + user.getNickname() + "! Your ID: " + user.getUniqueID());
                 setMode(Mode.MAINFROM_ON); // есди вошли удачно - то меняем режим работы на мейн форм
             } else {
-                showInfoMessage(startForm, lsCommand.getExceptionDescription());
+                StartForm.showErrorLabel(lsCommand.getExceptionDescription());
             }
         } else if (arg instanceof RegistrationStatusCommand) {
             RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) arg;
@@ -177,7 +177,7 @@ public class Application implements Observer {
                 startForm.setMode(Mode.LOGIN_ON, user.getNickname()); // если удачно зарегестрировались, то должны войти снова
                 showInfoMessage(startForm, "Please, log in using your nickname and password!");
             } else {
-                showInfoMessage(startForm, rsCommand.getExceptionDescription());
+                StartForm.showErrorLabel(rsCommand.getExceptionDescription());
             }
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
