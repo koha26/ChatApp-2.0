@@ -6,13 +6,14 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MessageView extends JPanel {
     private int currentPos = 0;
     private JScrollPane scrollPane;
     private JPanel messagesPanel; // панель для отображения сообщений
-    private RectangleForMessageArea r = new RectangleForMessageArea();
 
     public MessageView() {
         setLayout(new GridBagLayout());
@@ -33,8 +34,8 @@ public class MessageView extends JPanel {
         JPanel outMsgPanel = new JPanel();
         outMsgPanel.setBackground(new Color(0, 0, 0, 0));
         outMsgPanel.setLayout(new BorderLayout());
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), new Date().getHours() + ":" +
-                new Date().getMinutes() + ":" + new Date().getSeconds(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.GREEN);
+        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), getMessageTime(),
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.GREEN);
         msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
         msgBorder.setTitlePosition(TitledBorder.BOTTOM);
         JTextArea text = new JTextArea(message);
@@ -59,8 +60,8 @@ public class MessageView extends JPanel {
         inMsgPanel.setLayout(new BorderLayout());
         inMsgPanel.setBackground(new Color(0, 0, 0, 0));
         JTextArea text = new JTextArea(message);
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.BLUE, 2), new Date().getHours() + ":" +
-                new Date().getMinutes() + ":" + new Date().getSeconds(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.BLUE);
+        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.BLUE, 2), getMessageTime()
+                , TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.BLUE);
         msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
         msgBorder.setTitlePosition(TitledBorder.BOTTOM);
         text.setBackground(new Color(0, 0, 0, 0));
@@ -79,7 +80,7 @@ public class MessageView extends JPanel {
         updatePanel(messagesPanel);
     }
 
-    public Dimension messageToPixels(String message) { // метод, который возвращает из строки пиксели
+    public static Dimension messageToPixels(String message) { // метод, который возвращает из строки пиксели
         AffineTransform affineTransform = new AffineTransform();
         FontRenderContext frc = new FontRenderContext(affineTransform, true, true);
         Font font = new Font("Century Gothic", Font.PLAIN, 16);
@@ -88,21 +89,13 @@ public class MessageView extends JPanel {
         return new Dimension(msgWidth, msgHeight);
     }
 
+    public static String getMessageTime() {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        return dateFormat.format(new Date());
+    }
+
     void updatePanel(JPanel panel) {
         panel.revalidate();
         panel.updateUI();
-    }
-
-    class RectangleForMessageArea {
-
-        private Rectangle r;
-
-        public Rectangle getR() {
-            return r;
-        }
-
-        public void setR(Rectangle r) {
-            this.r = r;
-        }
     }
 }
