@@ -477,28 +477,6 @@ public class Database {
 
 
     public static void main(String[] args) throws IOException {
-        /*ArrayList<String> resultSet = new ArrayList<>();
-        long start = System.currentTimeMillis();
-        Pattern pattern = Pattern.compile(Config.REGEX);
-        Matcher matcher;
-        BufferedReader reader = new BufferedReader(new FileReader("text.txt"));
-        StringBuffer buffer = new StringBuffer();
-        String inputString;
-        while ((inputString = reader.readLine()) != null) {
-            matcher = pattern.matcher(inputString);
-            while (matcher.find()) {  //вообще это надо доделать + добавить в парам Юзер
-                buffer.append(matcher.group());
-                buffer.append(" ");
-            }
-            resultSet.add(buffer.toString());
-            buffer.setLength(0);
-        }
-        long finish = System.currentTimeMillis();
-        System.out.println("Time = " + (finish - start) + " ms");
-
-        for (String st : resultSet) {
-            System.out.println(st);
-        }*/
 
         /*Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
