@@ -10,6 +10,8 @@ public class Config {
     public static int UNIQUE_ID;
     public static String DATA_PATH;
     public static String CLIENTS_DATA_FILENAME;
+    public static String REGEX_HISTORY;
+    public static int BUFFER_HISTORY_SIZE;
 
     private static Properties properties = new Properties();
 
@@ -25,6 +27,8 @@ public class Config {
             UNIQUE_ID = Integer.parseInt(properties.getProperty("UNIQUE_ID"));
             DATA_PATH = properties.getProperty("DATA_PATH");
             CLIENTS_DATA_FILENAME = properties.getProperty("CLIENTS_DATA_FILENAME");
+            REGEX_HISTORY = properties.getProperty("REGEX_HISTORY");
+            BUFFER_HISTORY_SIZE = Integer.parseInt(properties.getProperty("BUFFER_HISTORY_SIZE"));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -51,6 +55,8 @@ public class Config {
             UNIQUE_ID = Integer.parseInt(properties.getProperty("UNIQUE_ID"));
             DATA_PATH = properties.getProperty("DATA_PATH");
             CLIENTS_DATA_FILENAME = properties.getProperty("CLIENTS_DATA_FILENAME");
+            REGEX_HISTORY = properties.getProperty("REGEX_HISTORY");
+            BUFFER_HISTORY_SIZE = Integer.parseInt(properties.getProperty("BUFFER_HISTORY_SIZE"));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -72,6 +78,8 @@ public class Config {
             properties.setProperty("UNIQUE_ID", String.valueOf(newID));
             properties.setProperty("DATA_PATH", Config.DATA_PATH);
             properties.setProperty("CLIENTS_DATA_FILENAME", Config.CLIENTS_DATA_FILENAME);
+            properties.setProperty("REGEX_HISTORY", Config.REGEX_HISTORY);
+            properties.setProperty("BUFFER_HISTORY_SIZE",String.valueOf(Config.BUFFER_HISTORY_SIZE));
 
             OutputStream fis = new FileOutputStream(Config.PROPERTIES_FILE);
             properties.store(fis,"Changed UNIQUE_ID");

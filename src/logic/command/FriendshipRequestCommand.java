@@ -1,10 +1,12 @@
 package logic.command;
 
-public class SessionRequestCommand extends Command {
+
+public class FriendshipRequestCommand extends Command {
+
     private String nickname_To;
     private String nickname_From;
 
-    public SessionRequestCommand(){
+    public FriendshipRequestCommand(){
         super();
     }
 

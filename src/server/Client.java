@@ -1,6 +1,7 @@
 package server;
 
 import logic.Constants;
+import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
@@ -44,7 +45,7 @@ public class Client extends Observable {
      * Сделано для того, чтобы в пользовательском интерфейсе и обработчиках не было взаимодействия с коммандами напрямую.
      */
     public void sendAcceptConnectionCommand(String nickname_To, String nickname_From, boolean isAccept) {
-        AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+        AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
         acCommand.setNickname_From(nickname_From);
         acCommand.setNickname_To(nickname_To);
         acCommand.setAccept(isAccept);
@@ -53,9 +54,12 @@ public class Client extends Observable {
 
     public void sendMessageCommand(String nickname_To, String nickname_From, String messageText) {
         MessageCommand mCommand = new MessageCommand();
-        mCommand.setMessageText(messageText);
-        mCommand.setNickname_From(nickname_From);
-        mCommand.setNickname_To(nickname_To);
+        Message message = new Message();
+        message.setMessageText(messageText);
+        message.setNickname_From(nickname_From);
+        message.setNickname_To(nickname_To);
+        message.setReaded(true);
+        mCommand.setMessage(message);
         send(mCommand);
     }
 
@@ -75,7 +79,7 @@ public class Client extends Observable {
     }
 
     public void sendSessionRequestCommand(String nickname_To, String nickname_From) {
-        SessionRequestCommand srCommand = new SessionRequestCommand();
+        FriendshipRequestCommand srCommand = new FriendshipRequestCommand();
         srCommand.setNickname_From(nickname_From);
         srCommand.setNickname_To(nickname_To);
         send(srCommand);
@@ -154,7 +158,7 @@ public class Client extends Observable {
 
 
                             /*if (user.getNickname().equals("Kostya2")){
-                                SessionRequestCommand srCommand = new SessionRequestCommand();
+                                FriendshipRequestCommand srCommand = new FriendshipRequestCommand();
                                 srCommand.setNickname_To("Kostya1");
                                 srCommand.setNickname_From(user.getNickname());
                                 try {
@@ -184,12 +188,12 @@ public class Client extends Observable {
                             e.printStackTrace();
                         }*/
 
-                    } else if (lastCommand instanceof AcceptConnectionCommand) {
+                    } else if (lastCommand instanceof AcceptFriendshipCommand) {
 
-                        AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
+                        AcceptFriendshipCommand afCommand = (AcceptFriendshipCommand) lastCommand;
 
                         setChanged();
-                        notifyObservers(acCommand);
+                        notifyObservers(afCommand);
 
                         /*if (acCommand.isAccept()){
                             System.out.println("мы начинает общение! =)");
@@ -207,14 +211,14 @@ public class Client extends Observable {
 
                         }*/
 
-                    } else if (lastCommand instanceof SessionRequestCommand) {
+                    } else if (lastCommand instanceof FriendshipRequestCommand) {
 
-                        SessionRequestCommand srCommand = (SessionRequestCommand) lastCommand;
+                        FriendshipRequestCommand frCommand = (FriendshipRequestCommand) lastCommand;
 
                         setChanged();
-                        notifyObservers(srCommand);
+                        notifyObservers(frCommand);
 
-                        /*AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+                        /*AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
                         acCommand.setAccept(true);
                         acCommand.setNickname_From(srCommand.getNickname_To());
                         acCommand.setNickname_To(srCommand.getNickname_From());
@@ -225,6 +229,13 @@ public class Client extends Observable {
                         }*/
                     } else if (lastCommand instanceof DisconnectCommand) {
                         close();
+                    } else if (lastCommand instanceof HistoryPacketCommand) {
+
+                        HistoryPacketCommand hpCommand = (HistoryPacketCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(hpCommand);
+
                     }
 
                 }

@@ -1,11 +1,9 @@
 package gui;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import logic.Constants;
 import logic.RegistrationModel;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -419,7 +417,7 @@ public class StartForm extends JFrame {
             if (!isDateCorrect(reg_monthComboBox.getSelectedItem(), reg_dayComboBox.getSelectedItem())) {
                 return null;
             }
-            regModel.setAge(reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
+            regModel.setDateOfBirth(reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
                     + " " + reg_dayComboBox.getSelectedItem());
             return regModel;
         } else if (mode == Mode.LOGIN_ON) {

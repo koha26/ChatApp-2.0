@@ -1,10 +1,11 @@
 package logic.command;
 
-public class AcceptConnectionCommand  extends Command {
+public class AcceptFriendshipCommand extends Command {
+
     private String nickname_To;
     private String nickname_From;
     private boolean isAccept;
-    public AcceptConnectionCommand(){
+    public AcceptFriendshipCommand(){
         super();
     }
 

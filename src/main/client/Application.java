@@ -14,8 +14,6 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Observable;
@@ -181,16 +179,18 @@ public class Application implements Observer {
             }
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
-            this.mainForm.getMessage(mCommand.getMessageText());
+            this.mainForm.getMessage(mCommand.getMessage().getMessageText());
+        } else if (arg instanceof FriendshipRequestCommand){
 
-            //TODO: команды ниже не имеют смысла, учитывая задуманное ТЗ
-        } else if (arg instanceof SessionRequestCommand) {//TODELETE
-            SessionRequestCommand srCommand = (SessionRequestCommand) arg;
+            FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
+
             if (user.getNickname().equals("AAAAAAA"))
                 client.sendAcceptConnectionCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
-        } else if (arg instanceof AcceptConnectionCommand) { //TODELETE
-            AcceptConnectionCommand acCommand = (AcceptConnectionCommand) arg;
-            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()) {
+
+        } else if (arg instanceof AcceptFriendshipCommand){
+
+            AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) arg;
+            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()){
                 showInfoMessage(mainForm, "Соеседник принял ваше предложение. Начинайте общение!");
             }
         }

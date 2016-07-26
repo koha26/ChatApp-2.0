@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public abstract class Command implements Serializable {
     public static void main(String[] args) {
-        SessionRequestCommand src = new SessionRequestCommand();
+        FriendshipRequestCommand src = new FriendshipRequestCommand();
         System.out.println(src instanceof Command);
-        System.out.println(src instanceof SessionRequestCommand);
+        System.out.println(src instanceof FriendshipRequestCommand);
 
         Command ob = src;
 
-        System.out.println(ob instanceof SessionRequestCommand);
+        System.out.println(ob instanceof FriendshipRequestCommand);
         System.out.println(ob instanceof Command);
 
 
