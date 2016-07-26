@@ -225,18 +225,18 @@ public class Application implements Observer{
         } else if (arg instanceof MessageCommand) {
 
             MessageCommand mCommand = (MessageCommand) arg;
-            this.mainForm.getMessage(mCommand.getMessageText());
+            this.mainForm.getMessage(mCommand.getMessage().getMessageText());
 
-        } else if (arg instanceof SessionRequestCommand){//TODELETE
+        } else if (arg instanceof FriendshipRequestCommand){//TODELETE
 
-            SessionRequestCommand srCommand = (SessionRequestCommand) arg;
+            FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
 
             if (user.getNickname().equals("AAAAAAA"))
                 client.sendAcceptConnectionCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
 
-        } else if (arg instanceof AcceptConnectionCommand){ //TODELETE
+        } else if (arg instanceof AcceptFriendshipCommand){ //TODELETE
 
-            AcceptConnectionCommand acCommand = (AcceptConnectionCommand) arg;
+            AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) arg;
             if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()){
                 showInfoMessage(mainForm, "Соеседник принял ваше предложение. Начинайте общение!");
             }

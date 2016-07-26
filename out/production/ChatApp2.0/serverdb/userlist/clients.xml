@@ -1,0 +1,78 @@
+<map>
+  <entry>
+    <string>AAAAAAA</string>
+    <user>
+      <nickname>AAAAAAA</nickname>
+      <password>AAAAAAA</password>
+      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+        <java.net.InetAddress>
+          <default>
+            <address>624492769</address>
+            <family>2</family>
+          </default>
+        </java.net.InetAddress>
+      </ipAddress>
+      <uniqueID>1</uniqueID>
+      <friends>
+        <string>erty</string>
+        <string>koha</string>
+      </friends>
+    </user>
+  </entry>
+  <entry>
+    <string>testreg2</string>
+    <user>
+      <nickname>testreg2</nickname>
+      <password>111111</password>
+      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+        <java.net.InetAddress>
+          <default>
+            <address>1834425080</address>
+            <family>2</family>
+          </default>
+        </java.net.InetAddress>
+      </ipAddress>
+      <uniqueID>4</uniqueID>
+    </user>
+  </entry>
+  <entry>
+    <string>testreg</string>
+    <user>
+      <nickname>testreg</nickname>
+      <password>111111</password>
+      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+        <java.net.InetAddress>
+          <default>
+            <address>1834425080</address>
+            <family>2</family>
+          </default>
+        </java.net.InetAddress>
+      </ipAddress>
+      <uniqueID>3</uniqueID>
+    </user>
+  </entry>
+  <entry>
+    <string>MAXMAXMAX</string>
+    <user>
+      <nickname>MAXMAXMAX</nickname>
+      <password>2331239</password>
+      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+        <java.net.InetAddress>
+          <default>
+            <address>1834425080</address>
+            <family>2</family>
+          </default>
+        </java.net.InetAddress>
+      </ipAddress>
+      <uniqueID>2</uniqueID>
+    </user>
+  </entry>
+  <entry>
+    <string>erty</string>
+    <user reference="../../entry/user"/>
+  </entry>
+  <entry>
+    <string>koha</string>
+    <user reference="../../entry/user"/>
+  </entry>
+</map>

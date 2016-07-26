@@ -1,14 +1,16 @@
 package server;
 
+import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -16,7 +18,7 @@ public class Server {
 
     private ServerSocket serverSocket;
     private Thread mainThread;
-    private Database database;
+    private volatile Database database;
     private BlockingQueue<ClientThread> clients;
 
     public Server(int port) {
@@ -25,9 +27,9 @@ public class Server {
             this.database = new Database();
             clients = new LinkedBlockingDeque<ClientThread>();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            System.out.println("Неизвестный хост: "+e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -65,34 +67,81 @@ public class Server {
         return s;
     }
 
-    /**Контроллеры для взаимодействия с объектом класса Database*/
+    /**
+     * Контроллеры для взаимодействия с объектом класса Database
+     */
 
     public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException { //для регистрации
-        return this.database.registerUser(regModel,connection);
+        return this.database.registerUser(regModel, connection);
     }
 
-    public void goOnline(User user, Connection connection) { // для хранения онлайн клиентов
-        this.database.goOnline(user, connection);
+    public void goOnline(String nickname, Connection connection) { // для хранения онлайн клиентов
+        this.database.goOnline(nickname, connection);
     }
 
-    public void goOffline(User user) {
-        this.database.goOffline(user);
+    public void goOffline(String nickname) {
+        this.database.goOffline(nickname);
     }
 
-    public void deleteUser(User user) {
-        this.database.deleteUser(user);
+    public void deleteUser(String nickname) {
+        this.database.deleteUser(nickname);
     }
 
     public User checkUser(String nickname, String password) { // проверка на существования такой связки "ник"-"пароль"
         return database.checkUser(nickname, password);
     }
 
-    public boolean isExist(String nickname){ // существует ли кл-т с таким ником
+    public boolean isExist(String nickname) { // существует ли кл-т с таким ником
         return database.isExist(nickname);
     }
 
-    public boolean isOnline(String nickname){ // в онлайне ли кл-т с таким ником
+    public boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
         return database.isOnline(nickname);
+    }
+
+    public void addFriend(String nickname_host, String nickname_friend) {
+        database.addFriend(nickname_host, nickname_friend);
+    }
+
+    public void deleteFriend(String nickname_host, String nickname_friend) {
+        database.deleteFriend(nickname_host, nickname_friend);
+    }
+
+    public Set<String> retainAllFriendOnline(Set<String> comparatedSet) {
+        return database.retainAllFriendOnline(comparatedSet);
+    }
+
+    public Set<String> getSetOfFriendUnreadMes(String nickname_host) {
+        return database.getSetOfFriendUnreadMes(nickname_host);
+    }
+
+    public boolean deleteAndCreateUnreadMesFile(String nickname_host){
+        return database.deleteAndCreateUnreadMesFile(nickname_host);
+    }
+
+    public void saveMessageInSenderHistory(Message message, String nickname_sender, String nickname_receiver) {
+        try {
+            database.saveMessageInSenderHistory(message, nickname_sender, nickname_receiver);
+        } catch (IOException e) {
+            //
+        }
+    }
+
+    public void saveMessageInReceiverHistory(Message message, String nickname_sender, String nickname_receiver, boolean isRead) {
+        try {
+            database.saveMessageInReceiverHistory(message, nickname_sender, nickname_receiver, isRead);
+        } catch (IOException e) {
+            //
+        }
+    }
+
+    public Stack<HistoryPacketCommand> loadHistory(String nickname_asker, String nickname_companion) {
+        try {
+            return database.loadHistory(nickname_asker, nickname_companion);
+        } catch (IOException e) {
+            //
+            return null;
+        }
     }
 
     public ServerSocket getServerSocket() {
@@ -112,6 +161,7 @@ public class Server {
         private Command lastCommand;  // последняя полученая команда
         private Connection connection;  // соединение между сервером и клиентом
         private User user;  // запись о клиенте
+        private ArrayList<Stack<HistoryPacketCommand>> histories;
 
         public ClientThread(Socket socket) throws IOException {
             this.connection = new Connection(socket);
@@ -132,16 +182,14 @@ public class Server {
                     lastCommand = connection.receiveCommand();
 
                     if (lastCommand != null) {// receiveCommand() может выдать null в случае,
-                                              // если полученый объект не наследник от Command
+                        // если полученый объект не наследник от Command
                         if (lastCommand instanceof RegistrationCommand) { // клиент отправляет эту команду для регистрации
 
                             RegistrationCommand rCommand = (RegistrationCommand) lastCommand;
                             RegistrationStatusCommand rsCommand;
                             user = registerUser(rCommand.getRegModel(), connection); //рега через Database
-                            if (user != null){ //если рега успешна - отправка полученого объекта User
-                                user.setIpAddress(connection.getSocket().getInetAddress());
+                            if (user != null) { //если рега успешна - отправка полученого объекта User
                                 rsCommand = new RegistrationStatusCommand(true, user);
-                                goOnline(user,connection);
                             } else { //если не успешна - то отправляем причину
                                 String exceptionDescription = "Такой никнейм уже зарегестрирован! Извините, попробуйте другой.";
                                 rsCommand = new RegistrationStatusCommand(false, exceptionDescription);
@@ -156,66 +204,135 @@ public class Server {
                             LoginStatusCommand lsCommand;
                             if (logCommand.getVersion().equals(Config.VERSION_ID)) {
                                 if (user != null) { // если все верно и выдало объект User
-                                    goOnline(user, connection);
+                                    goOnline(user.getNickname(), connection);
                                     lsCommand = new LoginStatusCommand(user);
+                                    lsCommand.setFriendOnline(retainAllFriendOnline(user.getFriends()));
+
+                                    Set<String> unreadMessagesFrom = getSetOfFriendUnreadMes(user.getNickname());//позьзователи с которыми есть непрочитанные смс
+                                    deleteAndCreateUnreadMesFile(user.getNickname()); // удалить файл с никами выше
+                                    if (unreadMessagesFrom != null) {
+                                        lsCommand.setUnreadMessagesFrom(unreadMessagesFrom);
+
+                                        histories = (ArrayList<Stack<HistoryPacketCommand>>) Collections.synchronizedList(new ArrayList<Stack<HistoryPacketCommand>>());
+                                        for (String nicknameFriend : unreadMessagesFrom) {
+                                            histories.add(loadHistory(user.getNickname(), nicknameFriend)); //загружаем историю с каждым собеседником в наборе
+                                        }
+                                    }
                                 } else {
                                     lsCommand = new LoginStatusCommand();
                                     lsCommand.setExceptionDescription("Неверный логин или пароль!");
                                 }
+
+                                send(lsCommand);// отправка логин статуса
+
+                                for (Stack<HistoryPacketCommand> historyPacketCommands : histories) { // проход истори с каждым собеседником
+
+                                    Stack<HistoryPacketCommand> tmp = new Stack<>();//для последующей записи в файл
+
+                                    while (!historyPacketCommands.empty() && historyPacketCommands.peek().isUnreadHas()) {//если содержит пакет с непрочитанными
+                                        HistoryPacketCommand hpCommand = historyPacketCommands.pop();
+                                        send(hpCommand);
+
+                                        tmp.push(hpCommand); // для записи в файл
+
+                                    }
+
+                                    final Stack<HistoryPacketCommand> toWritting = tmp;
+                                    EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
+                                        @Override
+                                        public void run() {
+                                            while (!toWritting.empty()){
+                                                HistoryPacketCommand packetCommand = toWritting.pop();
+                                                for (Message message :packetCommand.getHistoryPart()) {
+                                                    saveMessageInReceiverHistory(message, packetCommand.getNickname_host(), packetCommand.getNickname_companion(), true);
+                                                }
+                                            }
+
+                                        }
+                                    });
+                                }
+
                             } else {
                                 lsCommand = new LoginStatusCommand();
                                 lsCommand.setExceptionDescription("Устаревшая версия программы. Обновите пожалуйста!");
+                                send(lsCommand);
                             }
-                            send(lsCommand);
 
-                        } else if (lastCommand instanceof SessionRequestCommand) { // клиент запрашивает разрешение на д-г с другим кл-ом
 
-                            SessionRequestCommand srCommand = (SessionRequestCommand) lastCommand;
+                        } else if (lastCommand instanceof FriendshipRequestCommand) { // клиент запрашивает разрешение на д-г с другим кл-ом
+
+                            FriendshipRequestCommand srCommand = (FriendshipRequestCommand) lastCommand;
                             if (isExist(srCommand.getNickname_From()) && isExist(srCommand.getNickname_To()) &&
-                                isOnline(srCommand.getNickname_From()) && isOnline(srCommand.getNickname_To())){//если есть такой и он в сети
+                                    isOnline(srCommand.getNickname_From()) && isOnline(srCommand.getNickname_To())) {//если есть такой и он в сети
 
-                                sendTo(srCommand.getNickname_To(),srCommand);
+                                sendTo(srCommand.getNickname_To(), srCommand);
 
                             } else {
-                                AcceptConnectionCommand acCommand = new AcceptConnectionCommand();
+                                AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
                                 acCommand.setAccept(false);
 
                                 send(acCommand);
                             }
 
-                        } else if (lastCommand instanceof AcceptConnectionCommand) { //получает принятие/отказ от запрашиваемого кл-та на д-г
+                        } else if (lastCommand instanceof AcceptFriendshipCommand) { //получает принятие/отказ от запрашиваемого кл-та на д-г
 
-                            AcceptConnectionCommand acCommand = (AcceptConnectionCommand) lastCommand;
+                            AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) lastCommand;
                             if (isExist(acCommand.getNickname_From()) && isExist(acCommand.getNickname_To()) &&
-                                    isOnline(acCommand.getNickname_From()) && isOnline(acCommand.getNickname_To())){
+                                    isOnline(acCommand.getNickname_From()) && isOnline(acCommand.getNickname_To())) {
 
-                                sendTo(acCommand.getNickname_To(),acCommand);
+                                sendTo(acCommand.getNickname_To(), acCommand);
                             }
 
-                        } else if (lastCommand instanceof MessageCommand){ // перенаправляет сообщение
+                        } else if (lastCommand instanceof MessageCommand) { // перенаправляет сообщение
 
                             MessageCommand mCommand = (MessageCommand) lastCommand;
-                            mCommand.setDate(new Date()); //установка времени, когда пришло сообщение
-                            if (isExist(mCommand.getNickname_From()) && isExist(mCommand.getNickname_To()) &&
-                                    isOnline(mCommand.getNickname_From()) && isOnline(mCommand.getNickname_To())){
+                            mCommand.getMessage().setDate(new Date()); //установка времени, когда пришло сообщение
+                            Message message = mCommand.getMessage();
+                            if (isExist(message.getNickname_From()) && isExist(message.getNickname_To()) &&
+                                    isOnline(message.getNickname_From())) {
 
-                                sendTo(mCommand.getNickname_To(),mCommand);
-                            }
+                                saveMessageInSenderHistory(message, message.getNickname_From(), message.getNickname_To());
 
-                            //TODO история сообщений
+                                if (isOnline(message.getNickname_To())) {
+                                    sendTo(message.getNickname_To(), mCommand);
+                                    saveMessageInReceiverHistory(message, message.getNickname_From(), message.getNickname_To(), true);
+                                } else {
+                                    saveMessageInReceiverHistory(message, message.getNickname_From(), message.getNickname_To(), false);
+                                }
+                            } // если такого ника не существует
 
-                        } else if (lastCommand instanceof DisconnectCommand){ // выход с сети
+                        } else if (lastCommand instanceof DisconnectCommand) { // выход с сети
 
-                            goOffline(user);
+                            goOffline(user.getNickname());
                             send(lastCommand);
                             close();
+
+                        } else if (lastCommand instanceof HistoryPacketCommand) {
+
+                            HistoryPacketCommand hpCommand = (HistoryPacketCommand) lastCommand;
+
+                            for (Stack<HistoryPacketCommand> historyPacketCommands : histories) {
+                                if (!historyPacketCommands.empty() &&
+                                        historyPacketCommands.peek().getNickname_host().equals(user.getNickname()) &&
+                                        historyPacketCommands.peek().getNickname_companion().equals(hpCommand.getNickname_companion())) {
+                                    int count = 0;
+                                    while (!historyPacketCommands.empty()) {
+                                        send(historyPacketCommands.pop());
+                                        count++;
+                                        if (count == 2) {
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
 
                         }
 
                     } else close();
 
                 } catch (IOException e) {
-                    goOffline(user);
+                    goOffline(user.getNickname());
                     close();
                     //TODO
                 } catch (ClassNotFoundException e) {
@@ -229,17 +346,22 @@ public class Server {
                 this.connection.sendCommand(command);
             } catch (IOException e) {
                 System.out.println("Ошибка отправки!");
+                /*if (command instanceof MessageCommand) {
+                    Message message = ((MessageCommand) command).getMessage();
+                    saveMessageInReceiverHistory(message, message.getNickname_From(), message.getNickname_To(), false);
+                }*/
             }
         }
 
         private synchronized void sendTo(String nickname, Command command) { // м-д для отправки комманды сервером другому кл-ту
             for (ClientThread clientThread : clients) {
-                if (clientThread.getUser().getNickname().equals(nickname)){
+                if (clientThread.getUser().getNickname().equals(nickname)) {
                     clientThread.send(command);
                     break;
                 }
             }
         }
+
 
         public synchronized void close() {
             clients.remove(this);

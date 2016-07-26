@@ -480,7 +480,7 @@ public class StartForm extends JFrame {
             regModel.setName(reg_nameField.getName());
             regModel.setSurname(reg_surnameField.getText());
             if (isDateCorrect(reg_monthComboBox.getSelectedItem(), reg_dayComboBox.getSelectedItem()));
-                regModel.setAge(reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
+                regModel.setDateOfBirth(reg_yearComboBox.getSelectedItem() + " " + reg_monthComboBox.getSelectedItem()
                     + " " + reg_dayComboBox.getSelectedItem());
             return regModel;
         } else if (mode == Mode.LOGIN_ON && isFieldFilled()) {

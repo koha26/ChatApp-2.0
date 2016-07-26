@@ -2,45 +2,43 @@ package server;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
+import logic.command.HistoryPacketCommand;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Database {
 
     private Map<String, User> userMap; // все пользователи
-    private Map<User, Connection> userOnline; // пользователи, которые онлайн
+    private Map<String, Connection> userOnline; // пользователи, которые онлайн
 
     private File dataPath;
     private File clientsDataFile;
 
     public Database() {
-        this.userMap = new HashMap<String, User>();
-        this.userOnline = new TreeMap<User, Connection>(new SortedByUniqueID());
-
+        this.userMap = Collections.synchronizedMap(new HashMap<String, User>());
+        this.userOnline = Collections.synchronizedMap(new HashMap<String, Connection>());
         this.dataPath = new File(Config.DATA_PATH);
         this.clientsDataFile = new File(dataPath + "/" + Config.CLIENTS_DATA_FILENAME);
 
         loadData();
     }
 
-    public void goOnline(User user, Connection connection) {
+    public void goOnline(String nickname, Connection connection) {
         if (connection.isOpen()) {
-            this.userOnline.put(user, connection);
+            this.userOnline.put(nickname, connection);
         }
     }
 
-    public void goOffline(User user) {
-        if (!userOnline.get(user).isOpen()) {
-            this.userOnline.put(user, null);
-        }
+    public void goOffline(String nickname) {
+        this.userOnline.remove(nickname);
     }
 
     public User checkUser(String nickname, String password) {
@@ -63,16 +61,16 @@ public class Database {
             return false;
     }
 
-    public void deleteUser(User user) {
-        this.userMap.remove(user.getNickname());
-        this.userOnline.remove(user);
+    public void deleteUser(String nickname) {
+        this.userMap.remove(nickname);
+        this.userOnline.remove(nickname);
     }
 
     public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException {
         if (isNickAvailable(regModel.getNick())) { // FIXME by Koha: 10.07.2016
             int uniqueID = getLastUserId() + 1;
             Config.changeID(uniqueID);
-            User newUser = new User(regModel.getNick(), regModel.getPassword(), connection.getSocket().getInetAddress(), uniqueID);//+regModel
+            User newUser = new User(regModel, connection.getSocket().getInetAddress(), uniqueID);
             userMap.put(regModel.getNick(), newUser);
 
             createDirectoryForRegisteredUser(newUser);
@@ -108,6 +106,28 @@ public class Database {
 
     public ArrayList<User> getUsersOnline() {
         return (ArrayList<User>) userMap.values();
+    }
+
+    public void addFriend(String nickname_host, String nickname_friend) {
+        User editedUser = userMap.get(nickname_host);
+        editedUser.addFriend(nickname_friend);
+        userMap.put(nickname_host, editedUser);
+
+        updateData();
+    }
+
+    public void deleteFriend(String nickname_host, String nickname_friend) {
+        User editedUser = userMap.get(nickname_host);
+        boolean contained = editedUser.deleteFriend(nickname_friend);
+        if (contained) {
+            userMap.put(nickname_host, editedUser);
+            updateData();
+        }
+    }
+
+    public Set<String> retainAllFriendOnline(Set<String> comparatedSet) { // возврат друзей онлайн
+        comparatedSet.retainAll(this.userOnline.keySet());
+        return comparatedSet;
     }
 
     // ДЛЯ РАБОТЫ С ДИРИКТОРИЯМИ
@@ -204,36 +224,303 @@ public class Database {
 
     }
 
-    public static void main(String[] args) throws UnknownHostException {
-        /*RegistrationModel rm1 = new RegistrationModel("Bob", "morcos");
-        RegistrationModel rm2 = new RegistrationModel("koha", "iloveNIGGERS");
-        Database db = new Database();
-        db.registerUser(rm1);
-        db.registerUser(rm2);*/
-        User u = new User("kostyq", "as", InetAddress.getLocalHost(), 1);
-        final String dirName = "user_" + u.getUniqueID();
-        String[] files = new File(Config.DATA_PATH).list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                File dirName = new File(dir + "/" + name);
-                if (dir.isDirectory() && name.equals(dirName) && dirName.isDirectory()) {
-                    return true;
-                } else
-                    return false;
+    public Set<String> getSetOfFriendUnreadMes(String nickname_host) { // возврат друзей от которых несколько непрочитанных
+        File file = new File(dataPath + "/user_" + userMap.get(nickname_host).getUniqueID() + "/unread_messages_from.dat");
+        Set<String> unreadMesFrom = new HashSet<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            if (file.exists() && file.isFile()) {
+                String nickFriend = "";
+                while ((nickFriend = reader.readLine()) != null) {
+                    if (isExist(nickFriend))
+                        unreadMesFrom.add(nickFriend);
+                }
             }
-        });
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            return null;
+        }
+        return unreadMesFrom;
+    }
 
-        if (files.length == 0) { // если не нашло такой папки, то создаем ее
-            File newDirectory = new File(Config.DATA_PATH + dirName + "/history");
+    public boolean addFriendAsUnreadMesFrom(String nickname_host, String nickname_friend) { //добавление ника друга, от которого пропущено смс
+        Set<String> unreadMesFrom = getSetOfFriendUnreadMes(nickname_host);
+        if (!unreadMesFrom.contains(nickname_friend)) {
+            File file = new File(dataPath + "/user_" + userMap.get(nickname_host).getUniqueID() + "/unread_messages_from.dat");
+            try {
+                FileWriter fw = new FileWriter(file, true);
+                fw.append(nickname_friend + "\n");
+                fw.flush();
+                fw.close();
+                return true;
+            } catch (IOException e) {
+                System.out.println("Не получилось записать в файл \"" + file.getName() + "\" нового непрочитанного юзера!");
+                return false;
+            }
+        } else
+            return true;
+    }
 
-            while (true) {
-                if (newDirectory.mkdirs()) {
-                    break;
+    public boolean deleteAndCreateUnreadMesFile(String nickname_host) {
+        File file = new File(dataPath + "/user_" + userMap.get(nickname_host).getUniqueID() + "/unread_messages_from.dat");
+        if (file.delete()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Неудалось создать файл \"" + file.getName() + "\"");
+                return false;
+            }
+            return true;
+        } else {
+            System.out.println("Неудалось удалить файл \"" + file.getName() + "\"");
+            return false;
+        }
+    }
+
+    public synchronized void saveMessageInSenderHistory(Message message, String nickname_sender, String nickname_receiver) throws IOException {
+        User user_To = userMap.get(nickname_receiver);                                                //КОМУ - тот, кому отослали
+        User user_From = userMap.get(nickname_sender);                                              //ОТ - тот, кто отослал
+
+        String history_filePath = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID() + "/messages.dat";
+        File historyFile_From = new File(history_filePath);//папка истории переписки ОТ с КОМУ
+
+        if (!historyFile_From.isFile() && !historyFile_From.exists()) {
+            historyFile_From.createNewFile();
+        }
+
+        saveMessageInHistory(historyFile_From, message);
+    }
+
+    public synchronized void saveMessageInReceiverHistory(Message message, String nickname_sender, String nickname_receiver, boolean isRead) throws IOException {
+        User user_To = userMap.get(nickname_receiver);                                                //КОМУ - тот, кому отослали
+        User user_From = userMap.get(nickname_sender);                                           //ОТ - тот, кто отослал
+
+        String history_filePath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID() + "/messages.dat";
+        String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID() + "/unread.dat";
+
+        if (isRead) { // если прочтено, то в историю смс записываем
+            File file_To = new File(history_filePath);//папка истории переписки КОМУ с ОТ
+            if (!file_To.isFile() && !file_To.exists()) {
+                file_To.createNewFile();
+            }
+            saveMessageInHistory(file_To, message);
+        } else { //если не прочтено, то в пропущенные
+            File file_To = new File(unreadMessages_filePath);
+            if (!file_To.isFile() && !file_To.exists()) {
+                file_To.createNewFile();
+            }
+            saveMessageInHistory(file_To, message);
+            addFriendAsUnreadMesFrom(nickname_receiver, nickname_sender);
+        }
+    }
+
+    public synchronized void saveMessageInHistory(File file, Message message) throws IOException {
+        /*User user_To = userMap.get(message.getNickname_To());                                                //ОТ - тот, кто отослал
+        User user_From = userMap.get(message.getNickname_From());                                            //КОМУ - тот, кому отослали
+
+        String dirPath_From = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID() + "/messages.dat";
+        String dirPath_To = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID() + "/messages.dat";
+        File file_From = new File(dirPath_From);//папка истории переписки ОТ с КОМУ
+        File file_To = new File(dirPath_To);
+        if (!file_From.isFile() && !file_From.exists()) {
+            file_From.createNewFile();
+        }
+        if (!file_To.isFile() && !file_To.exists()) {
+            file_To.createNewFile();
+        }*/
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("<NICK>");
+        stringBuilder.append(message.getNickname_From());
+        stringBuilder.append("</NICK>");
+
+        stringBuilder.append("<TEXT>");
+        stringBuilder.append(message.getMessageText());
+        stringBuilder.append("</TEXT>");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+00"));
+        String dateText = dateFormat.format(message.getDate());
+        String[] arg = dateText.split(" ");
+
+        stringBuilder.append("<DATE>");
+        stringBuilder.append(arg[0]);
+        stringBuilder.append("</DATE>");
+
+        stringBuilder.append("<TIME>");
+        stringBuilder.append(arg[1]);
+        stringBuilder.append("</TIME>");
+
+        stringBuilder.append("\n");
+
+        //PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("test.txt", true), "UTF-8"));
+        FileWriter writer = new FileWriter(file, true);
+        writer.append(stringBuilder.toString());
+        writer.flush();
+        writer.close();
+    }
+
+    public synchronized Stack<HistoryPacketCommand> loadHistory(String nickname_asker, String nickname_companion) throws IOException {
+        //id_asker - тот, кто запрашивает историю / id_companion - тот, с кем он общался
+        Stack<HistoryPacketCommand> history = new Stack<>(); //стэк со всей историей
+        ArrayList<Message> messageList; //определенное к-во истории
+        HistoryPacketCommand packet = new HistoryPacketCommand();
+
+        User user_asker = userMap.get(nickname_asker);
+        User user_companion = userMap.get(nickname_companion);
+
+        if (user_asker != null && user_companion != null) {
+
+            String history_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/messages.dat";//or unread_messagges.dat
+            File historyFile = new File(history_filePath);
+            String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/unread.dat";
+            File unreadMessagesFile = new File(unreadMessages_filePath);
+            if (!(historyFile.isFile() && historyFile.exists()) || historyFile.length() == 0) {
+                return null;
+            }
+
+            int numFiles = 1;
+
+            if (unreadMessagesFile.isFile() && unreadMessagesFile.exists() || unreadMessagesFile.length() != 0) {
+                numFiles = 2; //если есть файл с пропущенными, то читаем его
+            }
+
+            Pattern pattern = Pattern.compile(Config.REGEX_HISTORY); // мой паттерн по которому я разберу каждое смс
+            Matcher matcher;
+            BufferedReader reader;
+            messageList = new ArrayList<>();
+            Message message = new Message(); // модель смс, которое я заполню и впихну в массив
+            String inputString;
+
+            for (int i = 0; i < numFiles; i++) { //0 - history; 1 - unread messages
+                if (i == 0) {
+                    reader = new BufferedReader(new FileReader(historyFile));
+                } else {
+                    reader = new BufferedReader(new FileReader(unreadMessagesFile));
+                }
+
+                while ((inputString = reader.readLine()) != null) {
+                    matcher = pattern.matcher(inputString);
+                    int tagNumber = 1; //1 - <NICK>; 2 - <TEXT>; 3 - <DATE> & <TIME>
+
+                    while (matcher.find()) { //проверка есть ли во входящей строке такая строка == моему патерну
+
+                        switch (tagNumber) {
+                            case 1:
+                                message = new Message();
+                                String nickname = matcher.group();
+                                if (nickname.equals(user_asker.getNickname())) { //в истории записывается ник того, чье смс, тоесть ОТ кого
+                                    message.setNickname_From(nickname);
+                                    message.setNickname_To(user_companion.getNickname());
+                                } else if (nickname.equals(user_companion.getNickname())) {
+                                    message.setNickname_From(nickname);
+                                    message.setNickname_To(user_asker.getNickname());
+                                }
+                                tagNumber = 2;
+                                break;
+                            case 2:
+                                message.setMessageText(matcher.group()); //текст
+                                tagNumber = 3;
+                                break;
+                            case 3:
+                                String date = matcher.group();
+                                String time = matcher.group();
+
+                                String[] datePart = date.split("."); //0 - day; 1 - month; 2 - year;
+                                String[] timePart = time.split(":"); //0 - hour, 1 - min, 2 - sec;
+
+                                GregorianCalendar calendar = new GregorianCalendar(); //буду всоввывать в конструктор по формату yyyy.MM.dd Hh:mm:ss
+                                if (datePart.length == 3 && timePart.length == 2) {
+                                    calendar = new GregorianCalendar(Integer.parseInt(datePart[0]), Integer.parseInt(datePart[1]) - 1,
+                                            Integer.parseInt(datePart[2]), Integer.parseInt(timePart[0]), Integer.parseInt(timePart[1]),
+                                            Integer.parseInt(datePart[2]));
+
+                                }
+
+                                message.setDate(calendar.getTime());
+
+                                tagNumber = 1;
+
+                                break;
+                        }
+                    } // закончился разбор строки
+
+                    messageList.add(message); // добавил смс в массив
+
+                    if (messageList.size() == Config.BUFFER_HISTORY_SIZE) { // если массив достиг максимального значения по вместимости,
+                        packet.setNickname_host(nickname_asker);
+                        packet.setNickname_companion(nickname_companion);
+                        packet.setHistoryPart(messageList);
+                        packet.setUnreadHas(i == 1 ? true : false);
+                        history.add(packet); // то готвим его как пакет
+                        messageList = new ArrayList<>();
+                        packet = new HistoryPacketCommand();
+                    }
+                }
+
+                reader.close();
+
+                if (messageList.size() > 0) { // если не собрался пакет последний и закончились строки
+                    packet.setNickname_host(nickname_asker);
+                    packet.setNickname_companion(nickname_companion);
+                    packet.setHistoryPart(messageList);
+                    packet.setUnreadHas(i == 1 ? true : false);
+                    history.add(packet);
+                    messageList = new ArrayList<>();
+                    packet = new HistoryPacketCommand();
                 }
             }
         }
+        return history;
+    }
 
-        //db.changeID(db.getLastUserId());
+
+    public static void main(String[] args) throws IOException {
+        /*ArrayList<String> resultSet = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        Pattern pattern = Pattern.compile(Config.REGEX);
+        Matcher matcher;
+        BufferedReader reader = new BufferedReader(new FileReader("text.txt"));
+        StringBuffer buffer = new StringBuffer();
+        String inputString;
+        while ((inputString = reader.readLine()) != null) {
+            matcher = pattern.matcher(inputString);
+            while (matcher.find()) {  //вообще это надо доделать + добавить в парам Юзер
+                buffer.append(matcher.group());
+                buffer.append(" ");
+            }
+            resultSet.add(buffer.toString());
+            buffer.setLength(0);
+        }
+        long finish = System.currentTimeMillis();
+        System.out.println("Time = " + (finish - start) + " ms");
+
+        for (String st : resultSet) {
+            System.out.println(st);
+        }*/
+
+        /*Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+        System.out.println(sdf.format(date));
+
+        GregorianCalendar calendar = new GregorianCalendar(2016, 6, 1, 1, 6, 8);
+        System.out.println(calendar.getTime());
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+00"));
+        System.out.println(calendar.getTime());
+
+
+        System.out.println();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("z dd.MM.yy HH:mm");
+        System.out.println(dateFormat.format(date));
+
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+06"));//"GMT+00"
+
+        System.out.println(dateFormat.format(date));
+
+        System.out.println();
+        System.out.println(dateFormat.format(calendar.getTime()));
+*/
 
     }
 }
