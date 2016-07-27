@@ -2,8 +2,9 @@ package logic;
 
 import java.io.Serializable;
 import java.net.InetAddress;
-
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class User implements Serializable {
@@ -124,8 +125,14 @@ public class User implements Serializable {
         this.uniqueID = uniqueID;
     }
 
-    public Set<String> getFriends() {
+    public Set<String> getFriendsSet() {
         return friends;
+    }
+
+    public List<String> getFriendsList() {
+        List<String> list = new ArrayList<>();
+        list.addAll(friends);
+        return list;
     }
 
     public void setFriends(Set<String> friends) {

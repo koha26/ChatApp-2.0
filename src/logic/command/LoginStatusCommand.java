@@ -49,4 +49,6 @@ public class LoginStatusCommand extends Command {
     public void setExceptionDescription(String exceptionDescription) {
         this.exceptionDescription = exceptionDescription;
     }
+
+
 }

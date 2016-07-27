@@ -44,7 +44,7 @@ public class Client extends Observable {
      * Методы для отправки конкретных комманд, которые разрешены клиенту.
      * Сделано для того, чтобы в пользовательском интерфейсе и обработчиках не было взаимодействия с коммандами напрямую.
      */
-    public void sendAcceptConnectionCommand(String nickname_To, String nickname_From, boolean isAccept) {
+    public void sendAcceptFriendshipCommand(String nickname_To, String nickname_From, boolean isAccept) {
         AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
         acCommand.setNickname_From(nickname_From);
         acCommand.setNickname_To(nickname_To);
@@ -78,7 +78,7 @@ public class Client extends Observable {
         send(rCommand);
     }
 
-    public void sendSessionRequestCommand(String nickname_To, String nickname_From) {
+    public void sendFriendshipRequestCommand(String nickname_To, String nickname_From) {
         FriendshipRequestCommand srCommand = new FriendshipRequestCommand();
         srCommand.setNickname_From(nickname_From);
         srCommand.setNickname_To(nickname_To);
@@ -122,7 +122,8 @@ public class Client extends Observable {
             client.start();
             client.run();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Oops!");
         }
     }
 

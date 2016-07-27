@@ -185,7 +185,7 @@ public class Application implements Observer {
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
 
             if (user.getNickname().equals("AAAAAAA"))
-                client.sendAcceptConnectionCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
+                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
 
         } else if (arg instanceof AcceptFriendshipCommand){
 

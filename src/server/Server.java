@@ -206,7 +206,7 @@ public class Server {
                                 if (user != null) { // если все верно и выдало объект User
                                     goOnline(user.getNickname(), connection);
                                     lsCommand = new LoginStatusCommand(user);
-                                    lsCommand.setFriendOnline(retainAllFriendOnline(user.getFriends()));
+                                    lsCommand.setFriendOnline(retainAllFriendOnline(user.getFriendsSet()));
 
                                     Set<String> unreadMessagesFrom = getSetOfFriendUnreadMes(user.getNickname());//позьзователи с которыми есть непрочитанные смс
                                     deleteAndCreateUnreadMesFile(user.getNickname()); // удалить файл с никами выше
@@ -279,6 +279,9 @@ public class Server {
                             AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) lastCommand;
                             if (isExist(acCommand.getNickname_From()) && isExist(acCommand.getNickname_To()) &&
                                     isOnline(acCommand.getNickname_From()) && isOnline(acCommand.getNickname_To())) {
+
+                                if (acCommand.isAccept())
+                                    addFriend(acCommand.getNickname_To(),acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
 
                                 sendTo(acCommand.getNickname_To(), acCommand);
                             }
