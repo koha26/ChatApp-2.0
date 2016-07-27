@@ -149,7 +149,7 @@
       <file leaf-file-name="Server.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="252" column="33" selection-start="10736" selection-end="10736" vertical-scroll-proportion="0.0" vertical-offset="5559" max-vertical-offset="6154">
+            <state line="281" column="0" selection-start="12389" selection-end="12389" vertical-scroll-proportion="0.0" vertical-offset="4777" max-vertical-offset="6562">
               <folding />
             </state>
           </provider>
@@ -158,7 +158,7 @@
       <file leaf-file-name="MessageCommand.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/command/MessageCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="14" selection-start="107" selection-end="107" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+            <state line="5" column="14" selection-start="107" selection-end="107" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="510">
               <folding />
             </state>
           </provider>
@@ -167,7 +167,7 @@
       <file leaf-file-name="Client.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/server/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="225" column="62" selection-start="8592" selection-end="8592" vertical-scroll-proportion="0.0" vertical-offset="2810" max-vertical-offset="4216">
+            <state line="125" column="37" selection-start="4227" selection-end="4227" vertical-scroll-proportion="0.0" vertical-offset="2125" max-vertical-offset="4454">
               <folding />
             </state>
           </provider>
@@ -176,10 +176,8 @@
       <file leaf-file-name="Message.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/Message.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="20" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="5" column="20" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="85" max-vertical-offset="1088">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -187,10 +185,8 @@
       <file leaf-file-name="RegistrationModel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/RegistrationModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="36" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="935">
-              <folding>
-                <element signature="e#771#772#0" expanded="true" />
-              </folding>
+            <state line="35" column="36" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0" vertical-offset="595" max-vertical-offset="1377">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -198,29 +194,25 @@
       <file leaf-file-name="User.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="13" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="2193">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="132" column="46" selection-start="3063" selection-end="3063" vertical-scroll-proportion="0.0" vertical-offset="2244" max-vertical-offset="2992">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LoginStatusCommand.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="5" selection-start="320" selection-end="320" vertical-scroll-proportion="0.19322033" vertical-offset="124" max-vertical-offset="714">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Application.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Application.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/client/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="182" column="60" selection-start="8980" selection-end="8980" vertical-scroll-proportion="0.0" vertical-offset="1161" max-vertical-offset="3060">
+            <state line="143" column="78" selection-start="6628" selection-end="6628" vertical-scroll-proportion="-0.8067797" vertical-offset="2431" max-vertical-offset="3196">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainFormVisualisation.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/gui/MainFormVisualisation.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="13" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="119" max-vertical-offset="2635">
               <folding />
             </state>
           </provider>
@@ -229,16 +221,7 @@
       <file leaf-file-name="FriendshipRequestCommand.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/command/FriendshipRequestCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AcceptFriendshipCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
+            <state line="4" column="0" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="578">
               <folding />
             </state>
           </provider>
@@ -293,17 +276,17 @@
         <option value="$PROJECT_DIR$/resources/serverdb/userlist/user_1/unread_messages_from.dat" />
         <option value="$PROJECT_DIR$/src/logic/command/HistoryPacketCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/RegistrationModel.java" />
-        <option value="$PROJECT_DIR$/src/server/Client.java" />
-        <option value="$PROJECT_DIR$/src/server/Server.java" />
         <option value="$PROJECT_DIR$/src/Fruit.java" />
         <option value="$PROJECT_DIR$/src/MyTasteException.java" />
         <option value="$PROJECT_DIR$/src/server/Database.java" />
         <option value="$PROJECT_DIR$/src/Test.java" />
-        <option value="$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/command/FriendshipRequestCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java" />
-        <option value="$PROJECT_DIR$/src/logic/User.java" />
         <option value="$PROJECT_DIR$/src/gui/StartForm.java" />
+        <option value="$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java" />
+        <option value="$PROJECT_DIR$/src/logic/User.java" />
+        <option value="$PROJECT_DIR$/src/server/Server.java" />
+        <option value="$PROJECT_DIR$/src/server/Client.java" />
         <option value="$PROJECT_DIR$/src/main/client/Application.java" />
       </list>
     </option>
@@ -342,6 +325,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -372,6 +356,64 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ChatApp2.0" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -435,7 +477,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -478,7 +519,7 @@
       <recent name="C:\Users\demo\IdeaProjects\ChatApp2.0\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Test">
+  <component name="RunManager" selected="Application.Application">
     <configuration default="false" name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="server.Server" />
@@ -837,11 +878,11 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.Fruit" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Database" />
-        <item index="2" class="java.lang.String" itemvalue="Application.Server" />
-        <item index="3" class="java.lang.String" itemvalue="Application.Test (1)" />
-        <item index="4" class="java.lang.String" itemvalue="Application.Application" />
+        <item index="0" class="java.lang.String" itemvalue="Application.Application" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Fruit" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Database" />
+        <item index="3" class="java.lang.String" itemvalue="Application.Server" />
+        <item index="4" class="java.lang.String" itemvalue="Application.Test (1)" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -903,12 +944,15 @@
       <workItem from="1469539589944" duration="621000" />
       <workItem from="1469543566604" duration="16390000" />
       <workItem from="1469571140112" duration="3634000" />
-      <workItem from="1469575506041" duration="985000" />
+      <workItem from="1469575506041" duration="1617000" />
+      <workItem from="1469631572426" duration="998000" />
+      <workItem from="1469638796180" duration="1921000" />
+      <workItem from="1469640786446" duration="11000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="215288000" />
+    <option name="totallyTimeSpent" value="218850000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -932,7 +976,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -985,6 +1029,13 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="697">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/StartForm.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="482" column="40" selection-start="19524" selection-end="19524" vertical-scroll-proportion="0.0" vertical-offset="8194" max-vertical-offset="8908">
@@ -995,9 +1046,7 @@
     <entry file="file://$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="0" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="680">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1041,11 +1090,6 @@
     <entry file="file://$PROJECT_DIR$/src/gui/MessageView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="13" selection-start="248" selection-end="248" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1802" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/MainFormVisualisation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="37" selection-start="8016" selection-end="8016" vertical-scroll-proportion="0.0" vertical-offset="2564" max-vertical-offset="3400" />
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/jars/xstream-1.4.9.jar!/com/thoughtworks/xstream/XStream.class">
@@ -1130,9 +1174,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/clients.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="30" selection-start="354" selection-end="354" vertical-scroll-proportion="-1.7796143" vertical-offset="816" max-vertical-offset="1411">
-          <folding />
-        </state>
+        <state line="10" column="30" selection-start="354" selection-end="354" vertical-scroll-proportion="-1.7796143" vertical-offset="816" max-vertical-offset="1411" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/Connection.java">
@@ -1140,11 +1182,6 @@
         <state line="54" column="19" selection-start="1431" selection-end="1431" vertical-scroll-proportion="0.33224222" vertical-offset="460" max-vertical-offset="1173">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/Set.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="16" selection-start="10414" selection-end="10414" vertical-scroll-proportion="0.49918166" vertical-offset="3520" max-vertical-offset="6732" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server.properties">
@@ -1166,9 +1203,7 @@
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="211" column="6" selection-start="9724" selection-end="9724" vertical-scroll-proportion="-0.5859247" vertical-offset="3503" max-vertical-offset="19771">
-          <folding />
-        </state>
+        <state line="211" column="6" selection-start="9724" selection-end="9724" vertical-scroll-proportion="-0.5859247" vertical-offset="3503" max-vertical-offset="19771" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/HistoryPacketCommand.java">
@@ -1197,13 +1232,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/MessageCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="107" selection-end="107" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/FriendshipRequestCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="0" selection-start="81" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
@@ -1218,13 +1246,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/client/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="182" column="60" selection-start="8980" selection-end="8980" vertical-scroll-proportion="0.0" vertical-offset="1161" max-vertical-offset="3060">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
@@ -1232,60 +1253,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="478" column="63" selection-start="19977" selection-end="19977" vertical-scroll-proportion="0.0" vertical-offset="7885" max-vertical-offset="8483">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="252" column="33" selection-start="10736" selection-end="10736" vertical-scroll-proportion="0.0" vertical-offset="5559" max-vertical-offset="6154">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="225" column="62" selection-start="8592" selection-end="8592" vertical-scroll-proportion="0.0" vertical-offset="3259" max-vertical-offset="4216">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="20" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/RegistrationModel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="36" selection-start="738" selection-end="738" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
-          <folding>
-            <element signature="e#771#772#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="13" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="2193">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="5" selection-start="320" selection-end="320" vertical-scroll-proportion="0.19322033" vertical-offset="124" max-vertical-offset="714">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="19" column="0" selection-start="397" selection-end="397" vertical-scroll-proportion="0.0" vertical-offset="5" max-vertical-offset="748">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/Set.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="17" selection-start="2997" selection-end="2997" vertical-scroll-proportion="0.3322034" vertical-offset="841" max-vertical-offset="6732" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="46" selection-start="3063" selection-end="3063" vertical-scroll-proportion="0.0" vertical-offset="1224" max-vertical-offset="2261">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Database.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="16" selection-start="3266" selection-end="3266" vertical-scroll-proportion="0.33275563" vertical-offset="1338" max-vertical-offset="8279">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="281" column="0" selection-start="12389" selection-end="12389" vertical-scroll-proportion="0.0" vertical-offset="4109" max-vertical-offset="6205">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/MessageCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="14" selection-start="107" selection-end="107" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="37" selection-start="4227" selection-end="4227" vertical-scroll-proportion="0.0" vertical-offset="1683" max-vertical-offset="4233">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/MainFormVisualisation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="122" selection-end="122" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="2346">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/client/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="143" column="78" selection-start="6628" selection-end="6628" vertical-scroll-proportion="-0.8067797" vertical-offset="2431" max-vertical-offset="3196">
+          <folding />
         </state>
       </provider>
     </entry>
