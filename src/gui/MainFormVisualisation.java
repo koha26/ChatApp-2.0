@@ -3,12 +3,12 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class MainFormVisualisation extends JFrame {
-
     private JPanel mainPanel;
     private JButton settingsButton, contactsButton, exitButton;
-    private JButton friendsNick = new JButton("BOB_MORCOS");
+    private JButton friendsNick = new OutlineButton("MaxTEAMLEAD");
     private JTextArea messageArea = new JTextArea();
     private JScrollPane messageScrollPane = new JScrollPane(messageArea);
     private MessageView messageView = new MessageView();
@@ -20,7 +20,7 @@ public class MainFormVisualisation extends JFrame {
     private final ImageIcon exitButIcon = new ImageIcon("images/mainform/exit_button.png");
     private final ImageIcon exitButIconEntered = new ImageIcon("images/mainform/exit_button_entered.png");
 
-    public MainFormVisualisation() {
+    public MainFormVisualisation() throws IOException {
         GUIStandartOperations.FrameStartOperations(this);
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
@@ -79,14 +79,16 @@ public class MainFormVisualisation extends JFrame {
         messageScrollPane.setOpaque(false);
         messageScrollPane.getViewport().setOpaque(false);
         messageScrollPane.setBorder(null);
-        lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(10, 175, 5, 175), 0, 0));
+        lastPanel.add(messageScrollPane, new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 10, 5, 10), 0, 0));
+        lastPanel.add(CircleLabelClass.CircleLabel("max.jpg"), new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 100, 5, 0), 0, 0));
+        lastPanel.add(CircleLabelClass.CircleLabel("pavlo.jpg"), new GridBagConstraints(3, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(5, 0, 5, 100), 0, 0));
 
+        mainPanel.add(friendsNick, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 100, 15, 300), 0, 0));
         mainPanel.add(settingsButton, new GridBagConstraints(1, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 2), 0, 0));
         mainPanel.add(contactsButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 2), 0, 0));
         mainPanel.add(exitButton, new GridBagConstraints(3, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 2, 15, 75), 0, 0));
-        mainPanel.add(friendsNick, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(20, 100, 15, 300), 0, 0));
         mainPanel.add(messageView, new GridBagConstraints(0, 1, GridBagConstraints.REMAINDER, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 75, 2, 75), 0, 0));
-        mainPanel.add(lastPanel, new GridBagConstraints(0, 2, GridBagConstraints.REMAINDER, 1, 1, 0.2, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        mainPanel.add(lastPanel, new GridBagConstraints(0, 2, GridBagConstraints.REMAINDER, 1, 1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
         add(mainPanel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
@@ -107,6 +109,7 @@ public class MainFormVisualisation extends JFrame {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
                     messageView.sendMessage(messageArea.getText());
                     messageArea.setText("");
+                    messageView.getMessage("Здравствуйте, Максим Вадимович!");
                     repaintAndRevalidate();
                 }
             }
