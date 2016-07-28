@@ -446,7 +446,14 @@ public class StartForm extends JFrame {
     public static void showErrorLabel(String errorText) {
         errorTextField.setText(errorText);
         errorTextField.setVisible(true);
-        errorTextField.revalidate();
+        Timer errorShowTime = new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                errorTextField.setVisible(false);
+            }
+        });
+        errorShowTime.start();
+        //errorTextField.revalidate();
     }
 
     public boolean isDateCorrect(Object month, Object day) {
