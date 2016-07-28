@@ -1,15 +1,26 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class AvatarEditor extends JFrame {
+    private JFrame thisFrame;
     private JPanel image;
     private JButton saveButton, cancelButton, plusButton, minusButton;
     private JLabel logo = new JLabel(new ImageIcon("images/popup.png"));
-    private Point point = new Point();
+    private final ImageIcon saveButIcon = new ImageIcon("images/avatarform/pl.png");
+    private final ImageIcon saveButIconEntered = new ImageIcon("images/avatarform/pl_e.png");
+    private final ImageIcon cancelButIcon = new ImageIcon("images/avatarform/cancel.png");
+    private final ImageIcon cancelButIconEntered = new ImageIcon("images/avatarform/cancel_e.png");
+    private final ImageIcon plusButIcon = new ImageIcon("images/avatarform/z1.png");
+    private final ImageIcon plusButIconEntered = new ImageIcon("images/avatarform/z1_e.png");
+    private final ImageIcon minusButIcon = new ImageIcon("images/avatarform/z2.png");
+    private final ImageIcon minusButIconEntered = new ImageIcon("images/avatarform/z2_e.png");
 
     private Dimension calculateSize(ImageIcon img, int width, int height) {
         int maxsize;
@@ -31,37 +42,51 @@ public class AvatarEditor extends JFrame {
         return new Dimension((int) (newWidth / 1.5), (int) (newHeight / 1.5));
     }
 
-    public AvatarEditor() throws IOException {
+    private BufferedImage cutImage(BufferedImage image, int x, int y, int size) {
+        BufferedImage newImage = image.getSubimage(x, y, size, size);
+        return newImage;
+    }
+
+    public AvatarEditor(File file) throws IOException {
+        thisFrame = this;
         this.setResizable(false);
         this.setUndecorated(true);
         this.setLayout(new GridBagLayout());
-        ImageIcon img = new ImageIcon("lambo.jpg");
-        System.out.println(img.getIconHeight() + ";" + img.getIconWidth());
+        ImageIcon img = new ImageIcon(file.getAbsolutePath());
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
         int x = screenSize.width;
         int y = screenSize.height;
         setBounds(y / 4, x / 4, y / 2, x / 2);
-        Dimension d = calculateSize(img, x, y);
-        LoadImage.resizeImage("lambo.jpg", (int) d.getWidth(), (int) d.getHeight());
+        final Dimension d = calculateSize(img, x, y);
+        final BufferedImage bufImage = LoadImage.resizeImage(file.getAbsolutePath(), (int) d.getWidth(), (int) d.getHeight());
 
+        image = new ImagePanel(bufImage);
+        image.setSize(new Dimension((int) d.getWidth(), (int) d.getHeight()));
         System.out.println(d);
-
-        image = new ImagePanel("1.jpg");
-        image.setSize(d);
-        image.setBackground(new Color(0xd0d0ff));
         image.setLayout(new GridBagLayout());
-        plusButton = new JButton("+");
-        minusButton = new JButton("-");
-        saveButton = new JButton("Save");
-        cancelButton = new JButton("Cancel");
+        saveButton = GUIStandartOperations.ButtonStartOperations(saveButIcon, saveButIconEntered, true);
+        cancelButton = GUIStandartOperations.ButtonStartOperations(cancelButIcon, cancelButIconEntered, true);
+        plusButton = GUIStandartOperations.ButtonStartOperations(plusButIcon, plusButIconEntered, true);
+        minusButton = GUIStandartOperations.ButtonStartOperations(minusButIcon, minusButIconEntered, true);
+        minusButton.setEnabled(false);
 
-        final MyPanel myPanel = new MyPanel();
+        final MyPanel myPanel = new MyPanel(d);
 
         plusButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                minusButton.setEnabled(true);
+                if (myPanel.getY() <= 2) {
+                    myPanel.setLocation(myPanel.getX(), myPanel.getY());
+                } else if (myPanel.getY() + myPanel.getSizeOfSquare() >= (d.getHeight() - 3)) {
+                    myPanel.setLocation(myPanel.getX(), myPanel.getY() - 10);
+                }
+                myPanel.setSizeOfSquare(myPanel.getSizeOfSquare() + 10);
                 myPanel.setSize(myPanel.getWidth() + 10, myPanel.getHeight() + 10);
+                if (myPanel.getSizeOfSquare() + 20 > d.getHeight() || myPanel.getSizeOfSquare() + 20 > d.getWidth()) {
+                    plusButton.setEnabled(false);
+                }
                 image.repaint();
                 image.revalidate();
             }
@@ -70,7 +95,12 @@ public class AvatarEditor extends JFrame {
         minusButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                plusButton.setEnabled(true);
                 myPanel.setSize(myPanel.getWidth() - 10, myPanel.getHeight() - 10);
+                myPanel.setSizeOfSquare(myPanel.getSizeOfSquare() - 10);
+                if (myPanel.getSizeOfSquare() - 10 < 150) {
+                    minusButton.setEnabled(false);
+                }
                 image.repaint();
                 image.revalidate();
             }
@@ -79,28 +109,40 @@ public class AvatarEditor extends JFrame {
         cancelButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(-1);
+                thisFrame.dispose();
+            }
+        });
+
+        saveButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BufferedImage newImage = cutImage(bufImage, myPanel.getX(), myPanel.getY(), myPanel.getSizeOfSquare());
+                try {
+                    ImageIO.write(newImage, "JPG", new File("2.jpg"));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                thisFrame.dispose();
             }
         });
 
         JPanel bottomPanel = new JPanel(new GridBagLayout());
-        bottomPanel.add(saveButton, new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(logo, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 7, 2, 7), 0, 0));
+        bottomPanel.setBackground(Color.BLACK);
+        bottomPanel.add(saveButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(cancelButton, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 0), 0, 0));
+        bottomPanel.add(logo, new GridBagConstraints(2, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, (int) d.getWidth() - 32 - 32 - 2 - 2 - 2, 2, 2), 0, 0));
 
         JPanel rightPanel = new JPanel(new GridBagLayout());
-        rightPanel.add(plusButton, new GridBagConstraints(0, 0, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        rightPanel.add(minusButton, new GridBagConstraints(0, 1, 1, 1, 0, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-
-        System.out.println(point);
+        rightPanel.setBackground(Color.BLACK);
+        rightPanel.add(plusButton, new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        rightPanel.add(minusButton, new GridBagConstraints(0, 1, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
         image.setLayout(null);
         image.add(myPanel);
 
-
         this.add(image, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        this.add(rightPanel, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        this.add(bottomPanel, new GridBagConstraints(0, 1, 2, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        this.add(rightPanel, new GridBagConstraints(1, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        this.add(bottomPanel, new GridBagConstraints(0, 1, 2, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         this.setSize((int) ((int) d.getWidth() + bottomPanel.getPreferredSize().getHeight()), (int) ((int) d.getHeight() + rightPanel.getPreferredSize().getWidth()));
 
@@ -109,7 +151,7 @@ public class AvatarEditor extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        SwingUtilities.invokeLater(new Runnable() {
+        /*SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -118,6 +160,6 @@ public class AvatarEditor extends JFrame {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
     }
 }

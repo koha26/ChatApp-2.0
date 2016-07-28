@@ -34,11 +34,11 @@ public class Application implements Observer {
     private Client client;
     private User user;
 
-    public Application() {
+    public Application() throws IOException {
         init();
     }
 
-    public void init() {
+    public void init() throws IOException {
         this.startForm = new StartForm();
         this.mainForm = new MainFormVisualisation();
         this.mode = Mode.STARTFROM_ON;
@@ -138,7 +138,11 @@ public class Application implements Observer {
                     if (mode == Mode.STARTFROM_ON && Application.this.mode != Mode.STARTFROM_ON) {
                         Application.this.mode = mode;
                         startForm.setVisible(true); //становится видна логин форма
-                        mainForm = new MainFormVisualisation(); //создаем новую МейнФорму, удаляя старые данные с нее
+                        try {
+                            mainForm = new MainFormVisualisation(); //создаем новую МейнФорму, удаляя старые данные с нее
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
                         Application.this.mode = mode;
@@ -196,7 +200,7 @@ public class Application implements Observer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Application app = new Application();
         app.start();
     }
