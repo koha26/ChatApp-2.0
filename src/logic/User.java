@@ -1,5 +1,6 @@
 package logic;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -12,12 +13,14 @@ public class User implements Serializable {
     private String password;
     private InetAddress ipAddress;
     private int uniqueID;
-    private Set<String> friends;
+    private ArrayList<String> friends;
     private String country;
     private String city;
     private String dateOfBirth;
     private String name;
     private String surname;
+    private String sex;
+    private transient BufferedImage avatar;
 
     public User() {
         this.nickname = "";
@@ -38,6 +41,8 @@ public class User implements Serializable {
         this.country = "";
         this.name = "";
         this.surname = "";
+        this.sex = "";
+        this.friends = new ArrayList<>(0);
     }
 
     public User(RegistrationModel regModel, InetAddress ipAddress, int uniqueID) {
@@ -50,6 +55,8 @@ public class User implements Serializable {
         this.country = regModel.getCountry();
         this.name = regModel.getName();
         this.surname = regModel.getSurname();
+        this.sex = regModel.getSex();
+        this.friends = new ArrayList<>(0);
     }
 
 
@@ -125,31 +132,48 @@ public class User implements Serializable {
         this.uniqueID = uniqueID;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public BufferedImage getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(BufferedImage avatar) {
+        this.avatar = avatar;
+    }
+
     public Set<String> getFriendsSet() {
-        return friends;
+        Set<String> set = new HashSet<>();
+        set.addAll(friends);
+        return set;
     }
 
     public List<String> getFriendsList() {
-        List<String> list = new ArrayList<>();
-        list.addAll(friends);
-        return list;
+        return friends;
     }
 
-    public void setFriends(Set<String> friends) {
+    public void setFriends(ArrayList<String> friends) {
         this.friends = friends;
     }
 
-    public void addFriend(String nickname_friend) {
-        if (friends != null && friends.size() > 0) {
-            friends.add(nickname_friend);
-        } else {
-            friends = new HashSet<>();
-            friends.add(nickname_friend);
+    public void addFriend(String nicknameFriend) {
+        if (!friends.contains(nicknameFriend)){
+            friends.add(nicknameFriend);
         }
     }
 
-    public boolean deleteFriend(String nickname_friend) {
-        return friends.remove(nickname_friend);
+    public boolean deleteFriend(String nicknameFriend) {
+        return friends.remove(nicknameFriend);
+    }
+
+    public boolean hasFriend(String nicknameFriend) {
+        return friends.contains(nicknameFriend);
     }
 
     @Override
