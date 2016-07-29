@@ -7,6 +7,7 @@ import logic.RegistrationModel;
 import logic.User;
 import logic.command.HistoryPacketCommand;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -81,6 +82,50 @@ public class Database {
             return null;
     }
 
+    public User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged) {
+        if (changedUser != null && userMap.containsKey(changedUser.getNickname())) {
+            if (isAvatarChanged) {
+                File avatarDir = new File(dataPath + "/user_" + changedUser.getUniqueID() + "/avatar");
+                File avatarFile = new File(avatarDir.getPath() + "/avatar.jpg");
+                if (avatarFile.exists() && avatarFile.isFile()) {
+                    File[] list = avatarDir.listFiles(new FilenameFilter() {
+                        @Override
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".jpg");
+                        }
+                    });
+                    avatarFile.renameTo(new File(avatarDir.getPath() + "/avatar_" + list.length + ".jpg"));
+                }
+                int tries = 0;
+
+                while (tries < 20) {
+                    try {
+                        if (ImageIO.write(changedUser.getAvatar(), "jpg", avatarFile)) {
+                            break;
+                        } else {
+                            tries++;
+                        }
+                    } catch (IOException e) {
+                        tries++;
+                    }
+                }
+
+            }
+
+            if (isInfoChanged) {
+                userMap.put(changedUser.getNickname(), changedUser);
+
+                updateData();
+                return userMap.get(changedUser.getNickname());
+            } else {
+
+                return userMap.get(changedUser.getNickname());
+            }
+        } else {
+            return null;
+        }
+    }
+
     public boolean isNickAvailable(String nickname) {
         return !userMap.containsKey(nickname);
     }
@@ -146,7 +191,28 @@ public class Database {
             } catch (FileNotFoundException e) {
                 // ex
             }
+
+            File avatarFile;
+            File defaultImageFile = new File("/resources/avatar/default.jpg");
+
+            for (User u : userMap.values()) {
+                avatarFile = new File(dataPath + "/user_" + u.getUniqueID() + "/avatar/avatar.jpg");
+                if (avatarFile.exists() && avatarFile.isFile()) {
+                    try {
+                        u.setAvatar(ImageIO.read(avatarFile));
+                    } catch (IOException e) {
+                        u.setAvatar(null);
+                    }
+                } else {
+                    try {
+                        u.setAvatar(ImageIO.read(defaultImageFile));
+                    } catch (IOException e) {
+                        u.setAvatar(null);
+                    }
+                }
+            }
         }
+
     }
 
     public void updateData() {
@@ -213,12 +279,22 @@ public class Database {
         String[] files = dataPath.list(filter);
 
         if (files.length == 0) { // если не нашло такой папки, то создаем ее
-            File newDirectory = new File(dataPath + "/" + dirName + "/history");
+            File newHistoryDir = new File(dataPath + "/" + dirName + "/history");
+            File newAvatarDir = new File(dataPath + "/" + dirName + "/avatar");
 
-            while (true) {
-                if (newDirectory.mkdirs()) {
+            int count = 0;
+            while (count < 10) {
+                if (newHistoryDir.mkdirs()) {
                     break;
                 }
+                count++;
+            }
+            count = 0;
+            while (count < 10) {
+                if (newAvatarDir.mkdirs()) {
+                    break;
+                }
+                count++;
             }
         }
 

@@ -85,6 +85,11 @@ public class Client extends Observable {
         send(srCommand);
     }
 
+    public void sendChangingUserInfoCommand(User changedUser, boolean isInfoChanged, boolean isAvatarChanged){
+        ChangingUserInfoCommand cuiCommand = new ChangingUserInfoCommand(changedUser,isInfoChanged,isAvatarChanged);
+        send(cuiCommand);
+    }
+
     public void sendDisconnectCommand() {
         send(new DisconnectCommand());
     }
@@ -237,7 +242,14 @@ public class Client extends Observable {
                         setChanged();
                         notifyObservers(hpCommand);
 
+                    } else if (lastCommand instanceof FriendOfflineCommand){
+
+                        FriendOfflineCommand foCommand = (FriendOfflineCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(foCommand);
                     }
+                    // А ВООБЩЕ МОЖНО НАПИСАТЬ В 5 строк этот обработкич комманд
 
                 }
             }

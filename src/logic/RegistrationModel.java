@@ -11,6 +11,7 @@ public class RegistrationModel implements Serializable{
     private String dateOfBirth;
     private String name;
     private String surname;
+    private String sex;
 
     public RegistrationModel(String nick, String password) {
         this.nick = nick;
@@ -71,5 +72,13 @@ public class RegistrationModel implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

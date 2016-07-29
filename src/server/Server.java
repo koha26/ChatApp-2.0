@@ -27,7 +27,7 @@ public class Server {
             this.database = new Database();
             clients = new LinkedBlockingDeque<ClientThread>();
         } catch (UnknownHostException e) {
-            System.out.println("Неизвестный хост: "+e.getMessage());
+            System.out.println("Неизвестный хост: " + e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -95,6 +95,10 @@ public class Server {
         return database.isExist(nickname);
     }
 
+    public User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged){
+        return database.modificationUser(changedUser,isInfoChanged,isAvatarChanged);
+    }
+
     public boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
         return database.isOnline(nickname);
     }
@@ -115,7 +119,7 @@ public class Server {
         return database.getSetOfFriendUnreadMes(nickname_host);
     }
 
-    public boolean deleteAndCreateUnreadMesFile(String nickname_host){
+    public boolean deleteAndCreateUnreadMesFile(String nickname_host) {
         return database.deleteAndCreateUnreadMesFile(nickname_host);
     }
 
@@ -241,9 +245,9 @@ public class Server {
                                     EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
                                         @Override
                                         public void run() {
-                                            while (!toWritting.empty()){
+                                            while (!toWritting.empty()) {
                                                 HistoryPacketCommand packetCommand = toWritting.pop();
-                                                for (Message message :packetCommand.getHistoryPart()) {
+                                                for (Message message : packetCommand.getHistoryPart()) {
                                                     saveMessageInReceiverHistory(message, packetCommand.getNickname_host(), packetCommand.getNickname_companion(), true);
                                                 }
                                             }
@@ -281,7 +285,7 @@ public class Server {
                                     isOnline(acCommand.getNickname_From()) && isOnline(acCommand.getNickname_To())) {
 
                                 if (acCommand.isAccept())
-                                    addFriend(acCommand.getNickname_To(),acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
+                                    addFriend(acCommand.getNickname_To(), acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
 
                                 sendTo(acCommand.getNickname_To(), acCommand);
                             }
@@ -329,6 +333,10 @@ public class Server {
                                     break;
                                 }
                             }
+                        } else if (lastCommand instanceof ChangingUserInfoCommand) {
+
+                            ChangingUserInfoCommand cuiCommand = (ChangingUserInfoCommand) lastCommand;
+                            modificationUser(cuiCommand.getChangedUser(), cuiCommand.isInfoChanged(), cuiCommand.isAvatarChanged());
 
                         }
 
@@ -336,6 +344,7 @@ public class Server {
 
                 } catch (IOException e) {
                     goOffline(user.getNickname());
+                    broadcastOfflineFriend(user.getNickname());
                     close();
                     //TODO
                 } catch (ClassNotFoundException e) {
@@ -365,6 +374,16 @@ public class Server {
             }
         }
 
+        public void broadcastOfflineFriend(String nicknameFriend) {
+            for (ClientThread clientThread : clients) {
+                if (clientThread.user != null && clientThread != this) {
+                    if (clientThread.user.hasFriend(nicknameFriend)) {
+                        send(new FriendOfflineCommand(nicknameFriend));
+                    }
+                }
+            }
+
+        }
 
         public synchronized void close() {
             clients.remove(this);
