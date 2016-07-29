@@ -34,11 +34,11 @@ public class Application implements Observer {
     private Client client;
     private User user;
 
-    public Application() {
+    public Application() throws IOException {
         init();
     }
 
-    public void init() {
+    public void init() throws IOException {
         this.startForm = new StartForm();
         try {
             this.mainForm = new MainFormVisualisation();
@@ -204,7 +204,7 @@ public class Application implements Observer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Application app = new Application();
         app.start();
     }

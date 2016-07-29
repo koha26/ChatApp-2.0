@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class LoadImage {
-    public static void resizeImage(String path, int width, int height) throws IOException {
+    public static BufferedImage resizeImage(String path, int width, int height) throws IOException {
         BufferedImage originalImage = null;
         try {
             originalImage = ImageIO.read(new File(path));
@@ -20,11 +20,6 @@ public class LoadImage {
         g.drawImage(originalImage, 0, 0, width, height, null);
         g.dispose();
 
-        ImageIO.write(scaled, "JPG", new File("1.jpg"));
-        //return scaled;
-    }
-
-    public static void main(String[] args) throws IOException {
-        //LoadImage.resizeImage("lambo.jpg");
+        return scaled;
     }
 }
