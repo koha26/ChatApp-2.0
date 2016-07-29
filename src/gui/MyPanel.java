@@ -20,8 +20,8 @@ public class MyPanel extends JPanel {
     }
 
     public MyPanel(Dimension d) {
-        this.setSize(150, 150);
-        sizeOfSquare = 150;
+        this.setSize(250, 250);
+        sizeOfSquare = 250;
         this.setBackground(new Color(0, 0, 0, 0));
         this.setBorder(new LineBorder(Color.WHITE, 7));
         sizeOfPicture = d;
@@ -42,20 +42,20 @@ public class MyPanel extends JPanel {
                         & ((getX() + e.getX() - (int) currCoords.getX()) + sizeOfSquare <= sizeOfPicture.getWidth()) &
                         ((getX() + e.getX() - (int) currCoords.getX()) >= 0)) {
                     setLocation(getX() + e.getX() - (int) currCoords.getX(), getY() + e.getY() - (int) currCoords.getY());
-                } else if (((getY() + e.getY() - (int) currCoords.getY()) + sizeOfSquare >= (sizeOfPicture.getHeight() - 0))) {//1->0
+                } else if (((getY() + e.getY() - (int) currCoords.getY()) + sizeOfSquare >= (sizeOfPicture.getHeight() - 0))) {
                     if (((getX() + e.getX() - (int) currCoords.getX()) + sizeOfSquare <= sizeOfPicture.getWidth()) &
                             ((getX() + e.getX() - (int) currCoords.getX()) >= 0)) {
                         setLocation(getX() + e.getX() - (int) currCoords.getX(), (int) sizeOfPicture.getHeight() - sizeOfSquare);
                     }
-                } else if (((getY() + e.getY() - (int) currCoords.getY()) <= 0)) {//1+>0
+                } else if (((getY() + e.getY() - (int) currCoords.getY()) <= 0)) {
                     if (((getX() + e.getX() - (int) currCoords.getX()) + sizeOfSquare <= sizeOfPicture.getWidth()) &
                             ((getX() + e.getX() - (int) currCoords.getX()) >= 0)) {
-                        setLocation(getX() + e.getX() - (int) currCoords.getX(), 0); //1->0
+                        setLocation(getX() + e.getX() - (int) currCoords.getX(), 0);
                     }
-                } else if (((getX() + e.getX() - (int) currCoords.getX()) + sizeOfSquare >= (sizeOfPicture.getWidth() - 0))) {//1->0
+                } else if (((getX() + e.getX() - (int) currCoords.getX()) + sizeOfSquare >= (sizeOfPicture.getWidth() - 0))) {
                     setLocation((int) sizeOfPicture.getWidth() - sizeOfSquare, getY() + e.getY() - (int) currCoords.getY());
-                } else if (((getX() + e.getX() - (int) currCoords.getX()) <= 0)) {//1->0
-                    setLocation(0, getY() + e.getY() - (int) currCoords.getY());//1->0
+                } else if (((getX() + e.getX() - (int) currCoords.getX()) <= 0)) {
+                    setLocation(0, getY() + e.getY() - (int) currCoords.getY());
                 }
             }
         });

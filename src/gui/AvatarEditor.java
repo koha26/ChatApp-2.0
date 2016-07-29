@@ -27,16 +27,18 @@ public class AvatarEditor extends JFrame {
         double x;
         double newWidth = 0;
         double newHeight = 0;
-        if (img.getIconWidth() > img.getIconHeight()) {
+        if ((img.getIconWidth() >= img.getIconHeight()) & (img.getIconWidth() >= width / 2)) {
             maxsize = width / 2;
             x = ((double) img.getIconWidth() / (double) maxsize);
             newWidth = (double) img.getIconWidth() / x;
             newHeight = (double) img.getIconHeight() / x;
-        } else {
+        } else if ((img.getIconWidth() < img.getIconHeight()) & (img.getIconHeight() >= height / 2)) {
             maxsize = height;
             x = ((double) img.getIconHeight() / maxsize);
             newWidth = (double) img.getIconWidth() / x;
             newHeight = (double) img.getIconHeight() / x;
+        } else {
+            return new Dimension(img.getIconWidth(), img.getIconHeight());
         }
 
         return new Dimension((int) (newWidth / 1.5), (int) (newHeight / 1.5));
@@ -63,7 +65,6 @@ public class AvatarEditor extends JFrame {
 
         image = new ImagePanel(bufImage);
         image.setSize(new Dimension((int) d.getWidth(), (int) d.getHeight()));
-        System.out.println(d);
         image.setLayout(new GridBagLayout());
         saveButton = GUIStandartOperations.ButtonStartOperations(saveButIcon, saveButIconEntered, true);
         cancelButton = GUIStandartOperations.ButtonStartOperations(cancelButIcon, cancelButIconEntered, true);
@@ -77,10 +78,13 @@ public class AvatarEditor extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 minusButton.setEnabled(true);
-                if (myPanel.getY() <= 2) {
-                    myPanel.setLocation(myPanel.getX(), myPanel.getY());
-                } else if (myPanel.getY() + myPanel.getSizeOfSquare() >= (d.getHeight() - 3)) {
+                if (myPanel.getX() + myPanel.getSizeOfSquare() + 10 > (d.getWidth())) {
+                    myPanel.setLocation(myPanel.getX() - 10, myPanel.getY());
+                }
+                if (myPanel.getY() + myPanel.getSizeOfSquare() + 10 > (d.getHeight())) {
                     myPanel.setLocation(myPanel.getX(), myPanel.getY() - 10);
+                } else {
+                    myPanel.setLocation(myPanel.getX(), myPanel.getY());
                 }
                 myPanel.setSizeOfSquare(myPanel.getSizeOfSquare() + 10);
                 myPanel.setSize(myPanel.getWidth() + 10, myPanel.getHeight() + 10);
@@ -98,7 +102,7 @@ public class AvatarEditor extends JFrame {
                 plusButton.setEnabled(true);
                 myPanel.setSize(myPanel.getWidth() - 10, myPanel.getHeight() - 10);
                 myPanel.setSizeOfSquare(myPanel.getSizeOfSquare() - 10);
-                if (myPanel.getSizeOfSquare() - 10 < 150) {
+                if (myPanel.getSizeOfSquare() - 10 < 250) {
                     minusButton.setEnabled(false);
                 }
                 image.repaint();
@@ -148,18 +152,5 @@ public class AvatarEditor extends JFrame {
 
         setLocationRelativeTo(null);
         this.setVisible(true);
-    }
-
-    public static void main(String[] args) throws IOException {
-        /*SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    new AvatarEditor();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
 }
