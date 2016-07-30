@@ -1,78 +1,47 @@
-<map>
-  <entry>
-    <string>AAAAAAA</string>
-    <user>
-      <nickname>AAAAAAA</nickname>
-      <password>AAAAAAA</password>
-      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
-        <java.net.InetAddress>
-          <default>
-            <address>624492769</address>
-            <family>2</family>
-          </default>
-        </java.net.InetAddress>
-      </ipAddress>
-      <uniqueID>1</uniqueID>
-      <friends>
-        <string>erty</string>
-        <string>koha</string>
-      </friends>
-    </user>
-  </entry>
-  <entry>
-    <string>testreg2</string>
-    <user>
-      <nickname>testreg2</nickname>
-      <password>111111</password>
-      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
-        <java.net.InetAddress>
-          <default>
-            <address>1834425080</address>
-            <family>2</family>
-          </default>
-        </java.net.InetAddress>
-      </ipAddress>
-      <uniqueID>4</uniqueID>
-    </user>
-  </entry>
-  <entry>
-    <string>testreg</string>
-    <user>
-      <nickname>testreg</nickname>
-      <password>111111</password>
-      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
-        <java.net.InetAddress>
-          <default>
-            <address>1834425080</address>
-            <family>2</family>
-          </default>
-        </java.net.InetAddress>
-      </ipAddress>
-      <uniqueID>3</uniqueID>
-    </user>
-  </entry>
-  <entry>
-    <string>MAXMAXMAX</string>
-    <user>
-      <nickname>MAXMAXMAX</nickname>
-      <password>2331239</password>
-      <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
-        <java.net.InetAddress>
-          <default>
-            <address>1834425080</address>
-            <family>2</family>
-          </default>
-        </java.net.InetAddress>
-      </ipAddress>
-      <uniqueID>2</uniqueID>
-    </user>
-  </entry>
-  <entry>
-    <string>erty</string>
-    <user reference="../../entry/user"/>
-  </entry>
-  <entry>
-    <string>koha</string>
-    <user reference="../../entry/user"/>
-  </entry>
-</map>
+<java.util.Collections_-SynchronizedMap serialization="custom">
+  <java.util.Collections_-SynchronizedMap>
+    <default>
+      <m>
+        <entry>
+          <string>koha26</string>
+          <user>
+            <nickname>koha26</nickname>
+            <password>260497</password>
+            <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+              <java.net.InetAddress>
+                <default>
+                  <address>2130706433</address>
+                  <family>2</family>
+                </default>
+              </java.net.InetAddress>
+            </ipAddress>
+            <uniqueID>1</uniqueID>
+            <friends/>
+            <dateOfBirth>1997 April 26</dateOfBirth>
+            <surname>Dyachenko</surname>
+          </user>
+        </entry>
+        <entry>
+          <string>MaxTEAMLEAD</string>
+          <user>
+            <nickname>MaxTEAMLEAD</nickname>
+            <password>2331239max</password>
+            <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+              <java.net.InetAddress>
+                <default>
+                  <address>1834425080</address>
+                  <family>2</family>
+                </default>
+              </java.net.InetAddress>
+            </ipAddress>
+            <uniqueID>2</uniqueID>
+            <friends/>
+            <dateOfBirth>1997 September 6</dateOfBirth>
+            <surname>Tkachenko</surname>
+          </user>
+        </entry>
+      </m>
+      <mutex class="java.util.Collections$SynchronizedMap" reference="../../.."/>
+    </default>
+  </java.util.Collections_-SynchronizedMap>
+</java.util.Collections_-SynchronizedMap>

@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String dateOfBirth;
     private String name;
     private String surname;
-    private String sex;
+    private Sex sex;
     private transient BufferedImage avatar;
 
     public User() {
@@ -41,8 +41,9 @@ public class User implements Serializable {
         this.country = "";
         this.name = "";
         this.surname = "";
-        this.sex = "";
+        this.sex = Sex.MALE;
         this.friends = new ArrayList<>(0);
+        this.avatar = null;
     }
 
     public User(RegistrationModel regModel, InetAddress ipAddress, int uniqueID) {
@@ -57,6 +58,7 @@ public class User implements Serializable {
         this.surname = regModel.getSurname();
         this.sex = regModel.getSex();
         this.friends = new ArrayList<>(0);
+        this.avatar = regModel.getAvatar();
     }
 
 
@@ -132,11 +134,11 @@ public class User implements Serializable {
         this.uniqueID = uniqueID;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -150,7 +152,8 @@ public class User implements Serializable {
 
     public Set<String> getFriendsSet() {
         Set<String> set = new HashSet<>();
-        set.addAll(friends);
+        if (friends!=null)
+            set.addAll(friends);
         return set;
     }
 

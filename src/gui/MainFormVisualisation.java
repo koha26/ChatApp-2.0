@@ -22,11 +22,8 @@ public class MainFormVisualisation extends JFrame {
 
     public MainFormVisualisation() throws IOException {
         GUIStandartOperations.FrameStartOperations(this);
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
-        setBounds(screenWidth / 4, screenHeight / 4, screenWidth / 2, screenHeight / 2);
+        setSize(960,540);
+        setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
 
         addMouseListener(new MouseAdapter() {

@@ -95,8 +95,8 @@ public class Server {
         return database.isExist(nickname);
     }
 
-    public User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged){
-        return database.modificationUser(changedUser,isInfoChanged,isAvatarChanged);
+    public User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged) {
+        return database.modificationUser(changedUser, isInfoChanged, isAvatarChanged);
     }
 
     public boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
@@ -192,6 +192,11 @@ public class Server {
                             RegistrationCommand rCommand = (RegistrationCommand) lastCommand;
                             RegistrationStatusCommand rsCommand;
                             user = registerUser(rCommand.getRegModel(), connection); //рега через Database
+
+                            if (rCommand.getRegModel().getAvatar() != null){
+                                modificationUser(user, false, true);
+                            }
+
                             if (user != null) { //если рега успешна - отправка полученого объекта User
                                 rsCommand = new RegistrationStatusCommand(true, user);
                             } else { //если не успешна - то отправляем причину
@@ -213,8 +218,10 @@ public class Server {
                                     lsCommand.setFriendOnline(retainAllFriendOnline(user.getFriendsSet()));
 
                                     Set<String> unreadMessagesFrom = getSetOfFriendUnreadMes(user.getNickname());//позьзователи с которыми есть непрочитанные смс
-                                    deleteAndCreateUnreadMesFile(user.getNickname()); // удалить файл с никами выше
+
                                     if (unreadMessagesFrom != null) {
+                                        deleteAndCreateUnreadMesFile(user.getNickname()); // удалить файл с никами выше
+
                                         lsCommand.setUnreadMessagesFrom(unreadMessagesFrom);
 
                                         histories = (ArrayList<Stack<HistoryPacketCommand>>) Collections.synchronizedList(new ArrayList<Stack<HistoryPacketCommand>>());
@@ -229,32 +236,41 @@ public class Server {
 
                                 send(lsCommand);// отправка логин статуса
 
-                                for (Stack<HistoryPacketCommand> historyPacketCommands : histories) { // проход истори с каждым собеседником
+                                if (histories != null) {
+                                    for (Stack<HistoryPacketCommand> historyPacketCommands : histories) { // проход истори с каждым собеседником
 
-                                    Stack<HistoryPacketCommand> tmp = new Stack<>();//для последующей записи в файл
+                                        Stack<HistoryPacketCommand> tmp = new Stack<>();//для последующей записи в файл
 
-                                    while (!historyPacketCommands.empty() && historyPacketCommands.peek().isUnreadHas()) {//если содержит пакет с непрочитанными
-                                        HistoryPacketCommand hpCommand = historyPacketCommands.pop();
-                                        send(hpCommand);
+                                        while (!historyPacketCommands.empty() && historyPacketCommands.peek().isUnreadHas()) {//если содержит пакет с непрочитанными
+                                            HistoryPacketCommand hpCommand = historyPacketCommands.pop();
+                                            send(hpCommand);
 
-                                        tmp.push(hpCommand); // для записи в файл
-
-                                    }
-
-                                    final Stack<HistoryPacketCommand> toWritting = tmp;
-                                    EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
-                                        @Override
-                                        public void run() {
-                                            while (!toWritting.empty()) {
-                                                HistoryPacketCommand packetCommand = toWritting.pop();
-                                                for (Message message : packetCommand.getHistoryPart()) {
-                                                    saveMessageInReceiverHistory(message, packetCommand.getNickname_host(), packetCommand.getNickname_companion(), true);
-                                                }
-                                            }
+                                            tmp.push(hpCommand); // для записи в файл
 
                                         }
-                                    });
+
+                                        final Stack<HistoryPacketCommand> toWritting = tmp;
+                                        EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
+                                            @Override
+                                            public void run() {
+                                                while (!toWritting.empty()) {
+                                                    HistoryPacketCommand packetCommand = toWritting.pop();
+                                                    for (Message message : packetCommand.getHistoryPart()) {
+                                                        saveMessageInReceiverHistory(message, packetCommand.getNickname_host(), packetCommand.getNickname_companion(), true);
+                                                    }
+                                                }
+
+                                            }
+                                        });
+                                    }
                                 }
+
+                                EventQueue.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        broadcastOnlineFriend(user.getNickname());
+                                    }
+                                });
 
                             } else {
                                 lsCommand = new LoginStatusCommand();
@@ -382,7 +398,16 @@ public class Server {
                     }
                 }
             }
+        }
 
+        public void broadcastOnlineFriend(String nicknameFriend) {
+            for (ClientThread clientThread : clients) {
+                if (clientThread.user != null && clientThread != this) {
+                    if (clientThread.user.hasFriend(nicknameFriend)) {
+                        send(new FriendOnlineCommand(nicknameFriend));
+                    }
+                }
+            }
         }
 
         public synchronized void close() {
