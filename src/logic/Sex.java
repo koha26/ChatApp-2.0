@@ -1,6 +1,8 @@
 package logic;
 
-public enum Sex {
+import java.io.Serializable;
+
+public enum Sex implements Serializable {
     MALE{
         @Override
         public String toString() {

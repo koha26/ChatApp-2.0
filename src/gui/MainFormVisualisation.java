@@ -1,5 +1,7 @@
 package gui;
 
+import logic.command.FriendshipRequestCommand;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -19,6 +21,10 @@ public class MainFormVisualisation extends JFrame {
     private final ImageIcon contactsButIconEntered = new ImageIcon("images/mainform/contacts_button_entered.png");
     private final ImageIcon exitButIcon = new ImageIcon("images/mainform/exit_button.png");
     private final ImageIcon exitButIconEntered = new ImageIcon("images/mainform/exit_button_entered.png");
+
+    public JButton getSettingsButton() {
+        return settingsButton;
+    }
 
     public MainFormVisualisation() throws IOException {
         GUIStandartOperations.FrameStartOperations(this);
@@ -62,6 +68,8 @@ public class MainFormVisualisation extends JFrame {
         settingsButton = GUIStandartOperations.ButtonStartOperations(settingsButIcon, settingsButIconEntered, true);
         contactsButton = GUIStandartOperations.ButtonStartOperations(contactsButIcon, contactsButIconEntered, true);
         exitButton = GUIStandartOperations.ButtonStartOperations(exitButIcon, exitButIconEntered, true);
+
+
 
         mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setOpaque(false);

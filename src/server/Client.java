@@ -119,7 +119,6 @@ public class Client extends Observable {
         }
     }
 
-
     public static void main(String[] args) {
         try {
             //new Client("localhost", 8621).run();
