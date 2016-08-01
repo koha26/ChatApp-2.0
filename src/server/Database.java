@@ -67,6 +67,10 @@ public class Database {
         this.userOnline.remove(nickname);
     }
 
+    public User getUser(String nickname){
+        return userMap.get(nickname);
+    }
+
     public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException {
         if (isNickAvailable(regModel.getNick())) { // FIXME by Koha: 10.07.2016
             int uniqueID = getLastUserId() + 1;
@@ -100,7 +104,7 @@ public class Database {
 
                 while (tries < 20) {
                     try {
-                        if (ImageIO.write(changedUser.getAvatar(), "jpg", avatarFile)) {
+                        if (ImageIO.write(changedUser.getAvatarAsBufImage(), "jpg", avatarFile)) {
                             break;
                         } else {
                             tries++;
@@ -155,11 +159,12 @@ public class Database {
 
     public void addFriend(String nickname_host, String nickname_friend) {
         User editedUser_host = userMap.get(nickname_host);
-        editedUser_host.addFriend(nickname_friend);
+        User editedUser_friend = userMap.get(nickname_friend);
+
+        editedUser_host.addFriend(editedUser_friend.toFriendObject());
         userMap.put(nickname_host, editedUser_host);
 
-        User editedUser_friend = userMap.get(nickname_friend);
-        editedUser_friend.addFriend(nickname_host);
+        editedUser_friend.addFriend(editedUser_host.toFriendObject());
         userMap.put(nickname_friend, editedUser_friend);
 
         updateData();
@@ -197,7 +202,7 @@ public class Database {
             }
 
             File avatarFile;
-            File defaultImageFile = new File("/resources/avatar/default.jpg");
+            File defaultImageFile = new File("images/avatar/default.jpg");
 
             for (User u : userMap.values()) {
                 avatarFile = new File(dataPath + "/user_" + u.getUniqueID() + "/avatar/avatar.jpg");
@@ -205,13 +210,13 @@ public class Database {
                     try {
                         u.setAvatar(ImageIO.read(avatarFile));
                     } catch (IOException e) {
-                        u.setAvatar(null);
+                        //u.setAvatar(new ImageSerializable(null));
                     }
                 } else {
                     try {
                         u.setAvatar(ImageIO.read(defaultImageFile));
                     } catch (IOException e) {
-                        u.setAvatar(null);
+                        //u.setAvatar(new ImageSerializable(null));
                     }
                 }
             }

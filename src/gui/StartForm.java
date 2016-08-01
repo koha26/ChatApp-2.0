@@ -1,5 +1,6 @@
 package gui;
 
+import logic.ImageSerializable;
 import logic.RegistrationModel;
 import logic.Sex;
 
@@ -233,7 +234,6 @@ public class StartForm extends JFrame {
             regModel.setSurname(regPanel.getSurnameField().getText());
             regModel.setSex((Sex) regPanel.getSexBox().getSelectedItem());
             ImageSerializable imageSerializable = new ImageSerializable(regPanel.getBufImage());
-            imageSerializable.imageToByteArray();
             if (!isDateCorrect(regPanel.getMonthBox().getSelectedItem(), regPanel.getDayBox().getSelectedItem())) {
                 return null;
             }

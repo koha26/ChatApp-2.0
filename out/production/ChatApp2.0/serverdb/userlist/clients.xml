@@ -66,6 +66,27 @@
             <surname></surname>
           </user>
         </entry>
+        <entry>
+          <string>asscsdfsfsfsd</string>
+          <user>
+            <nickname>asscsdfsfsfsd</nickname>
+            <password>111111</password>
+            <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+              <java.net.InetAddress>
+                <default>
+                  <address>1834425080</address>
+                  <family>2</family>
+                </default>
+              </java.net.InetAddress>
+            </ipAddress>
+            <uniqueID>4</uniqueID>
+            <friends/>
+            <dateOfBirth>1950 January 1</dateOfBirth>
+            <name>cscsdcsd</name>
+            <surname>sdcsdsdsdsdc</surname>
+            <sex>MALE</sex>
+          </user>
+        </entry>
       </m>
       <mutex class="java.util.Collections$SynchronizedMap" reference="../../.."/>
     </default>

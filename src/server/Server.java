@@ -91,6 +91,10 @@ public class Server {
         return database.checkUser(nickname, password);
     }
 
+    public User getUser(String nickname){
+        return database.getUser(nickname);
+    }
+
     public boolean isExist(String nickname) { // существует ли кл-т с таким ником
         return database.isExist(nickname);
     }
@@ -193,7 +197,7 @@ public class Server {
                             RegistrationStatusCommand rsCommand;
                             user = registerUser(rCommand.getRegModel(), connection); //рега через Database
 
-                            if (rCommand.getRegModel().getAvatar() != null){
+                            if (rCommand.getRegModel().getAvatarAsBufImage() != null){
                                 modificationUser(user, false, true);
                             }
 
@@ -304,6 +308,13 @@ public class Server {
                                     addFriend(acCommand.getNickname_To(), acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
 
                                 sendTo(acCommand.getNickname_To(), acCommand);
+
+                                User sendedUser_To = Server.this.getUser(acCommand.getNickname_To());
+                                User sendedUser_From = Server.this.getUser(acCommand.getNickname_From());
+
+                                sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+
                             }
 
                         } else if (lastCommand instanceof MessageCommand) { // перенаправляет сообщение
@@ -352,7 +363,10 @@ public class Server {
                         } else if (lastCommand instanceof ChangingUserInfoCommand) {
 
                             ChangingUserInfoCommand cuiCommand = (ChangingUserInfoCommand) lastCommand;
-                            modificationUser(cuiCommand.getChangedUser(), cuiCommand.isInfoChanged(), cuiCommand.isAvatarChanged());
+                            User changedUser = modificationUser(cuiCommand.getChangedUser(), cuiCommand.isInfoChanged(), cuiCommand.isAvatarChanged());
+
+                            ChangingUserInfoStatusCommand cuisCommand = new ChangingUserInfoStatusCommand(changedUser);
+                            send(cuisCommand);
 
                         }
 

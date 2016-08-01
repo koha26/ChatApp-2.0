@@ -247,6 +247,12 @@ public class Client extends Observable {
 
                         setChanged();
                         notifyObservers(foCommand);
+                    } else if (lastCommand instanceof ChangingUserInfoStatusCommand){
+
+                        ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) lastCommand;
+
+                        setChanged();
+                        notifyObservers(cuisCommand);
                     }
                     // А ВООБЩЕ МОЖНО НАПИСАТЬ В 5 строк этот обработкич комманд
 

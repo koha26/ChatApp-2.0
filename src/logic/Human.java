@@ -1,23 +1,31 @@
 package logic;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
-public class RegistrationModel implements Serializable{
-
-    private String nick;
-    private String password;
+public abstract class Human implements Serializable{
     private String country;
     private String city;
     private String dateOfBirth;
     private String name;
     private String surname;
     private Sex sex;
-    private ImageSerializable avatar;
 
-    public RegistrationModel(String nick, String password) {
-        this.nick = nick;
-        this.password = password;
+    public Human(){
+        this.country = "";
+        this.city = "";
+        this.dateOfBirth = "";
+        this.name = "";
+        this.surname = "";
+        this.sex = Sex.MALE;
+    }
+
+    public Human(String name, String surname, String country, String city, String dateOfBirth, Sex sex) {
+        this.country = country;
+        this.city = city;
+        this.dateOfBirth = dateOfBirth;
+        this.name = name;
+        this.surname = surname;
+        this.sex = sex;
     }
 
     public String getCountry() {
@@ -60,39 +68,11 @@ public class RegistrationModel implements Serializable{
         this.surname = surname;
     }
 
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Sex getSex() {
         return sex;
     }
 
     public void setSex(Sex sex) {
         this.sex = sex;
-    }
-
-    public BufferedImage getAvatarAsBufImage() {
-        return avatar.getBufferedImage();
-    }
-
-    public ImageSerializable getAvatar(){
-        return avatar;
-    }
-
-    public void setAvatar(ImageSerializable avatar) {
-        this.avatar = avatar;
     }
 }
