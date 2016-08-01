@@ -1,6 +1,7 @@
 package logic;
 
-import java.awt.image.BufferedImage;
+import gui.ImageSerializable;
+
 import java.io.Serializable;
 
 public class RegistrationModel implements Serializable{
@@ -13,7 +14,7 @@ public class RegistrationModel implements Serializable{
     private String name;
     private String surname;
     private Sex sex;
-    private BufferedImage avatar;
+    private ImageSerializable avatar;
 
     public RegistrationModel(String nick, String password) {
         this.nick = nick;
@@ -84,11 +85,11 @@ public class RegistrationModel implements Serializable{
         this.sex = sex;
     }
 
-    public BufferedImage getAvatar() {
+    public ImageSerializable getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(BufferedImage avatar) {
+    public void setAvatar(ImageSerializable avatar) {
         this.avatar = avatar;
     }
 }

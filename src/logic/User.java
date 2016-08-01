@@ -58,7 +58,7 @@ public class User implements Serializable {
         this.surname = regModel.getSurname();
         this.sex = regModel.getSex();
         this.friends = new ArrayList<>(0);
-        this.avatar = regModel.getAvatar();
+        //this.avatar = regModel.getAvatar();
     }
 
 

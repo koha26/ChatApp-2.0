@@ -232,7 +232,8 @@ public class StartForm extends JFrame {
             regModel.setName(regPanel.getNameField().getText());
             regModel.setSurname(regPanel.getSurnameField().getText());
             regModel.setSex((Sex) regPanel.getSexBox().getSelectedItem());
-            //regModel.setAvatar(regPanel.getBufImage());
+            ImageSerializable imageSerializable = new ImageSerializable(regPanel.getBufImage());
+            imageSerializable.imageToByteArray();
             if (!isDateCorrect(regPanel.getMonthBox().getSelectedItem(), regPanel.getDayBox().getSelectedItem())) {
                 return null;
             }
