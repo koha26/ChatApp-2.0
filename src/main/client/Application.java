@@ -81,7 +81,7 @@ public class Application implements Observer {
         this.startForm.getReg_registrationButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (startForm.isFieldFilled() && startForm.isPasswordsEquals()) {
+                if (startForm.isFieldFilled() & startForm.isPasswordsEquals()) {
                     if (client == null) { // если еще не создано соединение через клиента, то создаем его
                         /**НА ЭТОМ МОМЕНТЕ НУЖНО СДЕЛАТЬ ИЛИ ЗАГРУЗКУ СЕРВЕРА С НОРМАЛЬНОЙ РАБОТОЙ ФОРМЫ
                          * ИЛИ ЗАРАНЕЕ ПОДКЛЮЧАТЬСЯ К СЕРВЕРУ И ПРИ ОТПРАВЛЕНИИ УЖЕ КАК-ТО РЕАГИРОВАТЬ ПРИ ОТСУТСВИИ ИНТЕРНЕТА.
@@ -103,17 +103,24 @@ public class Application implements Observer {
                     if (regModel != null) {
                         client.sendRegistrationCommand(regModel); // отправка рег комманды
                     }
-                } else if (! startForm.isFieldFilled()){
-                    //showInfoMessage(startForm, "Заполните главные поля!");
+                } else if (!startForm.isFieldFilled()) {
                     StartForm.showErrorLabel("Заполните главные поля!");
                 } else if (startForm.isFieldFilled() && !startForm.isPasswordsEquals()) {
                     StartForm.showErrorLabel("Пароли не совпадают!");
-                    startForm.getReg_passwordField().setBorder(new LineBorder(Color.RED, 2));
-                    startForm.getReg_confirmPasswordField().setBorder(new LineBorder(Color.RED, 2));
+                    startForm.getRegPanel().getPasswordField().setBorder(new LineBorder(Color.RED, 2));
+                    startForm.getRegPanel().getConfirmPasswordField().setBorder(new LineBorder(Color.RED, 2));
                 }
             }
         });
+
+        this.mainForm.getSettingsButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.sendFriendshipRequestCommand("koha26", "testtest");
+            }
+        });
     }
+
 
     public void start() { //явный запуск приложения
         try {
@@ -173,7 +180,7 @@ public class Application implements Observer {
                 showInfoMessage(startForm, "You entered as " + user.getNickname() + "! Your ID: " + user.getUniqueID());
                 setMode(Mode.MAINFROM_ON); // есди вошли удачно - то меняем режим работы на мейн форм
             } else {
-                StartForm.showErrorLabel(lsCommand.getExceptionDescription());
+                startForm.showErrorLabel(lsCommand.getExceptionDescription());
             }
         } else if (arg instanceof RegistrationStatusCommand) {
             RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) arg;
@@ -183,34 +190,31 @@ public class Application implements Observer {
                 startForm.setMode(Mode.LOGIN_ON, user.getNickname()); // если удачно зарегестрировались, то должны войти снова
                 showInfoMessage(startForm, "Please, log in using your nickname and password!");
             } else {
-                StartForm.showErrorLabel(rsCommand.getExceptionDescription());
+                startForm.showErrorLabel(rsCommand.getExceptionDescription());
             }
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
             this.mainForm.getMessage(mCommand.getMessage().getMessageText());
-        } else if (arg instanceof FriendshipRequestCommand){
+        } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
 
-            /*Object[] options = {"Yes", "No"};
-            int n = JOptionPane.showOptionDialog(mainForm,
+            Object[] options = {"Yes", "No"};
+            int n = JOptionPane.showOptionDialog(null,
                     "Accept friendship request from " + srCommand.getNickname_From() + "?", "Friendship request",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
                     options[0]);
-            System.out.println(n);
-            if (n==0)
-                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);*/
 
-            /*if (user.getNickname().equals("AAAAAAA"))
-                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);*/
+            if (n == 0)
+                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
 
-        } else if (arg instanceof AcceptFriendshipCommand){
+        } else if (arg instanceof AcceptFriendshipCommand) {
 
             AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) arg;
-            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()){
+            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()) {
                 showInfoMessage(mainForm, "Соеседник принял ваше предложение. Начинайте общение!");
             }
         }

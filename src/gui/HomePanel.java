@@ -23,7 +23,7 @@ public class HomePanel extends JPanel {
         this.setOpaque(false);
         this.setBackground(new Color(0, 0, 0, 0));
 
-        yourPhoto = new JLabel(new ImageIcon("photos/max.jpg"));
+        yourPhoto = new JLabel(new ImageIcon("images/avatarBIG.png"));
         nickLabel = new JLabel("MaxTEAMLEAD");
         nickLabel.setFont(Fonts.nickFont);
         nickLabel.setForeground(Color.WHITE);
@@ -92,11 +92,11 @@ public class HomePanel extends JPanel {
         topPanel.add(contactsButton, new GridBagConstraints(2, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
         topPanel.add(exitButton, new GridBagConstraints(3, 0, 1, 1, 0.1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 75), 0, 0));
 
-        bottomPanel.add(new FriendLook("photos/kostik.jpg", "Kostya Dyachenko", "koha26"), new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(new FriendLook("photos/kate.jpg", "Kate Kurshakova", "marphinia"), new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(new FriendLook("photos/igor.jpg", "Igor Pekhov", "addep7y"), new GridBagConstraints(2, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(new FriendLook("photos/lingard.jpg", "Jesse Lingard", "DABBERMAN"), new GridBagConstraints(3, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        bottomPanel.add(new FriendLook("photos/sanchez.jpg", "Sasha Shatalov", "Sanchez"), new GridBagConstraints(4, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(new FriendLook("images/avatar.png", "Kostya Dyachenko", "koha26"), new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(new FriendLook("images/avatar.png", "Kate Kurshakova", "marphinia"), new GridBagConstraints(1, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(new FriendLook("images/avatar.png", "Igor Pekhov", "addep7y"), new GridBagConstraints(2, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(new FriendLook("images/avatar.png", "Jesse Lingard", "DABBERMAN"), new GridBagConstraints(3, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        bottomPanel.add(new FriendLook("images/avatar.png", "Sasha Shatalov", "Sanchez"), new GridBagConstraints(4, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
 
         leftPanel.add(yourPhoto, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
         leftPanel.add(nickLabel, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));

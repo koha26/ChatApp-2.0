@@ -1,6 +1,5 @@
 package gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -113,6 +112,7 @@ public class AvatarEditor extends JFrame {
         cancelButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                RegPanel.changeEnableOfButtons();
                 thisFrame.dispose();
             }
         });
@@ -121,11 +121,15 @@ public class AvatarEditor extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 BufferedImage newImage = cutImage(bufImage, myPanel.getX(), myPanel.getY(), myPanel.getSizeOfSquare());
-                try {
-                    ImageIO.write(newImage, "JPG", new File("2.jpg"));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+
+                BufferedImage scaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+
+                Graphics2D g = scaled.createGraphics();
+                g.drawImage(newImage, 0, 0, 256, 256, null);
+                g.dispose();
+
+                RegPanel.setBufImage(scaled);
+                RegPanel.changeEnableOfButtons();
                 thisFrame.dispose();
             }
         });
