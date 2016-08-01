@@ -56,7 +56,7 @@ public class Database {
     }
 
     public boolean isOnline(String nickname) {
-        if (userOnline.get(userMap.get(nickname)) != null) {
+        if (userOnline.get(nickname) != null) {
             return true;
         } else
             return false;
@@ -154,9 +154,13 @@ public class Database {
     }
 
     public void addFriend(String nickname_host, String nickname_friend) {
-        User editedUser = userMap.get(nickname_host);
-        editedUser.addFriend(nickname_friend);
-        userMap.put(nickname_host, editedUser);
+        User editedUser_host = userMap.get(nickname_host);
+        editedUser_host.addFriend(nickname_friend);
+        userMap.put(nickname_host, editedUser_host);
+
+        User editedUser_friend = userMap.get(nickname_friend);
+        editedUser_friend.addFriend(nickname_host);
+        userMap.put(nickname_friend, editedUser_friend);
 
         updateData();
     }
@@ -187,7 +191,7 @@ public class Database {
             try {
                 FileInputStream inputStream = new FileInputStream(clientsDataFile);
 
-                userMap = (HashMap<String, User>) xmlStream.fromXML(inputStream);
+                userMap = (Map<String, User>) xmlStream.fromXML(inputStream);
             } catch (FileNotFoundException e) {
                 // ex
             }

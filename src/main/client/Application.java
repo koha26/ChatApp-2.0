@@ -192,8 +192,20 @@ public class Application implements Observer {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
 
-            if (user.getNickname().equals("AAAAAAA"))
-                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
+            /*Object[] options = {"Yes", "No"};
+            int n = JOptionPane.showOptionDialog(mainForm,
+                    "Accept friendship request from " + srCommand.getNickname_From() + "?", "Friendship request",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            System.out.println(n);
+            if (n==0)
+                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);*/
+
+            /*if (user.getNickname().equals("AAAAAAA"))
+                client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);*/
 
         } else if (arg instanceof AcceptFriendshipCommand){
 

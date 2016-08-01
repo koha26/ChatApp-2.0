@@ -16,7 +16,10 @@
               </java.net.InetAddress>
             </ipAddress>
             <uniqueID>1</uniqueID>
-            <friends/>
+            <friends>
+              <string>MaxTEAMLEAD</string>
+              <string>testtest</string>
+            </friends>
             <dateOfBirth>1997 April 26</dateOfBirth>
             <surname>Dyachenko</surname>
           </user>
@@ -35,9 +38,53 @@
               </java.net.InetAddress>
             </ipAddress>
             <uniqueID>2</uniqueID>
-            <friends/>
+            <friends>
+              <string>koha26</string>
+            </friends>
             <dateOfBirth>1997 September 6</dateOfBirth>
             <surname>Tkachenko</surname>
+          </user>
+        </entry>
+        <entry>
+          <string>testtest</string>
+          <user>
+            <nickname>testtest</nickname>
+            <password>test123</password>
+            <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+              <java.net.InetAddress>
+                <default>
+                  <address>1834425080</address>
+                  <family>2</family>
+                </default>
+              </java.net.InetAddress>
+            </ipAddress>
+            <uniqueID>3</uniqueID>
+            <friends>
+              <string>koha26</string>
+            </friends>
+            <dateOfBirth>1950 January 1</dateOfBirth>
+            <surname></surname>
+          </user>
+        </entry>
+        <entry>
+          <string>asscsdfsfsfsd</string>
+          <user>
+            <nickname>asscsdfsfsfsd</nickname>
+            <password>111111</password>
+            <ipAddress class="java.net.Inet4Address" resolves-to="java.net.InetAddress" serialization="custom">
+              <java.net.InetAddress>
+                <default>
+                  <address>1834425080</address>
+                  <family>2</family>
+                </default>
+              </java.net.InetAddress>
+            </ipAddress>
+            <uniqueID>4</uniqueID>
+            <friends/>
+            <dateOfBirth>1950 January 1</dateOfBirth>
+            <name>cscsdcsd</name>
+            <surname>sdcsdsdsdsdc</surname>
+            <sex>MALE</sex>
           </user>
         </entry>
       </m>
