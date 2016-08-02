@@ -187,7 +187,7 @@ public class Application implements Observer {
             if (rsCommand.isRegistered() && rsCommand.getUser() != null) {
                 user = rsCommand.getUser();
                 showInfoMessage(startForm, "Your account is registered! Your ID " + user.getUniqueID());
-                startForm.setMode(Mode.LOGIN_ON, user.getNickname()); // если удачно зарегестрировались, то должны войти снова
+                startForm.setMode(Mode.LOGIN_ON, user.getNickname());
                 showInfoMessage(startForm, "Please, log in using your nickname and password!");
             } else {
                 startForm.showErrorLabel(rsCommand.getExceptionDescription());

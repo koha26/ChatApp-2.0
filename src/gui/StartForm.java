@@ -1,5 +1,7 @@
 package gui;
 
+import static logic.Constants.SCRDIM_KY;
+import static logic.Constants.SCRDIM_KX;
 import logic.ImageSerializable;
 import logic.RegistrationModel;
 import logic.Sex;
@@ -10,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import static logic.Constants.SCRDIM_KX;
-import static logic.Constants.SCRDIM_KY;
 
 public class StartForm extends JFrame {
     private RegPanel regPanel;
@@ -28,11 +27,11 @@ public class StartForm extends JFrame {
     public void changeSize() {
         if (!isChanged) {
             this.setSize((int) (960 * SCRDIM_KX), (int) (860 * SCRDIM_KY));
-            exitButton.setBounds(430, 760, 100, 50);
+            exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (760 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
             this.setLocationRelativeTo(null);
         } else {
             setSize((int) (960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
-            exitButton.setBounds(430, 450, 100, 50);
+            exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
             this.setLocationRelativeTo(null);
         }
     }
@@ -47,7 +46,7 @@ public class StartForm extends JFrame {
 
     public StartForm() {
         GUIStandartOperations.FrameStartOperations(this);
-        setSize((int) (960 *SCRDIM_KX), (int) (550 * SCRDIM_KY));
+        setSize((int) (960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
         setLocationRelativeTo(null);
         setLayout(null);
 
@@ -132,7 +131,7 @@ public class StartForm extends JFrame {
         });
 
         errorTextField = new JTextField();
-        errorTextField.setBounds(0, 120, 960, 35);
+        errorTextField.setBounds(0, (int) (120 * SCRDIM_KY), (int)(960 * SCRDIM_KX), (int) (35 * SCRDIM_KY));
         errorTextField.setFont(Fonts.typingFont);
         errorTextField.setHorizontalAlignment(JTextField.CENTER);
         errorTextField.setBackground(new Color(0, 0, 0, 150));
@@ -142,10 +141,10 @@ public class StartForm extends JFrame {
         errorTextField.setBorder(null);
         errorTextField.setVisible(false);
 
-        helloLabel.setBounds(330, 15, 300, 90);
-        exitButton.setBounds(430, 450, 100, 50);
-        loginPanel.setBounds(0, 120, 1000, 1000);
-        regPanel.setBounds(0, 120, 1000, 1000);
+        helloLabel.setBounds((int)(330 * SCRDIM_KX), (int) (15 * SCRDIM_KY), (int)(300 * SCRDIM_KX), (int) (90 * SCRDIM_KY));
+        exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
+        loginPanel.setBounds(0, (int) (120 * SCRDIM_KY), (int)(1000 * SCRDIM_KX), (int) (1000 * SCRDIM_KY));
+        regPanel.setBounds(0, (int) (120 * SCRDIM_KY), (int)(1000 * SCRDIM_KX), (int) (1000 * SCRDIM_KY));
 
         add(helloLabel);
         add(loginPanel);
@@ -163,7 +162,10 @@ public class StartForm extends JFrame {
     void setLoginMode(String nickname) {
         loginPanel.setVisible(true);
         regPanel.setVisible(false);
-        regPanel.getNicknameField().setText(nickname);
+        this.setSize((int)(960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
+        exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
+        this.setLocationRelativeTo(null);
+        loginPanel.getNickField().setText(nickname);
         mode = Mode.LOGIN_ON;
     }
 
@@ -237,6 +239,7 @@ public class StartForm extends JFrame {
             regModel.setSurname(regPanel.getSurnameField().getText());
             regModel.setSex((Sex) regPanel.getSexBox().getSelectedItem());
             ImageSerializable imageSerializable = new ImageSerializable(regPanel.getBufImage());
+            regModel.setAvatar(imageSerializable);
             if (!isDateCorrect(regPanel.getMonthBox().getSelectedItem(), regPanel.getDayBox().getSelectedItem())) {
                 return null;
             }

@@ -151,7 +151,6 @@ public class Client extends Observable {
 
                         setChanged();
                         notifyObservers(lsCommand);
-
                     } else if (lastCommand instanceof RegistrationStatusCommand) {
                         RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) lastCommand;
                         if (rsCommand.isRegistered()) {
@@ -160,18 +159,6 @@ public class Client extends Observable {
 
                             setChanged();
                             notifyObservers(rsCommand);
-
-
-                            /*if (user.getNickname().equals("Kostya2")){
-                                FriendshipRequestCommand srCommand = new FriendshipRequestCommand();
-                                srCommand.setNickname_To("Kostya1");
-                                srCommand.setNickname_From(user.getNickname());
-                                try {
-                                    connection.sendCommand(srCommand);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }*/
                         } else {
                             setChanged();
                             notifyObservers(rsCommand);
@@ -182,56 +169,18 @@ public class Client extends Observable {
 
                         setChanged();
                         notifyObservers(mCommand);
-
-                        /*System.out.println(mCommand.getNickname_From()+": "+mCommand.getMessageText());
-                        mCommand.setNickname_To(mCommand.getNickname_From());
-                        mCommand.setNickname_From(user.getNickname());
-                        mCommand.setMessageText("Хай. А я "+user.getNickname());
-                        try {
-                            connection.sendCommand(mCommand);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
-
                     } else if (lastCommand instanceof AcceptFriendshipCommand) {
 
                         AcceptFriendshipCommand afCommand = (AcceptFriendshipCommand) lastCommand;
 
                         setChanged();
                         notifyObservers(afCommand);
-
-                        /*if (acCommand.isAccept()){
-                            System.out.println("мы начинает общение! =)");
-
-                            MessageCommand mCommand = new MessageCommand();
-                            mCommand.setNickname_From(user.getNickname());
-                            mCommand.setNickname_To(acCommand.getNickname_From());
-                            mCommand.setMessageText("Привет, меня зовут "+user.getNickname());
-
-                            try {
-                                connection.sendCommand(mCommand);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }*/
-
                     } else if (lastCommand instanceof FriendshipRequestCommand) {
 
                         FriendshipRequestCommand frCommand = (FriendshipRequestCommand) lastCommand;
 
                         setChanged();
                         notifyObservers(frCommand);
-
-                        /*AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
-                        acCommand.setAccept(true);
-                        acCommand.setNickname_From(srCommand.getNickname_To());
-                        acCommand.setNickname_To(srCommand.getNickname_From());
-                        try {
-                            connection.sendCommand(acCommand);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
                     } else if (lastCommand instanceof DisconnectCommand) {
                         close();
                     } else if (lastCommand instanceof HistoryPacketCommand) {
@@ -240,7 +189,6 @@ public class Client extends Observable {
 
                         setChanged();
                         notifyObservers(hpCommand);
-
                     } else if (lastCommand instanceof FriendOfflineCommand){
 
                         FriendOfflineCommand foCommand = (FriendOfflineCommand) lastCommand;
@@ -254,8 +202,6 @@ public class Client extends Observable {
                         setChanged();
                         notifyObservers(cuisCommand);
                     }
-                    // А ВООБЩЕ МОЖНО НАПИСАТЬ В 5 строк этот обработкич комманд
-
                 }
             }
         }

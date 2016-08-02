@@ -1,5 +1,7 @@
 package gui;
 
+import logic.User;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -18,13 +20,13 @@ public class HomePanel extends JPanel {
     private final ImageIcon exitButIcon = new ImageIcon("images/mainform/exit_button.png");
     private final ImageIcon exitButIconEntered = new ImageIcon("images/mainform/exit_button_entered.png");
 
-    public HomePanel() {
+    public HomePanel(User user) {
         this.setLayout(new GridBagLayout());
         this.setOpaque(false);
         this.setBackground(new Color(0, 0, 0, 0));
 
-        yourPhoto = new JLabel(new ImageIcon("images/avatarBIG.png"));
-        nickLabel = new JLabel("MaxTEAMLEAD");
+        yourPhoto = new JLabel(new ImageIcon(user.getAvatarAsBufImage()));
+        nickLabel = new JLabel(user.getNickname());
         nickLabel.setFont(Fonts.nickFont);
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -48,10 +50,10 @@ public class HomePanel extends JPanel {
         dateOfBirthPanel.setForeground(Color.WHITE);
         sexPanel.setForeground(Color.WHITE);
 
-        JLabel namePanelInfo = new JLabel("Max");
-        JLabel surnamePanelInfo = new JLabel("Tkachenko");
-        JLabel dateOfBirthPanelInfo = new JLabel("6 September 1997");
-        JLabel sexPanelInfo = new JLabel("Male");
+        JLabel namePanelInfo = new JLabel(user.getName());
+        JLabel surnamePanelInfo = new JLabel(user.getSurname());
+        JLabel dateOfBirthPanelInfo = new JLabel(user.getDateOfBirth());
+        JLabel sexPanelInfo = new JLabel(user.getSex().toString());
         namePanelInfo.setForeground(Color.RED);
         surnamePanelInfo.setForeground(Color.RED);
         dateOfBirthPanelInfo.setForeground(Color.RED);

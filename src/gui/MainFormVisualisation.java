@@ -1,7 +1,5 @@
 package gui;
 
-import logic.command.FriendshipRequestCommand;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

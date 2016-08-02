@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static logic.Constants.SCRDIM_KX;
+import static logic.Constants.SCRDIM_KY;
+
 public class AvatarEditor extends JFrame {
     private JFrame thisFrame;
     private JPanel image;
@@ -122,10 +125,10 @@ public class AvatarEditor extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 BufferedImage newImage = cutImage(bufImage, myPanel.getX(), myPanel.getY(), myPanel.getSizeOfSquare());
 
-                BufferedImage scaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+                BufferedImage scaled = new BufferedImage((int) (256 * SCRDIM_KX), (int) (256 * SCRDIM_KY), BufferedImage.TYPE_INT_RGB);
 
                 Graphics2D g = scaled.createGraphics();
-                g.drawImage(newImage, 0, 0, 256, 256, null);
+                g.drawImage(newImage, 0, 0, (int) (256 * SCRDIM_KX), (int) (256 * SCRDIM_KY), null);
                 g.dispose();
 
                 RegPanel.setBufImage(scaled);
