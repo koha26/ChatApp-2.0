@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static logic.Constants.SCRDIM_KX;
+import static logic.Constants.SCRDIM_KY;
+
 public class StartForm extends JFrame {
     private RegPanel regPanel;
     private LoginPanel loginPanel;
@@ -24,11 +27,11 @@ public class StartForm extends JFrame {
 
     public void changeSize() {
         if (!isChanged) {
-            this.setSize(960, 860);
+            this.setSize((int) (960 * SCRDIM_KX), (int) (860 * SCRDIM_KY));
             exitButton.setBounds(430, 760, 100, 50);
             this.setLocationRelativeTo(null);
         } else {
-            this.setSize(960, 550);
+            setSize((int) (960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
             exitButton.setBounds(430, 450, 100, 50);
             this.setLocationRelativeTo(null);
         }
@@ -44,7 +47,7 @@ public class StartForm extends JFrame {
 
     public StartForm() {
         GUIStandartOperations.FrameStartOperations(this);
-        setSize(960, 550);
+        setSize((int) (960 *SCRDIM_KX), (int) (550 * SCRDIM_KY));
         setLocationRelativeTo(null);
         setLayout(null);
 

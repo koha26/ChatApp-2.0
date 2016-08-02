@@ -230,6 +230,7 @@ public class Database {
             if (checkDataPath() && checkClientsDataFile() && clientsDataFile.isFile()) {
                 XStream xmlStream = new XStream(new DomDriver());
                 xmlStream.alias("user", User.class); // класс User будет в тегах писать как user, а не logic.User
+                xmlStream.omitField(User.class, "avatar");
 
                 try {
                     FileOutputStream outputStream = new FileOutputStream(clientsDataFile);
