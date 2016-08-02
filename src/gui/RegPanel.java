@@ -157,7 +157,7 @@ public class RegPanel extends JPanel {
 
         mainLabel = new JLabel("Main Information");
         mainLabel.setForeground(Color.RED);
-        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
+        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX) - 1));
 
         nickLabel = new JLabel("Nickname");
         passwordLabel = new JLabel("Password");
@@ -216,7 +216,7 @@ public class RegPanel extends JPanel {
 
         additionalLabel = new JLabel("Additional Information");
         additionalLabel.setForeground(Color.RED);
-        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
+        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX) - 1));
 
         additionalCheckBox = new JCheckBox();
         additionalCheckBox.setBackground(new Color(0, 0, 0, 0));
