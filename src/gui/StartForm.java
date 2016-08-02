@@ -1,7 +1,5 @@
 package gui;
 
-import static logic.Constants.SCRDIM_KY;
-import static logic.Constants.SCRDIM_KX;
 import logic.ImageSerializable;
 import logic.RegistrationModel;
 import logic.Sex;
@@ -12,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import static logic.Constants.SCRDIM_KX;
+import static logic.Constants.SCRDIM_KY;
 
 public class StartForm extends JFrame {
     private RegPanel regPanel;
@@ -111,12 +112,12 @@ public class StartForm extends JFrame {
         });
 
         helloLabel = new JLabel("Hello!");
-        helloLabel.setFont(new Font("Century Gothic", Font.PLAIN, 72));
+        helloLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (72 * SCRDIM_KX)));
         helloLabel.setForeground(Color.WHITE);
         helloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         exitButton = new JButton("Exit ChatApp");
-        exitButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
+        exitButton.setFont(new Font("Century Gothic", Font.PLAIN, (int) (12 * SCRDIM_KX)));
         exitButton.setForeground(Color.WHITE);
         exitButton.setOpaque(false);
         exitButton.setBorder(null);

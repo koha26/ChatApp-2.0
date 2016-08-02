@@ -1,9 +1,6 @@
 package gui;
 
 
-import static logic.Constants.SCRDIM_KY;
-import static logic.Constants.SCRDIM_KX;
-
 import logic.Constants;
 import logic.Sex;
 
@@ -11,11 +8,16 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static logic.Constants.SCRDIM_KX;
+import static logic.Constants.SCRDIM_KY;
 
 public class RegPanel extends JPanel {
     private JLabel nickLabel, passwordLabel, confirmPasswordLabel, dateOfBirthLabel, nameLabel, surnameLabel, sexLabel, mainLabel, additionalLabel;
@@ -27,7 +29,7 @@ public class RegPanel extends JPanel {
     private static JButton regButton;
     private JButton backButton;
     private static JButton openButton;
-    private Font font = new Font("Century Gothic", Font.PLAIN, 16);
+    private Font font = new Font("Century Gothic", Font.PLAIN, (int) (16 * SCRDIM_KX));
     private final ImageIcon regButIcon = new ImageIcon("images/loginform/regbut.png");
     private final ImageIcon regButIconEntered = new ImageIcon("images/loginform/regbut_entered.png");
     private boolean isEntered;
@@ -155,7 +157,7 @@ public class RegPanel extends JPanel {
 
         mainLabel = new JLabel("Main Information");
         mainLabel.setForeground(Color.RED);
-        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
+        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
 
         nickLabel = new JLabel("Nickname");
         passwordLabel = new JLabel("Password");
@@ -214,7 +216,7 @@ public class RegPanel extends JPanel {
 
         additionalLabel = new JLabel("Additional Information");
         additionalLabel.setForeground(Color.RED);
-        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
+        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
 
         additionalCheckBox = new JCheckBox();
         additionalCheckBox.setBackground(new Color(0, 0, 0, 0));
@@ -323,19 +325,19 @@ public class RegPanel extends JPanel {
 
         yearBox = new JComboBox(new DefaultComboBoxModel(yearsList.toArray()));
         yearBox.setBackground(Color.WHITE);
-        yearBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        yearBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
 
         monthBox = new JComboBox(monthsList);
         monthBox.setBackground(Color.WHITE);
-        monthBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        monthBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
 
         dayBox = new JComboBox(daysList.toArray());
         dayBox.setBackground(Color.WHITE);
-        dayBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        dayBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
 
         sexBox = new JComboBox(Sex.values());
         sexBox.setBackground(Color.WHITE);
-        sexBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
+        sexBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
 
         avatar.setBorder(new LineBorder(Color.WHITE, 1));
 
@@ -343,7 +345,7 @@ public class RegPanel extends JPanel {
 
         backButton = GUIStandartOperations.ButtonStartOperations(null, null, false);
         backButton.setText("Back to login form");
-        backButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
+        backButton.setFont(new Font("Century Gothic", Font.PLAIN, (int) (12 * SCRDIM_KX)));
         backButton.setForeground(Color.WHITE);
 
         avatar.setVisible(isEntered);
