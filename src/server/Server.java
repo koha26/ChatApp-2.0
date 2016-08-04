@@ -152,6 +152,14 @@ public class Server {
         }
     }
 
+    public LinkedList<Command> loadAwaitingCommands(String nickname){
+        return database.loadAwaitingCommands(nickname);
+    }
+
+    public void addAwaitingCommand(String nickname, Command command){
+        database.addAwaitingCommand(nickname,command);
+    }
+
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
@@ -273,6 +281,11 @@ public class Server {
                                     @Override
                                     public void run() {
                                         broadcastOnlineFriend(user.getNickname());
+
+                                        LinkedList<Command> missingCommands = loadAwaitingCommands(user.getNickname());
+                                        for (Command command :missingCommands) {
+                                            send(command);
+                                        }
                                     }
                                 });
 
@@ -287,9 +300,13 @@ public class Server {
 
                             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) lastCommand;
                             if (isExist(srCommand.getNickname_From()) && isExist(srCommand.getNickname_To()) &&
-                                    isOnline(srCommand.getNickname_From()) && isOnline(srCommand.getNickname_To())) {//если есть такой и он в сети
+                                    isOnline(srCommand.getNickname_From())) {//если есть такой и он в сети
 
-                                sendTo(srCommand.getNickname_To(), srCommand);
+                                if (isOnline(srCommand.getNickname_To())){
+                                    sendTo(srCommand.getNickname_To(), srCommand);
+                                } else {
+                                    addAwaitingCommand(srCommand.getNickname_To(),srCommand);
+                                }
 
                             } else {
                                 AcceptFriendshipCommand acCommand = new AcceptFriendshipCommand();
@@ -302,19 +319,34 @@ public class Server {
 
                             AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) lastCommand;
                             if (isExist(acCommand.getNickname_From()) && isExist(acCommand.getNickname_To()) &&
-                                    isOnline(acCommand.getNickname_From()) && isOnline(acCommand.getNickname_To())) {
+                                    isOnline(acCommand.getNickname_From())) {
 
                                 if (acCommand.isAccept())
                                     addFriend(acCommand.getNickname_To(), acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
 
-                                sendTo(acCommand.getNickname_To(), acCommand);
+
+                                if (isOnline(acCommand.getNickname_To())){
+                                    sendTo(acCommand.getNickname_To(), acCommand);
+                                } else {
+                                    addAwaitingCommand(acCommand.getNickname_To(), acCommand);
+                                }
 
                                 User sendedUser_To = Server.this.getUser(acCommand.getNickname_To());
                                 User sendedUser_From = Server.this.getUser(acCommand.getNickname_From());
 
-                                sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
-                                sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+                                if (isOnline(acCommand.getNickname_To())){
+                                    sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                } else {
+                                    addAwaitingCommand(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                }
 
+                                if (isOnline(acCommand.getNickname_From())){
+                                    sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+                                } else {
+                                    addAwaitingCommand(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+                                }
+                                /*sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));*/
                             }
 
                         } else if (lastCommand instanceof MessageCommand) { // перенаправляет сообщение
@@ -360,6 +392,7 @@ public class Server {
                                     break;
                                 }
                             }
+
                         } else if (lastCommand instanceof ChangingUserInfoCommand) {
 
                             ChangingUserInfoCommand cuiCommand = (ChangingUserInfoCommand) lastCommand;

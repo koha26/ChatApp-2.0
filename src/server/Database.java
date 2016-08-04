@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
+import logic.command.Command;
 import logic.command.HistoryPacketCommand;
 
 import javax.imageio.ImageIO;
@@ -291,6 +292,7 @@ public class Database {
         if (files.length == 0) { // если не нашло такой папки, то создаем ее
             File newHistoryDir = new File(dataPath + "/" + dirName + "/history");
             File newAvatarDir = new File(dataPath + "/" + dirName + "/avatar");
+            File newAwaitingCommandDir = new File(dataPath + "/" + dirName + "/awaiting_command");
 
             int count = 0;
             while (count < 10) {
@@ -302,6 +304,13 @@ public class Database {
             count = 0;
             while (count < 10) {
                 if (newAvatarDir.mkdirs()) {
+                    break;
+                }
+                count++;
+            }
+            count = 0;
+            while (count < 10) {
+                if (newAwaitingCommandDir.mkdirs()) {
                     break;
                 }
                 count++;
@@ -559,6 +568,47 @@ public class Database {
             }
         }
         return history;
+    }
+
+    //ДЛЯ РАБОТЫ С ОФФ-ЛАЙН запросами
+
+    public LinkedList<Command> loadAwaitingCommands(String nickname){
+        User user = userMap.get(nickname);
+
+        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+
+        if (awaitingCommandFile.exists() && awaitingCommandFile.isFile() && awaitingCommandFile.length()>0){
+            XStream xStream = new XStream(new DomDriver());
+            LinkedList<Command> commands = new LinkedList<>();
+            try{
+                InputStream inputStream = new FileInputStream(awaitingCommandFile);
+                commands = (LinkedList<Command>) xStream.fromXML(inputStream);
+                awaitingCommandFile.delete();
+                return commands;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new LinkedList<Command>();
+        }
+        return new LinkedList<Command>();
+    }
+
+    public void addAwaitingCommand(String nickname, Command command){
+        User user = userMap.get(nickname);
+
+        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+        LinkedList<Command> commands = loadAwaitingCommands(nickname);
+        commands.push(command);
+
+        try(FileOutputStream outputStream = new FileOutputStream(awaitingCommandFile)) {
+
+            XStream xStream = new XStream(new DomDriver());
+            xStream.toXML(commands, outputStream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
