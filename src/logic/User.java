@@ -85,11 +85,11 @@ public class User extends Human {
         this.avatar = avatar;
     }
 
-    public BufferedImage getAvatarAsBufImage(){
+    public BufferedImage getAvatarAsBufImage() {
         return avatar.getBufferedImage();
     }
 
-    public void setAvatar(BufferedImage bufImage){
+    public void setAvatar(BufferedImage bufImage) {
         avatar = new ImageSerializable(bufImage);
     }
 
@@ -105,9 +105,9 @@ public class User extends Human {
         return friends;
     }
 
-    public List<Friend> getFriendsList(Collection<String> friendNickOnline){
+    public List<Friend> getFriendsList(Collection<String> friendNickOnline) {
         List<Friend> resultList = new ArrayList<>();
-        for (String friendNickname: friendNickOnline ) {
+        for (String friendNickname : friendNickOnline) {
             resultList.add(getFriend(friendNickname));
         }
         return resultList;
@@ -118,14 +118,14 @@ public class User extends Human {
     }
 
     public void addFriend(Friend friend) {
-        if (!friends.contains(friend)){
+        if (!friends.contains(friend)) {
             friends.add(friend);
         }
     }
 
     public boolean deleteFriend(String nicknameFriend) {
-        for (Friend friend :friends) {
-            if (friend.getNickname().equals(nicknameFriend)){
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
                 return friends.remove(friend);
             }
         }
@@ -133,8 +133,8 @@ public class User extends Human {
     }
 
     public boolean hasFriend(String nicknameFriend) {
-        for (Friend friend :friends) {
-            if (friend.getNickname().equals(nicknameFriend)){
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
                 return true;
             }
         }
@@ -142,15 +142,15 @@ public class User extends Human {
     }
 
     public Friend getFriend(String nicknameFriend) {
-        for (Friend friend :friends) {
-            if (friend.getNickname().equals(nicknameFriend)){
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
                 return friend;
             }
         }
         return null;
     }
 
-    public Friend toFriendObject(){
+    public Friend toFriendObject() {
         return new Friend(this);
     }
 

@@ -1,8 +1,6 @@
 package main.client;
 
-import gui.MainFormVisualisation;
-import gui.Mode;
-import gui.StartForm;
+import gui.*;
 import logic.Constants;
 import logic.RegistrationModel;
 import logic.User;
@@ -14,6 +12,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Observable;
@@ -29,7 +29,7 @@ public class Application implements Observer {
      * Хранение объекта клиента и пользователя будет находиться здесь. Хотя, вероятно, лучше будет юзера передать в менй форм
      */
     private StartForm startForm;
-    private MainFormVisualisation mainForm;
+    private MainForm mainForm;
     private Mode mode;
     private Client client;
     private User user;
@@ -40,11 +40,6 @@ public class Application implements Observer {
 
     public void init() throws IOException {
         this.startForm = new StartForm();
-        try {
-            this.mainForm = new MainFormVisualisation();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
         this.startForm.getLoginButton().addActionListener(new ActionListener() {
@@ -112,13 +107,6 @@ public class Application implements Observer {
                 }
             }
         });
-
-        this.mainForm.getSettingsButton().addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                client.sendFriendshipRequestCommand("koha26", "testtest");
-            }
-        });
     }
 
 
@@ -149,14 +137,25 @@ public class Application implements Observer {
                     if (mode == Mode.STARTFROM_ON && Application.this.mode != Mode.STARTFROM_ON) {
                         Application.this.mode = mode;
                         startForm.setVisible(true); //становится видна логин форма
-                        try {
-                            mainForm = new MainFormVisualisation(); //создаем новую МейнФорму, удаляя старые данные с нее
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
                         Application.this.mode = mode;
+                        mainForm = new MainForm(user); //создаем новую МейнФорму, удаляя старые данные с нее
+                        mainForm.getPlusButton().addActionListener(new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                String nick = JOptionPane.showInputDialog(null, "Enter nickname: ");
+                                client.sendFriendshipRequestCommand(nick, user.getNickname());
+                            }
+                        });
+                        mainForm.getHomePanel().getBottomPanel().addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mousePressed(MouseEvent e) {
+                                super.mousePressed(e);
+                                FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
+                                mainForm.changeModeToDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname());
+                            }
+                        });
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();
                     }
@@ -194,7 +193,7 @@ public class Application implements Observer {
             }
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
-            this.mainForm.getMessage(mCommand.getMessage().getMessageText());
+            this.mainForm.getDialogPanel().getMessage(mCommand.getMessage().getMessageText());
         } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;

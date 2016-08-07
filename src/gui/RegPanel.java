@@ -155,6 +155,9 @@ public class RegPanel extends JPanel {
 
         avatar = new JLabel(new ImageIcon(bufImage));
 
+        repaint();
+        revalidate();
+
         mainLabel = new JLabel("Main Information");
         mainLabel.setForeground(Color.RED);
         mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX) - 1));
