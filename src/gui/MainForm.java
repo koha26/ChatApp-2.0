@@ -4,7 +4,6 @@ import logic.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +15,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import static logic.Constants.SCRDIM_KX;
-import static logic.Constants.SCRDIM_KY;
 
 public class MainForm extends JFrame {
     private HomePanel homePanel;
@@ -52,7 +48,7 @@ public class MainForm extends JFrame {
 
     public MainForm(User user) {
         GUIStandartOperations.FrameStartOperations(this);
-        setSize((int) (960 * SCRDIM_KX), (int) (610 * SCRDIM_KY));
+        setSize(960, 610);
         setLocationRelativeTo(null);
         setLayout(null);
         mode = Mode.HOME_PANEL;
