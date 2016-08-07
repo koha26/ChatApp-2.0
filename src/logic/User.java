@@ -37,6 +37,12 @@ public class User extends Human {
         this.uniqueID = uniqueID;
         this.friends = new ArrayList<>(0);
         this.avatar = regModel.getAvatar();
+        super.setName(regModel.getName());
+        super.setSurname(regModel.getSurname());
+        super.setDateOfBirth(regModel.getDateOfBirth());
+        super.setCity(regModel.getCity());
+        super.setCountry(regModel.getCountry());
+        super.setSex(regModel.getSex());
     }
 
     public String getNickname() {
@@ -88,11 +94,11 @@ public class User extends Human {
     }
 
     public Set<String> getFriendsSet() {
-        Set<String> set = new HashSet<>();
+        Set<String> resultSet = new HashSet<>();
         for (Friend friend :friends) {
-            set.add(friend.getNickname());
+            resultSet.add(friend.getNickname());
         }
-        return set;
+        return resultSet;
     }
 
     public List<Friend> getFriendsList() {

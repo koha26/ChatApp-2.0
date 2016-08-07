@@ -1,3 +1,12 @@
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import logic.Friend;
+import logic.ImageSerializable;
+import logic.User;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Test {
@@ -23,6 +32,18 @@ public class Test {
             System.out.println(matcher3.group());
         }*/
 
+        FileOutputStream fos = new FileOutputStream("test.xml");
+
+        User user = new User("koha","asda", null, 1);
+        Friend f1 =new Friend("max", new ImageSerializable(ImageIO.read(new File("images/avatar/default.jpg"))));
+        user.addFriend(f1);
+
+        XStream xStream = new XStream(new DomDriver());
+        xStream.toXML(user,fos);
+
+        xStream = new XStream(new DomDriver());
+        User nUser = (User) xStream.fromXML(new File("test.xml"));
+        System.out.println(nUser);
     }
 
 }

@@ -203,7 +203,7 @@ public class Database {
             }
 
             File avatarFile;
-            File defaultImageFile = new File("images/avatar/default.jpg");
+            File defaultImageFile = new File("images/avatar/default.png");
 
             for (User u : userMap.values()) {
                 avatarFile = new File(dataPath + "/user_" + u.getUniqueID() + "/avatar/avatar.jpg");

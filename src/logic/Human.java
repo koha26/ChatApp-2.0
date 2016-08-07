@@ -11,11 +11,11 @@ public abstract class Human implements Serializable{
     private Sex sex;
 
     public Human(){
-        this.country = "";
-        this.city = "";
-        this.dateOfBirth = "";
-        this.name = "";
-        this.surname = "";
+        this.country = "-";
+        this.city = "-";
+        this.dateOfBirth = "-";
+        this.name = "-";
+        this.surname = "-";
         this.sex = Sex.MALE;
     }
 
