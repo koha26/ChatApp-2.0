@@ -422,7 +422,7 @@ public class Server {
             } catch (IOException e) {
                 System.out.println("Ошибка отправки!");
                 /*if (command instanceof MessageCommand) {
-                    Message message = ((MessageCommand) command).getMessage();
+                    Message message = ((MessageCommand) command).showIncomingMessage();
                     saveMessageInReceiverHistory(message, message.getNickname_From(), message.getNickname_To(), false);
                 }*/
             }

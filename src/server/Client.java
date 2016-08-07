@@ -52,12 +52,8 @@ public class Client extends Observable {
         send(acCommand);
     }
 
-    public void sendMessageCommand(String nickname_To, String nickname_From, String messageText) {
+    public void sendMessageCommand(Message message) {
         MessageCommand mCommand = new MessageCommand();
-        Message message = new Message();
-        message.setMessageText(messageText);
-        message.setNickname_From(nickname_From);
-        message.setNickname_To(nickname_To);
         message.setReaded(true);
         mCommand.setMessage(message);
         send(mCommand);

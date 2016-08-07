@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class OutlineButton extends JButton {
 
-    private Color outlineColor = Color.RED;
+    private Color outlineColor = Color.WHITE;
     private boolean isPaintingOutline = false;
     private boolean forceTransparent = false;
 

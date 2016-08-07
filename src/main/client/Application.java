@@ -2,6 +2,7 @@ package main.client;
 
 import gui.*;
 import logic.Constants;
+import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
@@ -10,10 +11,7 @@ import server.Client;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Observable;
@@ -109,7 +107,6 @@ public class Application implements Observer {
         });
     }
 
-
     public void start() { //явный запуск приложения
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -156,6 +153,20 @@ public class Application implements Observer {
                                 mainForm.changeModeToDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname());
                             }
                         });
+                        mainForm.getDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
+                            @Override
+                            public void keyPressed(KeyEvent e) {
+                                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                                    Message myMesseage = new Message();
+                                    myMesseage.setMessageText(mainForm.getDialogPanel().getMessageArea().getText());
+                                    myMesseage.setNickname_From(user.getNickname());
+                                    myMesseage.setNickname_To(mainForm.getDialogPanel().getFriendsNickButton().getText());
+                                    client.sendMessageCommand(myMesseage);
+                                    mainForm.getDialogPanel().showOutcomingMessage(myMesseage);
+                                    mainForm.getDialogPanel().getMessageArea().setText("");
+                                }
+                            }
+                        });
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();
                     }
@@ -193,7 +204,9 @@ public class Application implements Observer {
             }
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
-            this.mainForm.getDialogPanel().getMessage(mCommand.getMessage().getMessageText());
+            Message message = mCommand.getMessage();
+            if (message.getNickname_To().equals(user.getNickname()))
+                this.mainForm.getDialogPanel().showIncomingMessage(message);
         } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;

@@ -1,8 +1,9 @@
 package gui;
 
+import logic.Message;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ public class DialogPanel extends JPanel {
         friendsNickButton = new OutlineButton(friendNick);
         friendsNickButton.setHorizontalAlignment(JLabel.CENTER);
         friendsNickButton.setFont(Fonts.nickFont);
-        friendsNickButton.setForeground(Color.WHITE);
+        friendsNickButton.setForeground(Color.BLACK);
         friendsNickButton.setBackground(new Color(0, 0, 0, 0));
         friendsNickButton.setOpaque(false);
         friendsNickButton.setBorder(null);
@@ -47,37 +48,26 @@ public class DialogPanel extends JPanel {
         messageArea.setLineWrap(true);
         messageArea.setBackground(Color.LIGHT_GRAY);
         messageArea.setWrapStyleWord(true);
-        messageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        messageScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
         messageArea.setBackground(new Color(0, 0, 0, 150));
         messageArea.setForeground(Color.WHITE);
+
+        messageScrollPane = new JScrollPane(messageArea);
+        messageScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         messageScrollPane.setOpaque(false);
         messageScrollPane.getViewport().setOpaque(false);
         messageScrollPane.setBorder(null);
-
-        messageArea.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                    messageView.sendMessage(messageArea.getText());
-                    messageArea.setText("");
-                    messageView.getMessage("Здравствуйте, Максим Вадимович!");
-                }
-            }
-        });
 
         messageView = new MessageView();
 
         friendsNickButton.setBounds(20, 20, 920, 40);
         messageView.setBounds(100, 70, 760, 300);
-        messageArea.setBounds(210, 390, 540, 100);
+        messageScrollPane.setBounds(210, 390, 540, 100);
         myPhotoLabel.setBounds(100, 390, 100, 100);
         friendPhotoLabel.setBounds(760, 390, 100, 100);
 
         this.add(friendsNickButton);
         this.add(messageView);
-        this.add(messageArea);
+        this.add(messageScrollPane);
         this.add(myPhotoLabel);
         this.add(friendPhotoLabel);
 
@@ -86,15 +76,23 @@ public class DialogPanel extends JPanel {
         thread.start();
     }
 
+    public JButton getFriendsNickButton() {
+        return friendsNickButton;
+    }
+
+    public MessageView getMessageView() {
+        return messageView;
+    }
+
     public JTextArea getMessageArea() {
         return messageArea;
     }
 
-    public void sendMessage() {
-        messageView.sendMessage(messageArea.getText());
+    public void showOutcomingMessage(Message message) {
+        messageView.showOutcomingMessage(message);
     }
 
-    public void getMessage(String text) {
-        messageView.getMessage(text);
+    public void showIncomingMessage(Message message) {
+        messageView.showIncomingMessage(message);
     }
 }
