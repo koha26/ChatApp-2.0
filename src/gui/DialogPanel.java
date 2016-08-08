@@ -14,27 +14,12 @@ public class DialogPanel extends JPanel {
     private MessageView messageView = new MessageView();
     private JLabel myPhotoLabel, friendPhotoLabel;
 
-    public DialogPanel(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNick) throws IOException {
+    public DialogPanel() {
         this.setLayout(null);
         this.setOpaque(false);
         this.setBackground(new Color(0, 0, 0, 0));
 
-        BufferedImage scaled1 = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-
-        Graphics2D g1 = scaled1.createGraphics();
-        g1.drawImage(myPhoto, 0, 0, 100, 100, null);
-        g1.dispose();
-
-        BufferedImage scaled2 = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-
-        Graphics2D g2 = scaled2.createGraphics();
-        g2.drawImage(friendPhoto, 0, 0, 100, 100, null);
-        g2.dispose();
-
-        myPhotoLabel = CircleLabelClass.CircleLabel(scaled1);
-        friendPhotoLabel = CircleLabelClass.CircleLabel(scaled2);
-
-        friendsNickButton = new OutlineButton(friendNick);
+        friendsNickButton = new OutlineButton("");
         friendsNickButton.setHorizontalAlignment(JLabel.CENTER);
         friendsNickButton.setFont(Fonts.nickFont);
         friendsNickButton.setForeground(Color.BLACK);
@@ -62,14 +47,10 @@ public class DialogPanel extends JPanel {
         friendsNickButton.setBounds(20, 20, 920, 40);
         messageView.setBounds(100, 70, 760, 300);
         messageScrollPane.setBounds(210, 390, 540, 100);
-        myPhotoLabel.setBounds(100, 390, 100, 100);
-        friendPhotoLabel.setBounds(760, 390, 100, 100);
 
         this.add(friendsNickButton);
         this.add(messageView);
         this.add(messageScrollPane);
-        this.add(myPhotoLabel);
-        this.add(friendPhotoLabel);
 
         RepaintPanel repaintPanel = new RepaintPanel(this);
         Thread thread = new Thread(repaintPanel);
@@ -94,5 +75,34 @@ public class DialogPanel extends JPanel {
 
     public void showIncomingMessage(Message message) {
         messageView.showIncomingMessage(message);
+    }
+
+    public void updateInfo(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNick) throws IOException {
+        BufferedImage scaled1 = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g1 = scaled1.createGraphics();
+        g1.drawImage(myPhoto, 0, 0, 100, 100, null);
+        g1.dispose();
+
+        BufferedImage scaled2 = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g2 = scaled2.createGraphics();
+        g2.drawImage(friendPhoto, 0, 0, 100, 100, null);
+        g2.dispose();
+
+        myPhotoLabel = CircleLabelClass.CircleLabel(scaled1);
+        friendPhotoLabel = CircleLabelClass.CircleLabel(scaled2);
+
+        myPhotoLabel.setBounds(100, 390, 100, 100);
+        friendPhotoLabel.setBounds(760, 390, 100, 100);
+
+        this.add(myPhotoLabel);
+        this.add(friendPhotoLabel);
+
+        friendsNickButton.setText(friendNick);
+
+        repaint();
+        revalidate();
+        updateUI();
     }
 }

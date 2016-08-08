@@ -33,7 +33,6 @@ public class MainForm extends JFrame {
     private final ImageIcon homeButIcon = new ImageIcon("images/mainform/home.png");
     private final ImageIcon homeButIconEntered = new ImageIcon("images/mainform/home_entered.png");
     private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton;
-    private static Mode mode;
 
     public JButton getPlusButton() {
         return plusButton;
@@ -47,12 +46,11 @@ public class MainForm extends JFrame {
         return homePanel;
     }
 
-    public MainForm(User user) {
+    public MainForm() {
         GUIStandartOperations.FrameStartOperations(this);
         setSize(960, 610);
         setLocationRelativeTo(null);
         setLayout(null);
-        mode = Mode.HOME_PANEL;
 
         addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
@@ -92,10 +90,12 @@ public class MainForm extends JFrame {
         bigPanel.add(contactsButton);
         exitButton.setBounds(834, 10, 64, 64);
         bigPanel.add(exitButton);
-        homePanel = new HomePanel(user);
+        homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
 
         bigPanel.add(homePanel);
+
+        dialogPanel = new DialogPanel();
 
         this.add(bigPanel);
 
@@ -105,14 +105,6 @@ public class MainForm extends JFrame {
                 System.exit(0);
             }
         });
-
-        homeButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (mode == Mode.DIALOG)
-                    changeModeToHomePanel();
-            }
-        });
     }
 
     public JButton getHomeButton() {
@@ -120,17 +112,13 @@ public class MainForm extends JFrame {
     }
 
     public void changeModeToHomePanel() {
-        if (mode == Mode.DIALOG) {
-            mode = Mode.HOME_PANEL;
-            dialogPanel.setVisible(false);
-            homePanel.setVisible(true);
-        }
+        dialogPanel.setVisible(false);
+        homePanel.setVisible(true);
     }
 
     public void changeModeToDialog(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNickname) {
-        mode = Mode.DIALOG;
         try {
-            dialogPanel = new DialogPanel(myPhoto, friendPhoto, friendNickname);
+            dialogPanel.updateInfo(myPhoto, friendPhoto, friendNickname);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -176,7 +164,7 @@ public class MainForm extends JFrame {
 
                 user.setFriends(friends);
 
-                MainForm mainForm = new MainForm(user);
+                MainForm mainForm = new MainForm();
 
                 mainForm.setVisible(true);
             }
