@@ -1,103 +1,46 @@
 package logic;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class User implements Serializable {
+public class User extends Human {
     private String nickname;
     private String password;
     private InetAddress ipAddress;
     private int uniqueID;
-    private ArrayList<String> friends;
-    private String country;
-    private String city;
-    private String dateOfBirth;
-    private String name;
-    private String surname;
-    private String sex;
-    private transient BufferedImage avatar;
+    private ArrayList<Friend> friends;
+    private ImageSerializable avatar;
 
     public User() {
-        this.nickname = "";
+        super();
         this.password = "";
         this.uniqueID = -1;
-        this.dateOfBirth = "";
-        this.city = "";
-        this.country = "";
     }
 
     public User(String nickname, String password, InetAddress ipAddress, int uniqueID) {
+        //String nickname, String country, String city, String dateOfBirth, String name, String surname, Sex sex
+        super();
         this.nickname = nickname;
         this.password = password;
         this.ipAddress = ipAddress;
         this.uniqueID = uniqueID;
-        this.dateOfBirth = "";
-        this.city = "";
-        this.country = "";
-        this.name = "";
-        this.surname = "";
-        this.sex = "";
         this.friends = new ArrayList<>(0);
+        this.avatar = null;
     }
 
     public User(RegistrationModel regModel, InetAddress ipAddress, int uniqueID) {
+        super();
         this.nickname = regModel.getNick();
         this.password = regModel.getPassword();
         this.ipAddress = ipAddress;
         this.uniqueID = uniqueID;
-        this.dateOfBirth = regModel.getDateOfBirth();
-        this.city = regModel.getCity();
-        this.country = regModel.getCountry();
-        this.name = regModel.getName();
-        this.surname = regModel.getSurname();
-        this.sex = regModel.getSex();
         this.friends = new ArrayList<>(0);
-    }
-
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        this.avatar = regModel.getAvatar();
+        super.setName(regModel.getName());
+        super.setSurname(regModel.getSurname());
+        super.setSex(regModel.getSex());
+        super.setDateOfBirth(regModel.getDateOfBirth());
     }
 
     public String getNickname() {
@@ -132,48 +75,81 @@ public class User implements Serializable {
         this.uniqueID = uniqueID;
     }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public BufferedImage getAvatar() {
+    public ImageSerializable getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(BufferedImage avatar) {
+    public void setAvatar(ImageSerializable avatar) {
         this.avatar = avatar;
+    }
+
+    public BufferedImage getAvatarAsBufImage() {
+        return avatar.getBufferedImage();
+    }
+
+    public void setAvatar(BufferedImage bufImage) {
+        avatar = new ImageSerializable(bufImage);
     }
 
     public Set<String> getFriendsSet() {
         Set<String> set = new HashSet<>();
-        set.addAll(friends);
+        for (Friend friend : friends) {
+            set.add(friend.getNickname());
+        }
         return set;
     }
 
-    public List<String> getFriendsList() {
+    public List<Friend> getFriendsList() {
         return friends;
     }
 
-    public void setFriends(ArrayList<String> friends) {
+    public List<Friend> getFriendsList(Collection<String> friendNickOnline) {
+        List<Friend> resultList = new ArrayList<>();
+        for (String friendNickname : friendNickOnline) {
+            resultList.add(getFriend(friendNickname));
+        }
+        return resultList;
+    }
+
+    public void setFriends(ArrayList<Friend> friends) {
         this.friends = friends;
     }
 
-    public void addFriend(String nicknameFriend) {
-        if (!friends.contains(nicknameFriend)){
-            friends.add(nicknameFriend);
+    public void addFriend(Friend friend) {
+        if (!friends.contains(friend)) {
+            friends.add(friend);
         }
     }
 
     public boolean deleteFriend(String nicknameFriend) {
-        return friends.remove(nicknameFriend);
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
+                return friends.remove(friend);
+            }
+        }
+        return false;
     }
 
     public boolean hasFriend(String nicknameFriend) {
-        return friends.contains(nicknameFriend);
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Friend getFriend(String nicknameFriend) {
+        for (Friend friend : friends) {
+            if (friend.getNickname().equals(nicknameFriend)) {
+                return friend;
+            }
+        }
+        return null;
+    }
+
+    public Friend toFriendObject() {
+        return new Friend(this);
     }
 
     @Override

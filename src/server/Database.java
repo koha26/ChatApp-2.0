@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import logic.Message;
 import logic.RegistrationModel;
 import logic.User;
+import logic.command.Command;
 import logic.command.HistoryPacketCommand;
 
 import javax.imageio.ImageIO;
@@ -56,7 +57,7 @@ public class Database {
     }
 
     public boolean isOnline(String nickname) {
-        if (userOnline.get(userMap.get(nickname)) != null) {
+        if (userOnline.get(nickname) != null) {
             return true;
         } else
             return false;
@@ -65,6 +66,10 @@ public class Database {
     public void deleteUser(String nickname) {
         this.userMap.remove(nickname);
         this.userOnline.remove(nickname);
+    }
+
+    public User getUser(String nickname){
+        return userMap.get(nickname);
     }
 
     public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException {
@@ -100,7 +105,7 @@ public class Database {
 
                 while (tries < 20) {
                     try {
-                        if (ImageIO.write(changedUser.getAvatar(), "jpg", avatarFile)) {
+                        if (ImageIO.write(changedUser.getAvatarAsBufImage(), "jpg", avatarFile)) {
                             break;
                         } else {
                             tries++;
@@ -154,9 +159,14 @@ public class Database {
     }
 
     public void addFriend(String nickname_host, String nickname_friend) {
-        User editedUser = userMap.get(nickname_host);
-        editedUser.addFriend(nickname_friend);
-        userMap.put(nickname_host, editedUser);
+        User editedUser_host = userMap.get(nickname_host);
+        User editedUser_friend = userMap.get(nickname_friend);
+
+        editedUser_host.addFriend(editedUser_friend.toFriendObject());
+        userMap.put(nickname_host, editedUser_host);
+
+        editedUser_friend.addFriend(editedUser_host.toFriendObject());
+        userMap.put(nickname_friend, editedUser_friend);
 
         updateData();
     }
@@ -187,13 +197,13 @@ public class Database {
             try {
                 FileInputStream inputStream = new FileInputStream(clientsDataFile);
 
-                userMap = (HashMap<String, User>) xmlStream.fromXML(inputStream);
+                userMap = (Map<String, User>) xmlStream.fromXML(inputStream);
             } catch (FileNotFoundException e) {
                 // ex
             }
 
             File avatarFile;
-            File defaultImageFile = new File("/resources/avatar/default.jpg");
+            File defaultImageFile = new File("images/avatar/default.jpg");
 
             for (User u : userMap.values()) {
                 avatarFile = new File(dataPath + "/user_" + u.getUniqueID() + "/avatar/avatar.jpg");
@@ -201,13 +211,13 @@ public class Database {
                     try {
                         u.setAvatar(ImageIO.read(avatarFile));
                     } catch (IOException e) {
-                        u.setAvatar(null);
+                        //u.setAvatar(new ImageSerializable(null));
                     }
                 } else {
                     try {
                         u.setAvatar(ImageIO.read(defaultImageFile));
                     } catch (IOException e) {
-                        u.setAvatar(null);
+                        //u.setAvatar(new ImageSerializable(null));
                     }
                 }
             }
@@ -221,6 +231,7 @@ public class Database {
             if (checkDataPath() && checkClientsDataFile() && clientsDataFile.isFile()) {
                 XStream xmlStream = new XStream(new DomDriver());
                 xmlStream.alias("user", User.class); // класс User будет в тегах писать как user, а не logic.User
+                xmlStream.omitField(User.class, "avatar");
 
                 try {
                     FileOutputStream outputStream = new FileOutputStream(clientsDataFile);
@@ -281,6 +292,7 @@ public class Database {
         if (files.length == 0) { // если не нашло такой папки, то создаем ее
             File newHistoryDir = new File(dataPath + "/" + dirName + "/history");
             File newAvatarDir = new File(dataPath + "/" + dirName + "/avatar");
+            File newAwaitingCommandDir = new File(dataPath + "/" + dirName + "/awaiting_command");
 
             int count = 0;
             while (count < 10) {
@@ -292,6 +304,13 @@ public class Database {
             count = 0;
             while (count < 10) {
                 if (newAvatarDir.mkdirs()) {
+                    break;
+                }
+                count++;
+            }
+            count = 0;
+            while (count < 10) {
+                if (newAwaitingCommandDir.mkdirs()) {
                     break;
                 }
                 count++;
@@ -549,6 +568,47 @@ public class Database {
             }
         }
         return history;
+    }
+
+    //ДЛЯ РАБОТЫ С ОФФ-ЛАЙН запросами
+
+    public LinkedList<Command> loadAwaitingCommands(String nickname){
+        User user = userMap.get(nickname);
+
+        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+
+        if (awaitingCommandFile.exists() && awaitingCommandFile.isFile() && awaitingCommandFile.length()>0){
+            XStream xStream = new XStream(new DomDriver());
+            LinkedList<Command> commands = new LinkedList<>();
+            try{
+                InputStream inputStream = new FileInputStream(awaitingCommandFile);
+                commands = (LinkedList<Command>) xStream.fromXML(inputStream);
+                awaitingCommandFile.delete();
+                return commands;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new LinkedList<Command>();
+        }
+        return new LinkedList<Command>();
+    }
+
+    public void addAwaitingCommand(String nickname, Command command){
+        User user = userMap.get(nickname);
+
+        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+        LinkedList<Command> commands = loadAwaitingCommands(nickname);
+        commands.push(command);
+
+        try(FileOutputStream outputStream = new FileOutputStream(awaitingCommandFile)) {
+
+            XStream xStream = new XStream(new DomDriver());
+            xStream.toXML(commands, outputStream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

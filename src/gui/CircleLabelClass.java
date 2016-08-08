@@ -1,10 +1,8 @@
 package gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class CircleLabelClass {
@@ -21,11 +19,9 @@ public class CircleLabelClass {
 
     }
 
-    public static JLabel CircleLabel(String path) throws IOException {
-        BufferedImage master = ImageIO.read(new File(path));
-
-        int diameter = Math.min(master.getWidth(), master.getHeight());
-        BufferedImage mask = new BufferedImage(master.getWidth(), master.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    public static JLabel CircleLabel(BufferedImage image) throws IOException {
+        int diameter = Math.min(image.getWidth(), image.getHeight());
+        BufferedImage mask = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = mask.createGraphics();
         applyQualityRenderingHints(g2d);
@@ -35,16 +31,12 @@ public class CircleLabelClass {
         BufferedImage masked = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
         g2d = masked.createGraphics();
         applyQualityRenderingHints(g2d);
-        int x = (diameter - master.getWidth()) / 2;
-        int y = (diameter - master.getHeight()) / 2;
-        g2d.drawImage(master, x, y, null);
+        int x = (diameter - image.getWidth()) / 2;
+        int y = (diameter - image.getHeight()) / 2;
+        g2d.drawImage(image, x, y, null);
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN));
         g2d.drawImage(mask, 0, 0, null);
         g2d.dispose();
         return new JLabel(new ImageIcon(masked));
-    }
-
-    public static void main(String[] args) throws IOException {
-        JOptionPane.showMessageDialog(null, CircleLabel("max.jpg"));
     }
 }

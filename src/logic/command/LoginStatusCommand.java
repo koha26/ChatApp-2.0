@@ -1,13 +1,15 @@
 package logic.command;
 
+import logic.Friend;
 import logic.User;
 
+import java.util.List;
 import java.util.Set;
 
 public class LoginStatusCommand extends Command {
     private User user;
     private String exceptionDescription;
-    private Set<String> friendOnline;
+    private Set<String> friendNickOnline; //nicknames
     private Set<String> unreadMessagesFrom;
 
     public LoginStatusCommand() {
@@ -26,12 +28,12 @@ public class LoginStatusCommand extends Command {
         this.unreadMessagesFrom = unreadMessagesFrom;
     }
 
-    public Set<String> getFriendOnline() {
-        return friendOnline;
+    public Set<String> getFriendNickOnline() {
+        return friendNickOnline;
     }
 
-    public void setFriendOnline(Set<String> friendOnline) {
-        this.friendOnline = friendOnline;
+    public void setFriendOnline(Set<String> friendNickOnline) {
+        this.friendNickOnline = friendNickOnline;
     }
 
     public User getUser() {
@@ -50,5 +52,11 @@ public class LoginStatusCommand extends Command {
         this.exceptionDescription = exceptionDescription;
     }
 
+    public List<Friend> getFriendOnlineList(){
+        return user.getFriendsList(friendNickOnline);
+    }
 
+    public List<Friend> getUnreadMessageFromList(){
+        return user.getFriendsList(unreadMessagesFrom);
+    }
 }

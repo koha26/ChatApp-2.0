@@ -1,5 +1,7 @@
 package gui;
 
+import logic.Message;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -29,38 +31,34 @@ public class MessageView extends JPanel {
         this.add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
     }
 
-
-    public void sendMessage(String message) {
+    public void showOutcomingMessage(Message message) {
         JPanel outMsgPanel = new JPanel();
         outMsgPanel.setBackground(new Color(0, 0, 0, 0));
         outMsgPanel.setLayout(new BorderLayout());
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), getMessageTime(),
+        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), getMessageTime(new Date()),
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.GREEN);
         msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
         msgBorder.setTitlePosition(TitledBorder.BOTTOM);
-        JTextArea text = new JTextArea(message);
+        JTextArea text = new JTextArea(message.getMessageText());
         text.setBackground(new Color(0, 0, 0, 0));
         text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
         text.setEditable(false);
         text.setBorder(msgBorder);
         text.setForeground(Color.WHITE);
-        outMsgPanel.add(text, BorderLayout.WEST);
+        text.setLineWrap(true);
+        outMsgPanel.add(text, BorderLayout.CENTER);
         outMsgPanel.setBorder(null);
-        JPanel panel = new JPanel();
-        panel.setBorder(null);
-        panel.setBackground(new Color(0, 0, 0, 0));
-        messagesPanel.add(outMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        messagesPanel.add(panel, new GridBagConstraints(1, currentPos, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        messagesPanel.add(outMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 200), 0, 0));
         currentPos++;
         updatePanel(messagesPanel);
     }
 
-    public void getMessage(String message) {
+    public void showIncomingMessage(Message message) {
         JPanel inMsgPanel = new JPanel();
         inMsgPanel.setLayout(new BorderLayout());
         inMsgPanel.setBackground(new Color(0, 0, 0, 0));
-        JTextArea text = new JTextArea(message);
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.BLUE, 2), getMessageTime()
+        JTextArea text = new JTextArea(message.getMessageText());
+        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.BLUE, 2), getMessageTime(message.getDate())
                 , TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.BLUE);
         msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
         msgBorder.setTitlePosition(TitledBorder.BOTTOM);
@@ -69,13 +67,9 @@ public class MessageView extends JPanel {
         text.setEditable(false);
         text.setForeground(Color.WHITE);
         text.setBorder(msgBorder);
-        inMsgPanel.add(text, BorderLayout.EAST);
+        inMsgPanel.add(text, BorderLayout.CENTER);
         inMsgPanel.setBorder(null);
-        JPanel panel = new JPanel();
-        panel.setBorder(null);
-        panel.setBackground(new Color(0, 0, 0, 0));
-        messagesPanel.add(inMsgPanel, new GridBagConstraints(1, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-        messagesPanel.add(panel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+        messagesPanel.add(inMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 200, 2, 2), 0, 0));
         currentPos++;
         updatePanel(messagesPanel);
     }
@@ -89,9 +83,10 @@ public class MessageView extends JPanel {
         return new Dimension(msgWidth, msgHeight);
     }
 
-    public static String getMessageTime() {
+    public static String getMessageTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        return dateFormat.format(new Date());
+      //  dateFormat.setTimeZone(TimeZone.);
+        return dateFormat.format(date);
     }
 
     void updatePanel(JPanel panel) {
