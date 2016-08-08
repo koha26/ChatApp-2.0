@@ -5,9 +5,6 @@ import logic.User;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class HomePanel extends JPanel {
@@ -16,25 +13,20 @@ public class HomePanel extends JPanel {
     private JLabel personaInfo;
     private JPanel topPanel, bottomPanel;
     private JScrollPane scrollPane;
+    private JLabel sexPanelInfo, namePanel, surnamePanel, dateOfBirthPanel, sexPanel, namePanelInfo, surnamePanelInfo, dateOfBirthPanelInfo;
 
     public JPanel getBottomPanel() {
         return bottomPanel;
     }
 
-    public HomePanel(User user) {
+    public HomePanel() {
         this.setLayout(null);
         this.setOpaque(false);
         this.setBackground(new Color(0, 0, 0, 0));
 
-        BufferedImage scaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
-
-        Graphics2D g = scaled.createGraphics();
-        g.drawImage(user.getAvatarAsBufImage(), 0, 0, 256, 256, null);
-        g.dispose();
-
-        yourPhoto = new JLabel(new ImageIcon(scaled));
+        yourPhoto = new JLabel();
         yourPhoto.setBorder(new LineBorder(Color.WHITE));
-        nickLabel = new JLabel(user.getNickname()); //TODO: сделать подсчет оптимального размера шрифта, чтобы он влез в компонент
+        nickLabel = new JLabel(); //TODO: сделать подсчет оптимального размера шрифта, чтобы он влез в компонент
         nickLabel.setFont(Fonts.nickFont);
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -48,10 +40,10 @@ public class HomePanel extends JPanel {
         personaInfo.setHorizontalAlignment(SwingConstants.CENTER);
         personaInfo.setBorder(new LineBorder(Color.WHITE, 5));
 
-        JLabel namePanel = new JLabel("Name: ");
-        JLabel surnamePanel = new JLabel("Surname: ");
-        JLabel dateOfBirthPanel = new JLabel("Date of birth: ");
-        JLabel sexPanel = new JLabel("Sex: ");
+        namePanel = new JLabel("Name: ");
+        surnamePanel = new JLabel("Surname: ");
+        dateOfBirthPanel = new JLabel("Date of birth: ");
+        sexPanel = new JLabel("Sex: ");
         namePanel.setHorizontalAlignment(SwingConstants.LEFT);
         surnamePanel.setHorizontalAlignment(SwingConstants.LEFT);
         dateOfBirthPanel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -61,15 +53,11 @@ public class HomePanel extends JPanel {
         dateOfBirthPanel.setForeground(Color.WHITE);
         sexPanel.setForeground(Color.WHITE);
 
-        JLabel namePanelInfo = new JLabel(user.getName());
-        JLabel surnamePanelInfo = new JLabel(user.getSurname());
-        JLabel dateOfBirthPanelInfo = new JLabel(user.getDateOfBirth());
-        JLabel sexPanelInfo;
-        if (user.getSex() == null) {
-            sexPanelInfo = new JLabel("-");
-        } else {
-            sexPanelInfo = new JLabel(user.getSex().toString());
-        }
+        namePanelInfo = new JLabel();
+        surnamePanelInfo = new JLabel();
+        dateOfBirthPanelInfo = new JLabel();
+        sexPanelInfo = new JLabel();
+
         namePanelInfo.setForeground(Color.RED);
         surnamePanelInfo.setForeground(Color.RED);
         dateOfBirthPanelInfo.setForeground(Color.RED);
@@ -96,17 +84,6 @@ public class HomePanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
-
-        if (user.getFriendsList().size() > 0) {
-            for (int i = 0; i < (user.getFriendsList().size() / 5) + 1; i++) {
-                for (int j = 0; j < 5; j++) {
-                    if (i * 5 + j >= user.getFriendsList().size()) break;
-                    FriendLook friend = new FriendLook(user.getFriendsList().get(i * 5 + j));
-                    bottomPanel.add(friend, new GridBagConstraints(j, i, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
-                }
-            }
-        }
-
 
         topPanel.setBounds(30, 10, 900, 320);
         scrollPane.setBounds(170, 350, 620, 150);
@@ -139,5 +116,41 @@ public class HomePanel extends JPanel {
         RepaintPanel repaintPanel = new RepaintPanel(this);
         Thread thread = new Thread(repaintPanel);
         thread.start();
+    }
+
+    public void updateInfo(User user) {
+        BufferedImage scaled = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g = scaled.createGraphics();
+        g.drawImage(user.getAvatarAsBufImage(), 0, 0, 256, 256, null);
+        g.dispose();
+
+        yourPhoto.setIcon(new ImageIcon(scaled));
+
+        nickLabel.setText(user.getNickname());
+
+        if (user.getSex() == null) {
+            sexPanelInfo = new JLabel("-");
+        } else {
+            sexPanelInfo = new JLabel(user.getSex().toString());
+        }
+
+        namePanelInfo.setText(user.getName());
+        surnamePanelInfo.setText(user.getSurname());
+        dateOfBirthPanelInfo.setText(user.getDateOfBirth());
+
+        if (user.getFriendsList().size() > 0) {
+            for (int i = 0; i < (user.getFriendsList().size() / 5) + 1; i++) {
+                for (int j = 0; j < 5; j++) {
+                    if (i * 5 + j >= user.getFriendsList().size()) break;
+                    FriendLook friend = new FriendLook(user.getFriendsList().get(i * 5 + j));
+                    bottomPanel.add(friend, new GridBagConstraints(j, i, 1, 1, 1, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
+                }
+            }
+        }
+
+        repaint();
+        revalidate();
+        updateUI();
     }
 }

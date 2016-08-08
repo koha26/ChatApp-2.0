@@ -38,6 +38,44 @@ public class Application implements Observer {
 
     public void init() throws IOException {
         this.startForm = new StartForm();
+        mainForm = new MainForm(); //создаем новую МейнФорму, удаляя старые данные с нее
+        mainForm.getPlusButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nick = JOptionPane.showInputDialog(null, "Enter nickname: ");
+                client.sendFriendshipRequestCommand(nick, user.getNickname());
+            }
+        });
+        mainForm.getHomePanel().getBottomPanel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
+                mainForm.changeModeToDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname());
+                Application.this.mode = Mode.DIALOG;
+            }
+        });
+        mainForm.getDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                    Message myMesseage = new Message();
+                    myMesseage.setMessageText(mainForm.getDialogPanel().getMessageArea().getText());
+                    myMesseage.setNickname_From(user.getNickname());
+                    myMesseage.setNickname_To(mainForm.getDialogPanel().getFriendsNickButton().getText());
+                    client.sendMessageCommand(myMesseage);
+                    mainForm.getDialogPanel().showOutcomingMessage(myMesseage);
+                    mainForm.getDialogPanel().getMessageArea().setText("");
+                }
+            }
+        });
+        mainForm.getHomeButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainForm.changeModeToHomePanel();
+            }
+        });
+
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
         this.startForm.getLoginButton().addActionListener(new ActionListener() {
@@ -136,37 +174,8 @@ public class Application implements Observer {
                         startForm.setVisible(true); //становится видна логин форма
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
-                        Application.this.mode = mode;
-                        mainForm = new MainForm(user); //создаем новую МейнФорму, удаляя старые данные с нее
-                        mainForm.getPlusButton().addActionListener(new AbstractAction() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                String nick = JOptionPane.showInputDialog(null, "Enter nickname: ");
-                                client.sendFriendshipRequestCommand(nick, user.getNickname());
-                            }
-                        });
-                        mainForm.getHomePanel().getBottomPanel().addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mousePressed(MouseEvent e) {
-                                super.mousePressed(e);
-                                FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
-                                mainForm.changeModeToDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname());
-                            }
-                        });
-                        mainForm.getDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
-                            @Override
-                            public void keyPressed(KeyEvent e) {
-                                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                    Message myMesseage = new Message();
-                                    myMesseage.setMessageText(mainForm.getDialogPanel().getMessageArea().getText());
-                                    myMesseage.setNickname_From(user.getNickname());
-                                    myMesseage.setNickname_To(mainForm.getDialogPanel().getFriendsNickButton().getText());
-                                    client.sendMessageCommand(myMesseage);
-                                    mainForm.getDialogPanel().showOutcomingMessage(myMesseage);
-                                    mainForm.getDialogPanel().getMessageArea().setText("");
-                                }
-                            }
-                        });
+                        mainForm.getHomePanel().updateInfo(user);
+                        Application.this.mode = Mode.HOME_PANEL;
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();
                     }
@@ -220,14 +229,16 @@ public class Application implements Observer {
                     options,
                     options[0]);
 
-            if (n == 0)
+            if (n == 0) {
                 client.sendAcceptFriendshipCommand(srCommand.getNickname_From(), srCommand.getNickname_To(), true);
+            }
 
         } else if (arg instanceof AcceptFriendshipCommand) {
 
             AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) arg;
-            if (user.getNickname().equals("MAXMAXMAX") && acCommand.isAccept()) {
-                showInfoMessage(mainForm, "Соеседник принял ваше предложение. Начинайте общение!");
+            if (acCommand.isAccept()) {
+                JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
+                mainForm.getHomePanel().updateInfo(user);
             }
         }
     }
