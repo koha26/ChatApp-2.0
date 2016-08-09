@@ -76,6 +76,18 @@ public class Application implements Observer {
             }
         });
 
+        mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+                    mainForm.changeModeToDialog(user.getAvatarAsBufImage(),
+                            friendSideLook.getFriend().getAvatarAsBufImage(), friendSideLook.getFriend().getNickname());
+                    Application.this.mode = Mode.DIALOG;
+                }
+            }
+        });
+
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
         this.startForm.getLoginButton().addActionListener(new ActionListener() {
@@ -175,6 +187,7 @@ public class Application implements Observer {
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
                         mainForm.getHomePanel().updateInfo(user);
+                        mainForm.getFriendSidePanel().updateInfo(user);
                         Application.this.mode = Mode.HOME_PANEL;
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();

@@ -234,6 +234,7 @@ public class RegPanel extends JPanel {
         openButton.setOpaque(false);
 
         final JFileChooser fileopen = new JFileChooser();
+        fileopen.setSelectedFile(new File("/"));
 
         openButton.addActionListener(new AbstractAction() {
             @Override

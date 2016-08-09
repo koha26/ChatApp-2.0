@@ -32,7 +32,13 @@ public class MainForm extends JFrame {
     private final ImageIcon plusButIconEntered = new ImageIcon("images/mainform/plus_entered.png");
     private final ImageIcon homeButIcon = new ImageIcon("images/mainform/home.png");
     private final ImageIcon homeButIconEntered = new ImageIcon("images/mainform/home_entered.png");
-    private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton;
+    private final ImageIcon friendSideOpenIcon = new ImageIcon("images/mainform/sidepnl_open.png");
+    private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
+    private final ImageIcon friendSideOpenIconEntered = new ImageIcon("images/mainform/sidepnl_open_entr.png");
+    private final ImageIcon friendSideCloseIconEntered = new ImageIcon("images/mainform/sidepnl_close_entr.png");
+    private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
+    private FriendSidePanel friendSidePanel;
+    private boolean isFriendPanelOpened;
 
     public JButton getPlusButton() {
         return plusButton;
@@ -44,6 +50,27 @@ public class MainForm extends JFrame {
 
     public HomePanel getHomePanel() {
         return homePanel;
+    }
+
+    public FriendSidePanel getFriendSidePanel() {
+        return friendSidePanel;
+    }
+
+    public JButton getFriendPanelButton() {
+        return friendPanelButton;
+    }
+
+    public void friendPanelMode() {
+        if (isFriendPanelOpened == true) {
+            friendPanelButton.setIcon(friendSideCloseIcon);
+            setSize(1250, 610);
+        } else {
+            setSize(960, 610);
+            friendPanelButton.setIcon(friendSideOpenIcon);
+        }
+        bigPanel.revalidate();
+        bigPanel.repaint();
+        bigPanel.updateUI();
     }
 
     public MainForm() {
@@ -80,6 +107,27 @@ public class MainForm extends JFrame {
         plusButton = GUIStandartOperations.ButtonStartOperations(plusButIcon, plusButIconEntered, true);
         homeButton = GUIStandartOperations.ButtonStartOperations(homeButIcon, homeButIconEntered, true);
 
+        friendPanelButton = new JButton();
+        friendPanelButton.setOpaque(false);
+        friendPanelButton.setBorder(null);
+        friendPanelButton.setFocusPainted(false);
+        friendPanelButton.setContentAreaFilled(false);
+        friendPanelButton.setIcon(friendSideOpenIcon);
+        friendPanelButton.setVisible(false);
+
+        friendPanelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isFriendPanelOpened = !isFriendPanelOpened;
+                friendPanelMode();
+            }
+        });
+
+        friendSidePanel = new FriendSidePanel();
+        friendSidePanel.setBorder(null);
+        friendSidePanel.setBounds(970, 75, 240, 490);
+        this.add(friendSidePanel);
+
         homeButton.setBounds(538, 18, 64, 64);
         bigPanel.add(homeButton);
         plusButton.setBounds(612, 10, 64, 64);
@@ -90,6 +138,11 @@ public class MainForm extends JFrame {
         bigPanel.add(contactsButton);
         exitButton.setBounds(834, 10, 64, 64);
         bigPanel.add(exitButton);
+        friendPanelButton.setBounds(900, 19, 40, 45);
+        bigPanel.add(friendPanelButton);
+
+
+
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
 
@@ -112,6 +165,7 @@ public class MainForm extends JFrame {
     }
 
     public void changeModeToHomePanel() {
+        friendPanelButton.setVisible(false);
         dialogPanel.setVisible(false);
         homePanel.setVisible(true);
     }
@@ -124,6 +178,7 @@ public class MainForm extends JFrame {
         }
         dialogPanel.setBounds(0, 84, 960, 1000);
         bigPanel.add(dialogPanel);
+        friendPanelButton.setVisible(true);
         dialogPanel.setVisible(true);
         homePanel.setVisible(false);
         repaint();
