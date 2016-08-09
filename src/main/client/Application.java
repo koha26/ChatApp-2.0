@@ -252,6 +252,7 @@ public class Application implements Observer {
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
                 mainForm.getHomePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().updateInfo(user);
             }
         }
     }
