@@ -1,9 +1,13 @@
 package gui;
 
+import gui.Notifications.FriendshipRequestNotification;
+import gui.Notifications.Notification;
 import logic.*;
+import logic.command.FriendshipRequestCommand;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +25,7 @@ public class MainForm extends JFrame {
     private HomePanel homePanel;
     private DialogPanel dialogPanel;
     private JPanel bigPanel;
+    private NotificationPanel notificationPanel;
     private Point mouseDownCompCoords = new Point();
     private final ImageIcon settingsButIcon = new ImageIcon("images/mainform/settings_button.png");
     private final ImageIcon settingsButIconEntered = new ImageIcon("images/mainform/settings_button_entered.png");
@@ -101,6 +106,25 @@ public class MainForm extends JFrame {
         bigPanel.setOpaque(false);
         bigPanel.setBackground(new Color(0, 0, 0, 0));
 
+        JPanel topPanel = new JPanel(null);
+        topPanel.setBackground(new Color(0, 0, 0, 150));
+        topPanel.setBounds(0, 20, 960, 65);
+        topPanel.setBorder(new LineBorder(Color.WHITE));
+        bigPanel.add(topPanel);
+
+        notificationPanel = new NotificationPanel();
+        notificationPanel.setBounds(0, 0, 500, 65);
+        notificationPanel.setBorder(new LineBorder(Color.WHITE));
+        topPanel.add(notificationPanel);
+
+        RepaintPanel repaintPanel = new RepaintPanel(notificationPanel);
+        Thread thread = new Thread(repaintPanel);
+        thread.start();
+
+        RepaintPanel repaintPanel2 = new RepaintPanel(bigPanel);
+        Thread thread2 = new Thread(repaintPanel2);
+        thread2.start();
+
         settingsButton = GUIStandartOperations.ButtonStartOperations(settingsButIcon, settingsButIconEntered, true);
         contactsButton = GUIStandartOperations.ButtonStartOperations(contactsButIcon, contactsButIconEntered, true);
         exitButton = GUIStandartOperations.ButtonStartOperations(exitButIcon, exitButIconEntered, true);
@@ -128,20 +152,29 @@ public class MainForm extends JFrame {
         friendSidePanel.setBounds(970, 75, 240, 490);
         this.add(friendSidePanel);
 
-        homeButton.setBounds(538, 18, 64, 64);
-        bigPanel.add(homeButton);
-        plusButton.setBounds(612, 10, 64, 64);
-        bigPanel.add(plusButton);
-        settingsButton.setBounds(686, 10, 64, 64);
-        bigPanel.add(settingsButton);
-        contactsButton.setBounds(760, 10, 64, 64);
-        bigPanel.add(contactsButton);
-        exitButton.setBounds(834, 10, 64, 64);
-        bigPanel.add(exitButton);
-        friendPanelButton.setBounds(900, 19, 40, 45);
-        bigPanel.add(friendPanelButton);
+        settingsButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FriendshipRequestNotification notification1 = new FriendshipRequestNotification();
+                FriendshipRequestCommand command = new FriendshipRequestCommand();
+                command.setNickname_From("test" + Math.random());
+                notification1.updateInfo(command);
+                notificationPanel.addNotification(notification1);
+            }
+        });
 
-
+        homeButton.setBounds(538, 8, 64, 64);
+        topPanel.add(homeButton);
+        plusButton.setBounds(612, 0, 64, 64);
+        topPanel.add(plusButton);
+        settingsButton.setBounds(686, 0, 64, 64);
+        topPanel.add(settingsButton);
+        contactsButton.setBounds(760, 0, 64, 64);
+        topPanel.add(contactsButton);
+        exitButton.setBounds(834, 0, 64, 64);
+        topPanel.add(exitButton);
+        friendPanelButton.setBounds(900, 10, 40, 45);
+        topPanel.add(friendPanelButton);
 
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
@@ -162,6 +195,18 @@ public class MainForm extends JFrame {
 
     public JButton getHomeButton() {
         return homeButton;
+    }
+
+    public NotificationPanel getNotificationPanel() {
+        return notificationPanel;
+    }
+
+    public void addNotificationPanel(Notification notification) {
+        notificationPanel.addNotification(notification);
+    }
+
+    public void closeNotification() {
+        notificationPanel.closeNotification();
     }
 
     public void changeModeToHomePanel() {

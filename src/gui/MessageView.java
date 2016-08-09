@@ -85,7 +85,7 @@ public class MessageView extends JPanel {
 
     public static String getMessageTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-      //  dateFormat.setTimeZone(TimeZone.);
+        //  dateFormat.setTimeZone(TimeZone.);
         return dateFormat.format(date);
     }
 

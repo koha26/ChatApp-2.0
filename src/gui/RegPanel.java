@@ -233,12 +233,10 @@ public class RegPanel extends JPanel {
         openButton.setContentAreaFilled(false);
         openButton.setOpaque(false);
 
-        final JFileChooser fileopen = new JFileChooser();
-        fileopen.setSelectedFile(new File("/"));
-
         openButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFileChooser fileopen = new JFileChooser();
                 fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileopen.setCurrentDirectory(new File("/"));
                 fileopen.showOpenDialog(null);
@@ -267,6 +265,7 @@ public class RegPanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "Choose JPEG File please!");
                     }
                 }
+
             }
         });
 
