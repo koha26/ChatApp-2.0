@@ -67,11 +67,33 @@ public class MainForm extends JFrame {
 
     public void friendPanelMode() {
         if (isFriendPanelOpened == true) {
+            friendPanelButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    friendPanelButton.setIcon(friendSideCloseIconEntered);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    friendPanelButton.setIcon(friendSideCloseIcon);
+                }
+            });
             friendPanelButton.setIcon(friendSideCloseIcon);
             setSize(1250, 610);
         } else {
             setSize(960, 610);
             friendPanelButton.setIcon(friendSideOpenIcon);
+            friendPanelButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    friendPanelButton.setIcon(friendSideOpenIconEntered);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    friendPanelButton.setIcon(friendSideOpenIcon);
+                }
+            });
         }
         bigPanel.revalidate();
         bigPanel.repaint();
@@ -137,6 +159,17 @@ public class MainForm extends JFrame {
         friendPanelButton.setFocusPainted(false);
         friendPanelButton.setContentAreaFilled(false);
         friendPanelButton.setIcon(friendSideOpenIcon);
+        friendPanelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                friendPanelButton.setIcon(friendSideOpenIconEntered);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                friendPanelButton.setIcon(friendSideOpenIcon);
+            }
+        });
         friendPanelButton.setVisible(false);
 
         friendPanelButton.addActionListener(new ActionListener() {

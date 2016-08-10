@@ -239,9 +239,9 @@ public class RegPanel extends JPanel {
                 JFileChooser fileopen = new JFileChooser();
                 fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileopen.setCurrentDirectory(new File("/"));
-                fileopen.showOpenDialog(null);
+                boolean b = fileopen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION;
                 fileopen.setMultiSelectionEnabled(false);
-                if (!(fileopen.getSelectedFile() == null)) {
+                if ((!(fileopen.getSelectedFile() == null) && (b))) {
                     final File file = fileopen.getSelectedFile();
                     if (getFileExtension(file).toLowerCase().equals("jpg")) {
                         ImageIcon img = new ImageIcon(file.getAbsolutePath());

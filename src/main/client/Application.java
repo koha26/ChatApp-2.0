@@ -263,6 +263,11 @@ public class Application implements Observer {
                 mainForm.getFriendSidePanel().updateInfo(user);
                 mainForm.getFriendSidePanel().updateInfo(user);
             }
+        } else if (arg instanceof ChangingUserInfoStatusCommand) {
+            ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) arg;
+            user = cuisCommand.getChangedUser();
+            mainForm.getHomePanel().updateInfo(user);
+            mainForm.getFriendSidePanel().updateInfo(user);
         }
     }
 
