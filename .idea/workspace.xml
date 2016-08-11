@@ -61,37 +61,7 @@
     </breakpoint_any>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/src/server/Client.java" line="126" class="server.Client" package="server">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/Test.java" line="19" class="Test" package="">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/Test.java" line="15" class="Test" package="">
+      <breakpoint url="file://$PROJECT_DIR$/src/server/Client.java" line="122" class="server.Client" package="server">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -121,7 +91,22 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/server/Database.java" line="414" class="server.Database" package="server">
+      <breakpoint url="file://$PROJECT_DIR$/src/server/Database.java" line="511" class="server.Database" package="server">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/server/Server.java" line="324" class="server.Server.ClientThread" package="server">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -146,14 +131,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Server.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/server/Server.java">
+      <file leaf-file-name="Database.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/Database.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="186" column="27" selection-start="5915" selection-end="5915" vertical-scroll-proportion="4.9545455" vertical-offset="928" max-vertical-offset="7174">
-              <folding>
-                <element signature="e#5832#5833#0" expanded="true" />
-                <element signature="e#5867#5868#0" expanded="true" />
-              </folding>
+            <state line="43" column="0" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="11985">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -161,23 +143,86 @@
       <file leaf-file-name="User.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/logic/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="0" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0" vertical-offset="838" max-vertical-offset="2584">
+            <state line="48" column="0" selection-start="1541" selection-end="1541" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="2618">
               <folding>
-                <element signature="e#1257#1258#0" expanded="true" />
-                <element signature="e#1288#1289#0" expanded="true" />
-                <element signature="e#1336#1337#0" expanded="true" />
-                <element signature="e#1376#1377#0" expanded="true" />
-                <element signature="e#1763#1764#0" expanded="true" />
+                <element signature="e#1570#1571#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Database.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/Database.java">
+      <file leaf-file-name="Friend.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/logic/Friend.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="203" column="28" selection-start="6753" selection-end="6753" vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="9656">
+            <state line="24" column="0" selection-start="824" selection-end="824" vertical-scroll-proportion="0.0" vertical-offset="408" max-vertical-offset="952">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Server.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/server/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="416" column="0" selection-start="19523" selection-end="19523" vertical-scroll-proportion="0.19930676" vertical-offset="6549" max-vertical-offset="7701">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Connection.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/Connection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="59" column="0" selection-start="1559" selection-end="1559" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1173">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Application.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/client/Application.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="218" column="0" selection-start="11280" selection-end="11280" vertical-scroll-proportion="0.0" vertical-offset="2771" max-vertical-offset="4318">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Test.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Test.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="15" column="0" selection-start="785" selection-end="785" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChangingUserInfoStatusCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/logic/command/ChangingUserInfoStatusCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Command.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/logic/command/Command.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="4" column="0" selection-start="54" selection-end="54" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="408">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AcceptFriendshipCommand.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="449" selection-end="449" vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="561">
+              <folding>
+                <element signature="e#273#274#0" expanded="true" />
+                <element signature="e#307#308#0" expanded="true" />
+                <element signature="e#483#484#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -192,15 +237,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/logic/command/RegistrationCommand.java" />
-        <option value="$PROJECT_DIR$/src/server/ServerTest.groovy" />
-        <option value="$PROJECT_DIR$/src/main/Application.java" />
-        <option value="$PROJECT_DIR$/src/gui/MainForm.java" />
-        <option value="$PROJECT_DIR$/src/Mode.java" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/test/TestServer.java" />
-        <option value="$PROJECT_DIR$/test/Test.java" />
-        <option value="$PROJECT_DIR$/src/gui/TestForm.form" />
         <option value="$PROJECT_DIR$/text.txt" />
         <option value="$PROJECT_DIR$/src/logic/command/MessageCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/Message.java" />
@@ -221,28 +257,37 @@
         <option value="$PROJECT_DIR$/src/logic/command/FriendOfflinedCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/command/FriendOfflineCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/command/ChangingUserInfoCommand.java" />
-        <option value="$PROJECT_DIR$/src/Test.java" />
-        <option value="$PROJECT_DIR$/src/logic/Constants.java" />
-        <option value="$PROJECT_DIR$/src/server.properties" />
         <option value="$PROJECT_DIR$/src/gui/MainFormVisualisation.java" />
         <option value="$PROJECT_DIR$/src/logic/Sex.java" />
         <option value="$PROJECT_DIR$/src/logic/command/FriendOnlineCommand.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
-        <option value="$PROJECT_DIR$/resources/serverdb/userlist/clients.xml" />
         <option value="$PROJECT_DIR$/src/server/Connection.java" />
         <option value="$PROJECT_DIR$/src/main/client/Application.java" />
         <option value="$PROJECT_DIR$/src/gui/ImageSerializable.java" />
         <option value="$PROJECT_DIR$/src/logic/ImageSerializable.java" />
         <option value="$PROJECT_DIR$/src/logic/RegistrationModel.java" />
-        <option value="$PROJECT_DIR$/src/logic/Human.java" />
         <option value="$PROJECT_DIR$/src/logic/Friend.java" />
-        <option value="$PROJECT_DIR$/src/gui/StartForm.java" />
-        <option value="$PROJECT_DIR$/src/logic/User.java" />
         <option value="$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java" />
         <option value="$PROJECT_DIR$/src/logic/command/ChangingUserInfoStatusCommand.java" />
-        <option value="$PROJECT_DIR$/src/server/Client.java" />
+        <option value="$PROJECT_DIR$/testXML.xml" />
+        <option value="$PROJECT_DIR$/src/gui/Fonts.java" />
+        <option value="$PROJECT_DIR$/src/gui/LoginPanel.java" />
+        <option value="$PROJECT_DIR$/src/gui/RegPanel.java" />
+        <option value="$PROJECT_DIR$/src/gui/StartForm.java" />
+        <option value="$PROJECT_DIR$/src/MainForm.java" />
+        <option value="$PROJECT_DIR$/src/MyScrollBar.java" />
+        <option value="$PROJECT_DIR$/testcommand.xml" />
         <option value="$PROJECT_DIR$/src/server/Server.java" />
+        <option value="$PROJECT_DIR$/src/logic/Constants.java" />
+        <option value="$PROJECT_DIR$/test.xml" />
+        <option value="$PROJECT_DIR$/src/logic/Human.java" />
+        <option value="$PROJECT_DIR$/src/logic/User.java" />
+        <option value="$PROJECT_DIR$/resources/serverdb/userlist/clients.xml" />
+        <option value="$PROJECT_DIR$/src/server/Client.java" />
+        <option value="$PROJECT_DIR$/src/gui/MainForm.java" />
         <option value="$PROJECT_DIR$/src/server/Database.java" />
+        <option value="$PROJECT_DIR$/src/Test.java" />
+        <option value="$PROJECT_DIR$/src/server.properties" />
       </list>
     </option>
   </component>
@@ -280,8 +325,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -372,48 +415,10 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ChatApp2.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ChatApp2.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ChatApp2.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ChatApp2.0" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="command" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -435,7 +440,7 @@
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
     <property name="FullScreen" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Test" />
     <property name="ignore_missing_gitignore" value="true" />
     <property name="recentsLimit" value="5" />
     <property name="dynamic.classpath" value="false" />
@@ -446,11 +451,11 @@
     <property name="LayoutCode.rearrangeEntriesHTML" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="groovy.util.GroovyTestCase" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="server" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\demo\IdeaProjects\ChatApp2.0\lib\jars" />
@@ -540,14 +545,14 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Test (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="StartForm" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="test.*" />
+          <option name="PATTERN" value="gui.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="test.Test" />
+      <option name="MAIN_CLASS_NAME" value="gui.StartForm" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -562,9 +567,9 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Fruit" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="MainForm" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="Fruit" />
+      <option name="MAIN_CLASS_NAME" value="MainForm" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -575,7 +580,13 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="ChatApp2.0" />
       <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
@@ -818,16 +829,16 @@
       <item index="1" class="java.lang.String" itemvalue="Application.Server" />
       <item index="2" class="java.lang.String" itemvalue="Application.Application" />
       <item index="3" class="java.lang.String" itemvalue="Application.Database" />
-      <item index="4" class="java.lang.String" itemvalue="Application.Test (1)" />
-      <item index="5" class="java.lang.String" itemvalue="Application.Fruit" />
+      <item index="4" class="java.lang.String" itemvalue="Application.StartForm" />
+      <item index="5" class="java.lang.String" itemvalue="Application.MainForm" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.Server" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Database" />
-        <item index="2" class="java.lang.String" itemvalue="Application.Application" />
-        <item index="3" class="java.lang.String" itemvalue="Application.Fruit" />
-        <item index="4" class="java.lang.String" itemvalue="Application.Test (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Application" />
+        <item index="2" class="java.lang.String" itemvalue="Application.MainForm" />
+        <item index="3" class="java.lang.String" itemvalue="Application.StartForm" />
+        <item index="4" class="java.lang.String" itemvalue="Application.Database" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -923,12 +934,32 @@
       <workItem from="1469914502903" duration="2260000" />
       <workItem from="1469978638196" duration="593000" />
       <workItem from="1469998391867" duration="2036000" />
-      <workItem from="1470058575227" duration="11553000" />
+      <workItem from="1470058575227" duration="11686000" />
+      <workItem from="1470144151299" duration="6269000" />
+      <workItem from="1470164387472" duration="8483000" />
+      <workItem from="1470174193135" duration="439000" />
+      <workItem from="1470182311789" duration="2886000" />
+      <workItem from="1470227339138" duration="1781000" />
+      <workItem from="1470235330888" duration="4773000" />
+      <workItem from="1470257098287" duration="32000" />
+      <workItem from="1470265413116" duration="3619000" />
+      <workItem from="1470479136325" duration="627000" />
+      <workItem from="1470501420977" duration="242000" />
+      <workItem from="1470517422378" duration="3646000" />
+      <workItem from="1470575274132" duration="4497000" />
+      <workItem from="1470596907027" duration="3945000" />
+      <workItem from="1470652844710" duration="4842000" />
+      <workItem from="1470657796954" duration="732000" />
+      <workItem from="1470676322468" duration="1439000" />
+      <workItem from="1470753071333" duration="4667000" />
+      <workItem from="1470828443849" duration="4142000" />
+      <workItem from="1470910828232" duration="166000" />
+      <workItem from="1470911020322" duration="3688000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="257995000" />
+    <option name="totallyTimeSpent" value="319043000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -958,29 +989,29 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31711146" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38925081" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36263737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24646781" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32810047" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25755286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21522693" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.247557" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21815519" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29042387" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329429" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1005,123 +1036,216 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/prefs/WindowsPreferencesFactory.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/lang/Thread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="6" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578" />
+        <state line="744" column="0" selection-start="27686" selection-end="27686" vertical-scroll-proportion="0.0" vertical-offset="11905" max-vertical-offset="34000" />
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/prefs/WindowsPreferences.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/RepaintPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="6" selection-start="791" selection-end="791" vertical-scroll-proportion="-0.5008183" vertical-offset="612" max-vertical-offset="18530" />
+        <state line="4" column="13" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/RepaintFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="13" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/CircleLabelClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="256" max-vertical-offset="867" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/FriendLook.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/LoadImage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="164" selection-end="164" vertical-scroll-proportion="0.1391162" vertical-offset="0" max-vertical-offset="611" />
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/javax/imageio/ImageIO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1295" column="32" selection-start="45708" selection-end="45708" vertical-scroll-proportion="0.33224222" vertical-offset="20758" max-vertical-offset="26571" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/ChangingUserInfoCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="25" selection-start="284" selection-end="284" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1700" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/ImageSerializable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="13" selection-start="229" selection-end="229" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748" />
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/jre/lib/rt.jar!/jdk/internal/org/objectweb/asm/ClassWriter.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="111" column="22" selection-start="5031" selection-end="5031" vertical-scroll-proportion="0.0" vertical-offset="1761" max-vertical-offset="3077" />
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/awt/Component.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2260" column="16" selection-start="77212" selection-end="77212" vertical-scroll-proportion="0.2015306" vertical-offset="36692" max-vertical-offset="170034" />
+        <state line="2251" column="16" selection-start="76965" selection-end="76965" vertical-scroll-proportion="0.3322034" vertical-offset="36422" max-vertical-offset="170034" />
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/io/File.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/GUIStandartOperations.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1032" column="19" selection-start="43100" selection-end="43100" vertical-scroll-proportion="0.33277592" vertical-offset="16716" max-vertical-offset="37570" />
+        <state line="8" column="25" selection-start="188" selection-end="188" vertical-scroll-proportion="-0.086440675" vertical-offset="136" max-vertical-offset="1037" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/HistoryPacketCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/Fonts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="928" selection-end="928" vertical-scroll-proportion="0.0" vertical-offset="436" max-vertical-offset="799" />
+        <state line="10" column="0" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="272" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/SortedByUniqueID.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/LoginPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="1" selection-start="211" selection-end="211" vertical-scroll-proportion="0.2881356" vertical-offset="0" max-vertical-offset="590" />
+        <state line="86" column="74" selection-start="3099" selection-end="3099" vertical-scroll-proportion="1.6425234" vertical-offset="368" max-vertical-offset="1479" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/Message.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/RegPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="20" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
-          <folding />
-        </state>
+        <state line="410" column="28" selection-start="17540" selection-end="17540" vertical-scroll-proportion="0.0" vertical-offset="5696" max-vertical-offset="6137" />
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/Set.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/StartForm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="17" selection-start="2997" selection-end="2997" vertical-scroll-proportion="0.3322034" vertical-offset="841" max-vertical-offset="6732" />
+        <state line="121" column="36" selection-start="4428" selection-end="4428" vertical-scroll-proportion="0.0" vertical-offset="1528" max-vertical-offset="4743" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/MessageCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/MyPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="107" selection-end="107" vertical-scroll-proportion="0.1391162" vertical-offset="0" max-vertical-offset="611" />
+        <state line="8" column="13" selection-start="177" selection-end="177" vertical-scroll-proportion="-0.76233184" vertical-offset="408" max-vertical-offset="952" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lambo.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/AvatarEditor.java">
+    <entry file="file://$PROJECT_DIR$/src/gui/MessageView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="13" selection-start="132" selection-end="132" vertical-scroll-proportion="0.0" vertical-offset="1306" max-vertical-offset="1904" />
+        <state line="26" column="43" selection-start="924" selection-end="924" vertical-scroll-proportion="0.70669746" vertical-offset="0" max-vertical-offset="1666" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/OutlineButton.java">
+    <entry file="jar://$PROJECT_DIR$/lib/jars/xstream-1.4.9.jar!/com/thoughtworks/xstream/XStream.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="69" selection-end="69" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="1649" />
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="239" column="6" selection-start="11219" selection-end="11219" vertical-scroll-proportion="0.08183306" vertical-offset="3571" max-vertical-offset="19771" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/photos/sanchez.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/photos/igor.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/photos/kostik.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
+        <state line="134" column="28" selection-start="8744" selection-end="8744" vertical-scroll-proportion="-4.68" vertical-offset="2144" max-vertical-offset="4981" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="50" selection-start="206" selection-end="206" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238" />
+        <state line="7" column="50" selection-start="226" selection-end="226" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/Sex.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="1" selection-start="270" selection-end="270" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/MainFormVisualisation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="36" selection-start="1366" selection-end="1366" vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="2295" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/FriendOnlineCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="1" selection-start="410" selection-end="410" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/FriendOfflineCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="219" selection-end="219" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/RegistrationCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="23" selection-start="502" selection-end="502" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Test.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="0" selection-start="1118" selection-end="1118" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+        <state line="105" column="13" selection-start="4247" selection-end="4247" vertical-scroll-proportion="0.33236152" vertical-offset="1246" max-vertical-offset="24497">
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="16" selection-start="785" selection-end="785" vertical-scroll-proportion="0.0" vertical-offset="294" max-vertical-offset="816">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/LoginCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="373" selection-end="373" vertical-scroll-proportion="0.0" vertical-offset="141" max-vertical-offset="765" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/RegistrationModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="96" selection-end="96" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1139" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/user_1/avatar/avatar.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/HomePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="574" selection-end="574" vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="2754" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="0" selection-start="2035" selection-end="2035" vertical-scroll-proportion="0.0" vertical-offset="722" max-vertical-offset="3536">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/DialogPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="11" selection-start="472" selection-end="472" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1751" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/MainForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="13" selection-start="441" selection-end="441" vertical-scroll-proportion="0.0" vertical-offset="1901" max-vertical-offset="2499" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/MessageCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="243" selection-end="243" vertical-scroll-proportion="0.0" vertical-offset="107" max-vertical-offset="476" />
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/io/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1005" column="19" selection-start="41907" selection-end="41907" vertical-scroll-proportion="0.33275563" vertical-offset="16264" max-vertical-offset="37570" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/user_1/history/user_2/messages.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="0" selection-start="363" selection-end="363" vertical-scroll-proportion="0.2060606" vertical-offset="0" max-vertical-offset="330" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/user_2/history/user_1/messages.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/Message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="0" selection-start="711" selection-end="711" vertical-scroll-proportion="0.0" vertical-offset="328" max-vertical-offset="799">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/user_1/unread_messages_from.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="343" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/user_1/history/user_2/unread.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="343" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/Human.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="0" selection-start="739" selection-end="739" vertical-scroll-proportion="0.0" vertical-offset="362" max-vertical-offset="1224">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/Friend.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="0" selection-start="824" selection-end="824" vertical-scroll-proportion="0.0" vertical-offset="298" max-vertical-offset="816">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/clients.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1493" column="32" selection-start="99179" selection-end="99185" vertical-scroll-proportion="-88.189186" vertical-offset="54748" max-vertical-offset="74239" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/Command.java">
@@ -1131,240 +1255,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/FriendshipRequestCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/server.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="249" selection-end="249" vertical-scroll-proportion="0.0" vertical-offset="107" max-vertical-offset="510">
+        <state line="7" column="0" selection-start="203" selection-end="203" vertical-scroll-proportion="0.20169492" vertical-offset="0" max-vertical-offset="590">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/java/lang/Thread.java">
+    <entry file="file://$PROJECT_DIR$/src/Test.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="744" column="0" selection-start="27686" selection-end="27686" vertical-scroll-proportion="0.0" vertical-offset="11905" max-vertical-offset="34000" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/serverdb/userlist/clients.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="25" selection-start="2265" selection-end="2265" vertical-scroll-proportion="0.5762712" vertical-offset="714" max-vertical-offset="1326">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Connection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="73" column="0" selection-start="1972" selection-end="1972" vertical-scroll-proportion="0.0" vertical-offset="831" max-vertical-offset="1173">
+        <state line="15" column="0" selection-start="785" selection-end="785" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/client/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="210" column="23" selection-start="9995" selection-end="9995" vertical-scroll-proportion="0.0" vertical-offset="2708" max-vertical-offset="3417">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/RepaintPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="13" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/RepaintFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="13" selection-start="50" selection-end="50" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/CircleLabelClass.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="185" selection-end="185" vertical-scroll-proportion="0.0" vertical-offset="256" max-vertical-offset="867">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/FriendLook.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="629">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/LoadImage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="13" selection-start="164" selection-end="164" vertical-scroll-proportion="0.1391162" vertical-offset="0" max-vertical-offset="611">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/src.zip!/javax/imageio/ImageIO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1295" column="32" selection-start="45708" selection-end="45708" vertical-scroll-proportion="0.33224222" vertical-offset="20758" max-vertical-offset="26571">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/Human.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="95" selection-start="543" selection-end="543" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="1428">
-          <folding>
-            <element signature="e#772#773#0" expanded="true" />
-            <element signature="e#802#803#0" expanded="true" />
-            <element signature="e#848#849#0" expanded="true" />
-            <element signature="e#886#887#0" expanded="true" />
-            <element signature="e#917#918#0" expanded="true" />
-            <element signature="e#944#945#0" expanded="true" />
-            <element signature="e#984#985#0" expanded="true" />
-            <element signature="e#1016#1017#0" expanded="true" />
-            <element signature="e#1054#1055#0" expanded="true" />
-            <element signature="e#1088#1089#0" expanded="true" />
-            <element signature="e#1142#1143#0" expanded="true" />
-            <element signature="e#1188#1189#0" expanded="true" />
-            <element signature="e#1219#1220#0" expanded="true" />
-            <element signature="e#1246#1247#0" expanded="true" />
-            <element signature="e#1286#1287#0" expanded="true" />
-            <element signature="e#1318#1319#0" expanded="true" />
-            <element signature="e#1352#1353#0" expanded="true" />
-            <element signature="e#1382#1383#0" expanded="true" />
-            <element signature="e#1428#1429#0" expanded="true" />
-            <element signature="e#1466#1467#0" expanded="true" />
-            <element signature="e#1493#1494#0" expanded="true" />
-            <element signature="e#1519#1520#0" expanded="true" />
-            <element signature="e#1554#1555#0" expanded="true" />
-            <element signature="e#1584#1585#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/Friend.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="39" selection-start="823" selection-end="823" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="952">
-          <folding>
-            <element signature="e#863#864#0" expanded="true" />
-            <element signature="e#894#895#0" expanded="true" />
-            <element signature="e#942#943#0" expanded="true" />
-            <element signature="e#982#983#0" expanded="true" />
-            <element signature="e#1026#1027#0" expanded="true" />
-            <element signature="e#1055#1056#0" expanded="true" />
-            <element signature="e#1110#1111#0" expanded="true" />
-            <element signature="e#1146#1147#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/StartForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="235" column="96" selection-start="8734" selection-end="8734" vertical-scroll-proportion="0.0" vertical-offset="3329" max-vertical-offset="4471">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/ChangingUserInfoCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/ChangingUserInfoStatusCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="27" selection-start="291" selection-end="291" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
-          <folding>
-            <element signature="e#262#263#0" expanded="true" />
-            <element signature="e#296#297#0" expanded="true" />
-            <element signature="e#348#349#0" expanded="true" />
-            <element signature="e#394#395#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="254" column="53" selection-start="9952" selection-end="9952" vertical-scroll-proportion="0.0" vertical-offset="3706" max-vertical-offset="4522">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="9" selection-start="239" selection-end="239" vertical-scroll-proportion="0.20169492" vertical-offset="0" max-vertical-offset="590">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="25" selection-start="284" selection-end="284" vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1700">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="0" selection-start="1734" selection-end="1734" vertical-scroll-proportion="0.0" vertical-offset="838" max-vertical-offset="2584">
-          <folding>
-            <element signature="e#1257#1258#0" expanded="true" />
-            <element signature="e#1288#1289#0" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1376#1377#0" expanded="true" />
-            <element signature="e#1763#1764#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_25/jre/lib/rt.jar!/jdk/internal/org/objectweb/asm/ClassWriter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="22" selection-start="5031" selection-end="5031" vertical-scroll-proportion="0.0" vertical-offset="1761" max-vertical-offset="3077">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/Database.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="203" column="28" selection-start="6753" selection-end="6753" vertical-scroll-proportion="0.0" vertical-offset="205" max-vertical-offset="9656">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/RegistrationModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="22" selection-start="375" selection-end="375" vertical-scroll-proportion="0.41734862" vertical-offset="0" max-vertical-offset="1156">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/ImageSerializable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="427" selection-end="427" vertical-scroll-proportion="0.18657938" vertical-offset="39" max-vertical-offset="748">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logic/command/LoginStatusCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="5" selection-start="1463" selection-end="1463" vertical-scroll-proportion="0.7774141" vertical-offset="205" max-vertical-offset="816">
+        <state line="218" column="0" selection-start="11280" selection-end="11280" vertical-scroll-proportion="0.0" vertical-offset="2771" max-vertical-offset="4318">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/logic/command/AcceptFriendshipCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="13" selection-start="37" selection-end="37" vertical-scroll-proportion="0.055646483" vertical-offset="0" max-vertical-offset="611">
+        <state line="20" column="0" selection-start="449" selection-end="449" vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="561">
+          <folding>
+            <element signature="e#273#274#0" expanded="true" />
+            <element signature="e#307#308#0" expanded="true" />
+            <element signature="e#483#484#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/command/ChangingUserInfoStatusCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="222" selection-end="222" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Database.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="0" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0" vertical-offset="378" max-vertical-offset="11985">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/logic/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="0" selection-start="1541" selection-end="1541" vertical-scroll-proportion="0.0" vertical-offset="663" max-vertical-offset="2618">
+          <folding>
+            <element signature="e#1570#1571#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/Connection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="0" selection-start="1559" selection-end="1559" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1173">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="186" column="27" selection-start="5915" selection-end="5915" vertical-scroll-proportion="4.9545455" vertical-offset="928" max-vertical-offset="7174">
-          <folding>
-            <element signature="e#5832#5833#0" expanded="true" />
-            <element signature="e#5867#5868#0" expanded="true" />
-          </folding>
+        <state line="416" column="0" selection-start="19523" selection-end="19523" vertical-scroll-proportion="0.19930676" vertical-offset="6549" max-vertical-offset="7701">
+          <folding />
         </state>
       </provider>
     </entry>
