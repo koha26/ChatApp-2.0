@@ -4,6 +4,7 @@ import logic.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,12 +98,6 @@ public class MainForm extends JFrame {
         dialogPanel = new DialogPanel();
 
         this.add(bigPanel);
-
-        try {
-            dialogPanel = new DialogPanel(null, null, "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         exitButton.addActionListener(new ActionListener() {
             @Override

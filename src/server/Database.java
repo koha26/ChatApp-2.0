@@ -340,8 +340,34 @@ public class Database {
 
     public boolean addFriendAsUnreadMesFrom(String nickname_host, String nickname_friend) { //добавление ника друга, от которого пропущено смс
         Set<String> unreadMesFrom = getSetOfFriendUnreadMes(nickname_host);
-        if (!unreadMesFrom.contains(nickname_friend)) {
-            File file = new File(dataPath + "/user_" + userMap.get(nickname_host).getUniqueID() + "/unread_messages_from.dat");
+        if (unreadMesFrom == null || unreadMesFrom.size()==0 || !unreadMesFrom.contains(nickname_friend)) {
+            String dirPath = dataPath + "/user_" + userMap.get(nickname_host).getUniqueID();
+            String filePath = dirPath + "/unread_messages_from.dat";
+            File dir = new File(dirPath);
+            File file = new File(filePath);
+
+            if (!dir.isDirectory() && !dir.exists()) {
+                int count = 0;
+                while (count < 10) {
+                    if (dir.mkdirs()) {
+                        break;
+                    }
+                    count++;
+                }
+            }
+            if (!file.isFile() && !file.exists()) {
+                int count = 0;
+                while (count < 10) {
+                    try {
+                        if (file.createNewFile()) {
+                            break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    count++;
+                }
+            }
             try {
                 FileWriter fw = new FileWriter(file, true);
                 fw.append(nickname_friend + "\n");
@@ -360,7 +386,13 @@ public class Database {
         File file = new File(dataPath + "/user_" + userMap.get(nickname_host).getUniqueID() + "/unread_messages_from.dat");
         if (file.delete()) {
             try {
-                file.createNewFile();
+                int count = 0;
+                while (count < 10) {
+                    if (file.createNewFile()) {
+                        break;
+                    }
+                    count++;
+                }
             } catch (IOException e) {
                 System.out.println("Неудалось создать файл \"" + file.getName() + "\"");
                 return false;
@@ -376,11 +408,28 @@ public class Database {
         User user_To = userMap.get(nickname_receiver);                                                //КОМУ - тот, кому отослали
         User user_From = userMap.get(nickname_sender);                                              //ОТ - тот, кто отослал
 
-        String history_filePath = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID() + "/messages.dat";
+        String history_dirPath  = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID();
+        String history_filePath = history_dirPath + "/messages.dat";
+        File historyDir_From = new File(history_dirPath);
         File historyFile_From = new File(history_filePath);//папка истории переписки ОТ с КОМУ
 
+        if (!historyDir_From.isDirectory() && !historyDir_From.exists()) {
+            int count = 0;
+            while (count < 10) {
+                if (historyDir_From.mkdirs()) {
+                    break;
+                }
+                count++;
+            }
+        }
         if (!historyFile_From.isFile() && !historyFile_From.exists()) {
-            historyFile_From.createNewFile();
+            int count = 0;
+            while (count < 10) {
+                if (historyFile_From.createNewFile()) {
+                    break;
+                }
+                count++;
+            }
         }
 
         saveMessageInHistory(historyFile_From, message);
@@ -390,19 +439,57 @@ public class Database {
         User user_To = userMap.get(nickname_receiver);                                                //КОМУ - тот, кому отослали
         User user_From = userMap.get(nickname_sender);                                           //ОТ - тот, кто отослал
 
-        String history_filePath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID() + "/messages.dat";
-        String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID() + "/unread.dat";
+        String history_dirPath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID();
+        String history_filePath = history_dirPath + "/messages.dat";
+        String unreadMessages_dirPath = Config.DATA_PATH + "/user_" + user_To.getUniqueID() + "/history/user_" + user_From.getUniqueID();
+        String unreadMessages_filePath = unreadMessages_dirPath + "/unread.dat";
 
         if (isRead) { // если прочтено, то в историю смс записываем
+            File dir_To = new File(history_dirPath);
             File file_To = new File(history_filePath);//папка истории переписки КОМУ с ОТ
+
+            if (!dir_To.isDirectory() && !dir_To.exists()) {
+                int count = 0;
+                while (count < 10) {
+                    if (dir_To.mkdirs()) {
+                        break;
+                    }
+                    count++;
+                }
+            }
+
             if (!file_To.isFile() && !file_To.exists()) {
-                file_To.createNewFile();
+                int count = 0;
+                while (count < 10) {
+                    if (file_To.createNewFile()) {
+                        break;
+                    }
+                    count++;
+                }
             }
             saveMessageInHistory(file_To, message);
         } else { //если не прочтено, то в пропущенные
+            File dir_To = new File(unreadMessages_dirPath);
             File file_To = new File(unreadMessages_filePath);
+
+            if (!dir_To.isDirectory() && !dir_To.exists()) {
+                int count = 0;
+                while (count < 10) {
+                    if (dir_To.mkdirs()) {
+                        break;
+                    }
+                    count++;
+                }
+            }
+
             if (!file_To.isFile() && !file_To.exists()) {
-                file_To.createNewFile();
+                int count = 0;
+                while (count < 10) {
+                    if (file_To.createNewFile()) {
+                        break;
+                    }
+                    count++;
+                }
             }
             saveMessageInHistory(file_To, message);
             addFriendAsUnreadMesFrom(nickname_receiver, nickname_sender);
