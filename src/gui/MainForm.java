@@ -1,11 +1,8 @@
 package gui;
 
-import gui.Notifications.FriendshipRequestNotification;
 import gui.Notifications.Notification;
 import logic.*;
-import logic.command.FriendshipRequestCommand;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
@@ -15,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -23,9 +19,11 @@ import java.util.ArrayList;
 
 public class MainForm extends JFrame {
     private HomePanel homePanel;
-    private DialogPanel dialogPanel;
+    private DialogPanel currentDialogPanel;
+    private DialogTab currentDialogTab;
     private JPanel bigPanel;
     private NotificationPanel notificationPanel;
+    private JPanel dialogTabsPanel;
     private Point mouseDownCompCoords = new Point();
     private final ImageIcon settingsButIcon = new ImageIcon("images/mainform/settings_button.png");
     private final ImageIcon settingsButIconEntered = new ImageIcon("images/mainform/settings_button_entered.png");
@@ -44,13 +42,19 @@ public class MainForm extends JFrame {
     private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
     private FriendSidePanel friendSidePanel;
     private boolean isFriendPanelOpened;
+    private ArrayList<DialogPanel> dialogPanelArrayList;
+    private ArrayList<DialogTab> dialogTabArrayList;
+
+    public DialogTab getCurrentDialogTab() {
+        return currentDialogTab;
+    }
 
     public JButton getPlusButton() {
         return plusButton;
     }
 
-    public DialogPanel getDialogPanel() {
-        return dialogPanel;
+    public DialogPanel getCurrentDialogPanel() {
+        return currentDialogPanel;
     }
 
     public HomePanel getHomePanel() {
@@ -100,6 +104,10 @@ public class MainForm extends JFrame {
         bigPanel.updateUI();
     }
 
+    public ArrayList<DialogTab> getDialogTabArrayList() {
+        return dialogTabArrayList;
+    }
+
     public MainForm() {
         GUIStandartOperations.FrameStartOperations(this);
         setSize(960, 610);
@@ -123,10 +131,16 @@ public class MainForm extends JFrame {
             }
         });
 
+        dialogPanelArrayList = new ArrayList<>();
+        dialogTabArrayList = new ArrayList<>();
+
         bigPanel = new JPanel(null);
         bigPanel.setSize(960, 600);
         bigPanel.setOpaque(false);
         bigPanel.setBackground(new Color(0, 0, 0, 0));
+
+        dialogTabsPanel = new JPanel(null);
+        dialogTabsPanel.setBackground(new Color(0, 0, 0, 150));
 
         JPanel topPanel = new JPanel(null);
         topPanel.setBackground(new Color(0, 0, 0, 150));
@@ -185,17 +199,6 @@ public class MainForm extends JFrame {
         friendSidePanel.setBounds(970, 75, 240, 490);
         this.add(friendSidePanel);
 
-        settingsButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FriendshipRequestNotification notification1 = new FriendshipRequestNotification();
-                FriendshipRequestCommand command = new FriendshipRequestCommand();
-                command.setNickname_From("test" + Math.random());
-                notification1.updateInfo(command);
-                notificationPanel.addNotification(notification1);
-            }
-        });
-
         homeButton.setBounds(538, 8, 64, 64);
         topPanel.add(homeButton);
         plusButton.setBounds(612, 0, 64, 64);
@@ -212,9 +215,14 @@ public class MainForm extends JFrame {
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
 
+        dialogTabsPanel.setBounds(0, 100, 960, 40);
+        dialogTabsPanel.setVisible(false);
+
+        bigPanel.add(dialogTabsPanel);
+
         bigPanel.add(homePanel);
 
-        dialogPanel = new DialogPanel();
+        currentDialogPanel = new DialogPanel();
 
         this.add(bigPanel);
 
@@ -225,6 +233,7 @@ public class MainForm extends JFrame {
             }
         });
     }
+
 
     public JButton getHomeButton() {
         return homeButton;
@@ -244,62 +253,194 @@ public class MainForm extends JFrame {
 
     public void changeModeToHomePanel() {
         friendPanelButton.setVisible(false);
-        dialogPanel.setVisible(false);
+        currentDialogPanel.setVisible(false);
         homePanel.setVisible(true);
+        dialogTabsPanel.setVisible(false);
     }
 
-    public void changeModeToDialog(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNickname) {
-        try {
-            dialogPanel.updateInfo(myPhoto, friendPhoto, friendNickname);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        dialogPanel.setBounds(0, 84, 960, 1000);
-        bigPanel.add(dialogPanel);
+    public void changeModeToDialog() {
         friendPanelButton.setVisible(true);
-        dialogPanel.setVisible(true);
         homePanel.setVisible(false);
+        currentDialogPanel.setVisible(true);
+        dialogTabsPanel.setVisible(true);
         repaint();
     }
 
+    private void repaintDialogTabsPanel() {
+        dialogTabsPanel.setVisible(false);
+        dialogTabsPanel = new JPanel(null);
+        dialogTabsPanel.setBackground(new Color(0, 0, 0, 150));
+        dialogTabsPanel.setBounds(0, 100, 960, 40);
 
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                RegistrationModel regModel = new RegistrationModel("MaxTEAMLEAD", "2331239max");
-                regModel.setName("Max");
-                regModel.setSurname("Tkachenko");
-                regModel.setSex(Sex.MALE);
-                regModel.setDateOfBirth("06 September 1997");
-                try {
-                    regModel.setAvatar(new ImageSerializable(ImageIO.read(new File("2.jpg"))));
-                } catch (IOException e) {
-                    e.printStackTrace();
+        for (int i = 0; i < dialogTabArrayList.size(); i++) {
+            dialogTabArrayList.get(i).setBounds(i * 151, 0, 150, 40);
+            dialogTabsPanel.add(dialogTabArrayList.get(i));
+        }
+
+        bigPanel.add(dialogTabsPanel);
+
+        repaint();
+        revalidate();
+    }
+
+    public void closeDialog(DialogTab dialogTab) {
+        for (int i = 0; i < dialogTabArrayList.size(); i++) {
+            if (dialogTabArrayList.get(i).equals(dialogTab)) {
+                dialogPanelArrayList.remove(i);
+                dialogTabArrayList.remove(i);
+                if (dialogTabArrayList.size() == 0) {
+                    changeModeToHomePanel();
+                    return;
                 }
-                User user = null;
-                try {
-                    user = new User(regModel, InetAddress.getLocalHost(), 1);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
 
-                ArrayList<Friend> friends = new ArrayList<>();
+                currentDialogPanel.setVisible(false);
 
-                try {
-                    for (int i = 0; i < 8; i++) {
-                        Friend friend1 = new Friend("koha26", "Kostya", "Dyachenko", "", "", "", Sex.MALE, new ImageSerializable(ImageIO.read(new File("photos/kostik.jpg"))));
-                        friends.add(friend1);
+                if ((dialogTab.equals(currentDialogTab))) {
+                    if (i > 0) {
+                        currentDialogPanel = dialogPanelArrayList.get(i - 1);
+                        currentDialogTab = dialogTabArrayList.get(i - 1);
+                    } else {
+                        currentDialogPanel = dialogPanelArrayList.get(i);
+                        currentDialogTab = dialogTabArrayList.get(i);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+                currentDialogTab.setBorder(new LineBorder(Color.RED));
+                currentDialogPanel.setBounds(0, 84, 960, 1000);
+                bigPanel.add(currentDialogPanel);
+                currentDialogPanel.setVisible(true);
+                repaintDialogTabsPanel();
+                bigPanel.repaint();
+                bigPanel.revalidate();
+                break;
+            }
+        }
+    }
+
+    public boolean startNewDialog(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNick) {
+        for (int i = 0; i < dialogTabArrayList.size(); i++) {
+            if (dialogTabArrayList.get(i).getNickButton().getText().equals(friendNick)) {
+                return false;
+            }
+        }
+
+        final DialogTab dialogTab = new DialogTab(friendNick);
+        currentDialogTab = dialogTab;
+
+        dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                closeDialog(dialogTab);
+            }
+        });
+
+
+        dialogTab.setBorder(new LineBorder(Color.RED));
+        dialogTabArrayList.add(dialogTab);
+        final DialogPanel dialogPanel = new DialogPanel();
+        try {
+            dialogPanel.updateInfo(myPhoto, friendPhoto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dialogPanelArrayList.add(dialogPanel);
+
+        for (int i = 0; i < dialogTabArrayList.size() - 1; i++) {
+            dialogTabArrayList.get(i).setBorder(new LineBorder(Color.WHITE));
+        }
+
+        currentDialogPanel.setVisible(false);
+        currentDialogPanel = dialogPanel;
+        currentDialogPanel.setBounds(0, 84, 960, 1000);
+        bigPanel.add(currentDialogPanel);
+        repaintDialogTabsPanel();
+        repaint();
+        revalidate();
+
+        dialogTab.getNickButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < dialogTabArrayList.size(); i++) {
+                    dialogTabArrayList.get(i).setBorder(new LineBorder(Color.WHITE));
                 }
 
-                user.setFriends(friends);
+                dialogTab.setBorder(new LineBorder(Color.RED));
 
-                MainForm mainForm = new MainForm();
+                dialogTab.getNewMessageLabel().setVisible(false);
 
-                mainForm.setVisible(true);
+                currentDialogTab = dialogTab;
+
+                currentDialogPanel.setVisible(false);
+                currentDialogPanel = dialogPanel;
+                currentDialogPanel.setBounds(0, 84, 960, 1000);
+                bigPanel.add(currentDialogPanel);
+                currentDialogPanel.setVisible(true);
+                repaintDialogTabsPanel();
+                repaint();
+                revalidate();
+            }
+        });
+
+        return true;
+    }
+
+    public void receiveIncomingMessage(Message message, BufferedImage myPhoto, BufferedImage friendPhoto) {
+        for (int i = 0; i < dialogTabArrayList.size(); i++) {
+            if (message.getNickname_From().equals(dialogTabArrayList.get(i).getNickButton().getText())){
+                if (dialogTabArrayList.get(i).equals(currentDialogTab)){
+                    dialogPanelArrayList.get(i).showIncomingMessage(message);
+                }
+                else{
+                    dialogPanelArrayList.get(i).showIncomingMessage(message);
+                    dialogTabArrayList.get(i).getNewMessageLabel().setVisible(true);
+                }
+
+                return;
+            }
+        }
+
+        final DialogTab dialogTab = new DialogTab(message.getNickname_From());
+        dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                closeDialog(dialogTab);
+            }
+        });
+
+        dialogTab.setBorder(new LineBorder(Color.WHITE));
+        dialogTabArrayList.add(dialogTab);
+        final DialogPanel dialogPanel = new DialogPanel();
+        try {
+            dialogPanel.updateInfo(myPhoto, friendPhoto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dialogPanelArrayList.add(dialogPanel);
+
+        repaintDialogTabsPanel();
+        repaint();
+        revalidate();
+
+        dialogTab.getNickButton().addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < dialogTabArrayList.size(); i++) {
+                    dialogTabArrayList.get(i).setBorder(new LineBorder(Color.WHITE));
+                }
+
+                dialogTab.setBorder(new LineBorder(Color.RED));
+
+                dialogTab.getNewMessageLabel().setVisible(false);
+
+                currentDialogTab = dialogTab;
+
+                currentDialogPanel.setVisible(false);
+                currentDialogPanel = dialogPanel;
+                currentDialogPanel.setBounds(0, 84, 960, 1000);
+                bigPanel.add(currentDialogPanel);
+                currentDialogPanel.setVisible(true);
+                repaintDialogTabsPanel();
+                repaint();
+                revalidate();
             }
         });
     }
