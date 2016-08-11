@@ -233,16 +233,15 @@ public class RegPanel extends JPanel {
         openButton.setContentAreaFilled(false);
         openButton.setOpaque(false);
 
-        final JFileChooser fileopen = new JFileChooser();
-
         openButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFileChooser fileopen = new JFileChooser();
                 fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileopen.setCurrentDirectory(new File("/"));
-                fileopen.showOpenDialog(null);
+                boolean b = fileopen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION;
                 fileopen.setMultiSelectionEnabled(false);
-                if (!(fileopen.getSelectedFile() == null)) {
+                if ((!(fileopen.getSelectedFile() == null) && (b))) {
                     final File file = fileopen.getSelectedFile();
                     if (getFileExtension(file).toLowerCase().equals("jpg")) {
                         ImageIcon img = new ImageIcon(file.getAbsolutePath());
@@ -266,6 +265,7 @@ public class RegPanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "Choose JPEG File please!");
                     }
                 }
+
             }
         });
 

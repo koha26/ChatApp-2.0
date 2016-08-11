@@ -112,6 +112,7 @@ public class HomePanel extends JPanel {
         topPanel.add(surnamePanelInfo);
         topPanel.add(dateOfBirthPanelInfo);
         topPanel.add(sexPanelInfo);
+        topPanel.add(sexPanelInfo);
 
         RepaintPanel repaintPanel = new RepaintPanel(this);
         Thread thread = new Thread(repaintPanel);
@@ -130,9 +131,9 @@ public class HomePanel extends JPanel {
         nickLabel.setText(user.getNickname());
 
         if (user.getSex() == null) {
-            sexPanelInfo = new JLabel("-");
+            sexPanelInfo.setText("-");
         } else {
-            sexPanelInfo = new JLabel(user.getSex().toString());
+            sexPanelInfo.setText(user.getSex().toString());
         }
 
         namePanelInfo.setText(user.getName());

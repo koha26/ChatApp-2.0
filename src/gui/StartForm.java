@@ -21,7 +21,7 @@ public class StartForm extends JFrame {
     private JButton exitButton;
     private Point mouseDownCompCoords = new Point();
     private PopUpMenu popUpMenu;
-    private static JTextField errorTextField; // лейбл, который будет отображать ошибку в случае некорректного ввода данных
+    private static JTextField notificationTextField; // лейбл, который будет отображать ошибку в случае некорректного ввода данных
     private Mode mode; // LOGIN_ON - loginMode; REGISTRATION_ON - registrationMode;
     private boolean isChanged;
 
@@ -86,7 +86,7 @@ public class StartForm extends JFrame {
         loginPanel.getRegButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                errorTextField.setVisible(false);
+                notificationTextField.setVisible(false);
                 regPanel.getPasswordField().setBorder(null);
                 regPanel.getConfirmPasswordField().setBorder(null);
                 setRegistrationMode();
@@ -101,7 +101,7 @@ public class StartForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 regPanel.getPasswordField().setBorder(null);
                 regPanel.getConfirmPasswordField().setBorder(null);
-                errorTextField.setVisible(false);
+                notificationTextField.setVisible(false);
                 isChanged = true;
                 changeSize();
                 regPanel.setEntered(true);
@@ -131,16 +131,16 @@ public class StartForm extends JFrame {
             }
         });
 
-        errorTextField = new JTextField();
-        errorTextField.setBounds(0, (int) (120 * SCRDIM_KY), (int)(960 * SCRDIM_KX), (int) (35 * SCRDIM_KY));
-        errorTextField.setFont(Fonts.typingFont);
-        errorTextField.setHorizontalAlignment(JTextField.CENTER);
-        errorTextField.setBackground(new Color(0, 0, 0, 150));
-        errorTextField.setEditable(false);
-        errorTextField.setFocusable(false);
-        errorTextField.setForeground(Color.RED);
-        errorTextField.setBorder(null);
-        errorTextField.setVisible(false);
+        notificationTextField = new JTextField();
+        notificationTextField.setBounds(0, (int) (120 * SCRDIM_KY), (int)(960 * SCRDIM_KX), (int) (35 * SCRDIM_KY));
+        notificationTextField.setFont(Fonts.typingFont);
+        notificationTextField.setHorizontalAlignment(JTextField.CENTER);
+        notificationTextField.setBackground(new Color(0, 0, 0, 150));
+        notificationTextField.setEditable(false);
+        notificationTextField.setFocusable(false);
+       // notificationTextField.setForeground(Color.RED);
+        notificationTextField.setBorder(null);
+        notificationTextField.setVisible(false);
 
         helloLabel.setBounds((int)(330 * SCRDIM_KX), (int) (15 * SCRDIM_KY), (int)(300 * SCRDIM_KX), (int) (90 * SCRDIM_KY));
         exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
@@ -151,7 +151,7 @@ public class StartForm extends JFrame {
         add(loginPanel);
         add(exitButton);
         add(regPanel);
-        add(errorTextField);
+        add(notificationTextField);
 
         RepaintFrame repaintFrame = new RepaintFrame(this);
         Thread repaintThread = new Thread(repaintFrame);
@@ -192,8 +192,8 @@ public class StartForm extends JFrame {
         return regPanel.getConfirmPasswordField();
     }
 
-    public static JTextField getErrorTextField() {
-        return errorTextField;
+    public static JTextField getNotificationTextField() {
+        return notificationTextField;
     }
 
     public boolean isFieldFilled() {
@@ -270,10 +270,11 @@ public class StartForm extends JFrame {
         JOptionPane.showMessageDialog(this, text, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showErrorLabel(String errorText) {
-        errorTextField.setText(errorText);
-        errorTextField.setVisible(true);
-        errorTextField.revalidate();
+    public static void showNotificationLabel(String errorText, Color color) {
+        notificationTextField.setText(errorText);
+        notificationTextField.setVisible(true);
+        notificationTextField.revalidate();
+        notificationTextField.setForeground(color);
     }
 
     public boolean isDateCorrect(Object month, Object day) {

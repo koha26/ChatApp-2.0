@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class DialogPanel extends JPanel {
-    private JButton friendsNickButton;
     private JTextArea messageArea = new JTextArea();
     private JScrollPane messageScrollPane = new JScrollPane(messageArea);
     private MessageView messageView = new MessageView();
@@ -18,16 +17,6 @@ public class DialogPanel extends JPanel {
         this.setLayout(null);
         this.setOpaque(false);
         this.setBackground(new Color(0, 0, 0, 0));
-
-        friendsNickButton = new OutlineButton("");
-        friendsNickButton.setHorizontalAlignment(JLabel.CENTER);
-        friendsNickButton.setFont(Fonts.nickFont);
-        friendsNickButton.setForeground(Color.BLACK);
-        friendsNickButton.setBackground(new Color(0, 0, 0, 0));
-        friendsNickButton.setOpaque(false);
-        friendsNickButton.setBorder(null);
-        friendsNickButton.setFocusPainted(false);
-        friendsNickButton.setContentAreaFilled(false);
 
         messageArea.setFont(Fonts.typingFont);
         messageArea.setLineWrap(true);
@@ -44,21 +33,15 @@ public class DialogPanel extends JPanel {
 
         messageView = new MessageView();
 
-        friendsNickButton.setBounds(20, 20, 920, 40);
         messageView.setBounds(100, 70, 760, 300);
         messageScrollPane.setBounds(210, 390, 540, 100);
 
-        this.add(friendsNickButton);
         this.add(messageView);
         this.add(messageScrollPane);
 
         RepaintPanel repaintPanel = new RepaintPanel(this);
         Thread thread = new Thread(repaintPanel);
         thread.start();
-    }
-
-    public JButton getFriendsNickButton() {
-        return friendsNickButton;
     }
 
     public MessageView getMessageView() {
@@ -77,7 +60,7 @@ public class DialogPanel extends JPanel {
         messageView.showIncomingMessage(message);
     }
 
-    public void updateInfo(BufferedImage myPhoto, BufferedImage friendPhoto, String friendNick) throws IOException {
+    public void updateInfo(BufferedImage myPhoto, BufferedImage friendPhoto) throws IOException {
         BufferedImage scaled1 = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g1 = scaled1.createGraphics();
@@ -98,8 +81,6 @@ public class DialogPanel extends JPanel {
 
         this.add(myPhotoLabel);
         this.add(friendPhotoLabel);
-
-        friendsNickButton.setText(friendNick);
 
         repaint();
         revalidate();
