@@ -106,6 +106,25 @@ public class Application implements Observer {
             }
         });
 
+        mainForm.getFriendSidePanel().getSearchTextField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    mainForm.getFriendSidePanel().resetPanel();
+                    mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
+                }
+            }
+        });
+
+        mainForm.getFriendSidePanel().getCancelButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainForm.getFriendSidePanel().resetPanel();
+                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
+            }
+        });
+
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
         this.startForm.getLoginButton().addActionListener(new ActionListener() {

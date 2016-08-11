@@ -194,9 +194,10 @@ public class MainForm extends JFrame {
             }
         });
 
+
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
-        friendSidePanel.setBounds(970, 75, 240, 490);
+        friendSidePanel.setBounds(970, 75, 240, 500);
         this.add(friendSidePanel);
 
         homeButton.setBounds(538, 8, 64, 64);
