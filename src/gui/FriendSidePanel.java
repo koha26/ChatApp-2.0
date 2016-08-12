@@ -2,10 +2,13 @@ package gui;
 
 import logic.Friend;
 import logic.User;
+import server.Client;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,14 +22,9 @@ public class FriendSidePanel extends JPanel {
     private JTextField searchTextField;
     private JButton cancelButton;
     private JButton globalSearchButton;
-    private GlobalSearchLook foundUser = new GlobalSearchLook();
 
     private final ImageIcon searchIcon = new ImageIcon("images/mainform/search.png");
     private final ImageIcon cancelSearchIcon = new ImageIcon("images/mainform/cancel_search.png");
-
-    public GlobalSearchLook getFoundUser() {
-        return foundUser;
-    }
 
     public JButton getCancelButton() {
         return cancelButton;
@@ -130,6 +128,7 @@ public class FriendSidePanel extends JPanel {
                     FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
                     friend.setBounds(7, currentPos, 220, 60);
                     friendsPanel.add(friend);
+                    currentPos += 65;
                 }
             }
         }
@@ -139,7 +138,7 @@ public class FriendSidePanel extends JPanel {
         updateUI();
     }
 
-    public void updateGlobalSearch(ArrayList<Friend> userList, String searchRequest, User user) {
+    public void updateGlobalSearch(ArrayList<Friend> userList, String searchRequest, User user, Client client) {
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */
@@ -149,7 +148,13 @@ public class FriendSidePanel extends JPanel {
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getNickname().contains(searchRequest) &&
                     !user.getFriendsList().get(i).getNickname().equals(searchRequest)){
-                foundUser = new GlobalSearchLook(userList.get(i));
+                GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
+                foundUser.getAddButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        client.sendFriendshipRequestCommand(searchRequest, user.getNickname());
+                    }
+                });
                 foundUser.setBounds(7, currentPos, 220, 60);
                 friendsPanel.add(foundUser);
                 currentPos += 65;

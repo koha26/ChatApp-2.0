@@ -34,15 +34,15 @@ public class GlobalSearchLook extends JPanel {
         setBackground(new Color(0, 0, 0, 100));
         setBorder(null);
 
-//        BufferedImage scaled = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
-//        Graphics2D g = scaled.createGraphics();
-//        g.drawImage(friend.getAvatarAsBufImage(), 0, 0, 50, 50, null);
-//        g.dispose();
-//        try {
-//            photoLabel = CircleLabelClass.CircleLabel(scaled);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        BufferedImage scaled = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = scaled.createGraphics();
+        g.drawImage(friend.getAvatarAsBufImage(), 0, 0, 50, 50, null);
+        g.dispose();
+        try {
+            photoLabel = CircleLabelClass.CircleLabel(scaled);
+       } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         nickLabel = new JLabel(friend.getNickname());
         nickLabel.setForeground(Color.WHITE);
@@ -55,7 +55,7 @@ public class GlobalSearchLook extends JPanel {
         addButton.setBorder(null);
         addButton.setFont(Fonts.typingFont);
 
-        //add(photoLabel);
+        add(photoLabel);
         add(nickLabel);
         add(addButton);
     }

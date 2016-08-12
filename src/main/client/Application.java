@@ -136,19 +136,10 @@ public class Application implements Observer {
                 // TODO: 12.08.2016
                 mainForm.getFriendSidePanel().resetPanel();
                 mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
-//                ArrayList<Friend> friends = new ArrayList<Friend>();
-//                friends.add(new Friend("dasdsad"));
-//                friends.add(new Friend("dasdsad1"));
-//                friends.add(new Friend("vlad22"));
-//                friends.add(new Friend("max"));
-//                friends.add(new Friend("max_morcos"));
-//                friends.add(new Friend("dante"));
-                String searchRequest = mainForm.getFriendSidePanel().getSearchTextField().getText();
-                // В этот метод приходит список Friend от сервера
-                //mainForm.getFriendSidePanel().updateGlobalSearch(friends, searchRequest, user);
+                //mainForm.getFriendSidePanel().updateGlobalSearch( СЮДА ПЕРЕДАТЬ ЛИСТ ОТ СЕРВЕРА,
+                // mainForm.getFriendSidePanel().getSearchTextField().getText();, user, client);
             }
         });
-
 
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
@@ -323,7 +314,6 @@ public class Application implements Observer {
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
                 mainForm.getHomePanel().updateInfo(user);
-                mainForm.getFriendSidePanel().updateInfo(user);
                 mainForm.getFriendSidePanel().updateInfo(user);
             }
         } else if (arg instanceof ChangingUserInfoStatusCommand) {
