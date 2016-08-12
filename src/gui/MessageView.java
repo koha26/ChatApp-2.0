@@ -76,6 +76,7 @@ public class MessageView extends JPanel {
         msgText.setBorder(null);
 
         JLabel msgTime = new JLabel(getMessageTime(new Date()));
+
         msgTime.setForeground(Color.GREEN);
         msgTime.setFont(Fonts.smallFont);
 
