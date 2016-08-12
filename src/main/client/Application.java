@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -22,6 +21,8 @@ public class Application implements Observer {
      * MAINFORM_ON - мейн форма
      * LOGIN_ON - отображение панели входа на старт форме
      * REGISTRATION_ON - отображение панели регистрации на старт форме
+     * DIALOG - панель диалогов, вкладки
+     * HOME_PANEL - домашняя панель с личной информацией и списком друзей
      * <p/>
      * Хранение объекта клиента и пользователя будет находиться здесь. Хотя, вероятно, лучше будет юзера передать в менй форм
      */
@@ -50,7 +51,8 @@ public class Application implements Observer {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 final FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
-                mainForm.changeModeToDialog();
+                mainForm.changeMode(mode);
+                mode = Mode.DIALOG;
                 if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname())) {
                     mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
                         @Override
@@ -66,16 +68,26 @@ public class Application implements Observer {
                             }
                         }
                     });
+                    final DialogTab dialogTab = mainForm.getCurrentDialogTab();
+                    dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (mainForm.closeDialog(dialogTab)) {
+                                mainForm.changeMode(mode);
+                                mode = Mode.HOME_PANEL;
+                            }
+                        }
+                    });
                 }
-
-                Application.this.mode = Mode.DIALOG;
             }
         });
 
         mainForm.getHomeButton().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainForm.changeModeToHomePanel();
+                mainForm.changeMode(mode);
+                if (mode == Mode.DIALOG) mode = Mode.HOME_PANEL;
+                else if (mode == Mode.HOME_PANEL) mode = Mode.DIALOG;
             }
         });
 
@@ -84,7 +96,6 @@ public class Application implements Observer {
             public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
-                    mainForm.changeModeToDialog();
                     if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendSideLook.getFriend().getAvatarAsBufImage(), friendSideLook.getFriend().getNickname())) {
                         mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
                             @Override
@@ -100,9 +111,18 @@ public class Application implements Observer {
                                 }
                             }
                         });
-                    }
 
-                    Application.this.mode = Mode.DIALOG;
+                        final DialogTab dialogTab = mainForm.getCurrentDialogTab();
+                        dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (mainForm.closeDialog(dialogTab)) {
+                                    mainForm.changeMode(mode);
+                                    mode = Mode.HOME_PANEL;
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -136,19 +156,18 @@ public class Application implements Observer {
                 // TODO: 12.08.2016
                 mainForm.getFriendSidePanel().resetPanel();
                 mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
-//                ArrayList<Friend> friends = new ArrayList<Friend>();
-//                friends.add(new Friend("dasdsad"));
-//                friends.add(new Friend("dasdsad1"));
-//                friends.add(new Friend("vlad22"));
-//                friends.add(new Friend("max"));
-//                friends.add(new Friend("max_morcos"));
-//                friends.add(new Friend("dante"));
+                //                ArrayList<Friend> friends = new ArrayList<Friend>();
+                //                friends.add(new Friend("dasdsad"));
+                //                friends.add(new Friend("dasdsad1"));
+                //                friends.add(new Friend("vlad22"));
+                //                friends.add(new Friend("max"));
+                //                friends.add(new Friend("max_morcos"));
+                //                friends.add(new Friend("dante"));
                 String searchRequest = mainForm.getFriendSidePanel().getSearchTextField().getText();
                 // В этот метод приходит список Friend от сервера
                 //mainForm.getFriendSidePanel().updateGlobalSearch(friends, searchRequest, user);
             }
         });
-
 
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
@@ -288,10 +307,38 @@ public class Application implements Observer {
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
             Message message = mCommand.getMessage();
-            mainForm.changeModeToDialog();
             Friend friend = user.getFriend(message.getNickname_From());
             if (message.getNickname_To().equals(user.getNickname()))
-                this.mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage());
+                if (!(mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage()) == null)) {
+                    mainForm.getDialogPanelArrayList().get(mainForm.getDialogPanelArrayList().size() - 1).getMessageArea().addKeyListener(new KeyAdapter() {
+                        @Override
+                        public void keyPressed(KeyEvent e) {
+                            if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                                Message myMesseage = new Message();
+                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMesseage.setNickname_From(user.getNickname());
+                                myMesseage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
+                                client.sendMessageCommand(myMesseage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                mainForm.getCurrentDialogPanel().getMessageArea().setText("");
+                            }
+                        }
+                    });
+
+                    final DialogTab dialogTab = mainForm.getDialogTabArrayList().get(mainForm.getDialogTabArrayList().size() - 1);
+                    dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (mainForm.closeDialog(dialogTab)) {
+                                mainForm.changeMode(mode);
+                                mode = Mode.HOME_PANEL;
+                            }
+                        }
+                    });
+                }
+            if (mode == Mode.HOME_PANEL) {
+                mainForm.getDialogTabsPanel().setVisible(false);
+            }
         } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;

@@ -74,13 +74,13 @@ public class MessageView extends JPanel {
         text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
         text.setEditable(false);
         text.setForeground(Color.WHITE);
-        text.setBorder(brdr);
+        text.setBorder(null);
         JLabel msgTime = new JLabel(" " + getMessageTime(new Date()));
         msgTime.setForeground(Color.GREEN);
         msgTime.setFont(Fonts.smallFont);
         inMsgPanel.add(msgTime, BorderLayout.WEST);
         inMsgPanel.add(text, BorderLayout.EAST);
-        inMsgPanel.setBorder(null);
+        inMsgPanel.setBorder(brdr);
         messagesPanel.add(inMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 200, 2, 2), 0, 0));
         currentPos++;
         updatePanel(messagesPanel);
