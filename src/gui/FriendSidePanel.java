@@ -125,13 +125,13 @@ public class FriendSidePanel extends JPanel {
         currentPos += 75;
 
         if (user.getFriendsList().size() > 0) {
-           for (int i = 0; i < user.getFriendsList().size(); i++) {
-               if (user.getFriendsList().get(i).getNickname().contains(searchRequest)) {
-                   FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
-                   friend.setBounds(7, currentPos, 220, 60);
-                   friendsPanel.add(friend);
-               }
-           }
+            for (int i = 0; i < user.getFriendsList().size(); i++) {
+                if (user.getFriendsList().get(i).getNickname().contains(searchRequest)) {
+                    FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
+                    friend.setBounds(7, currentPos, 220, 60);
+                    friendsPanel.add(friend);
+                }
+            }
         }
 
         repaint();
@@ -139,16 +139,16 @@ public class FriendSidePanel extends JPanel {
         updateUI();
     }
 
-    public void updateGlobalSearch(ArrayList<Friend> userList, String searchRequest) {
+    public void updateGlobalSearch(ArrayList<Friend> userList, String searchRequest, User user) {
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */
-        globalSearchButton.setBounds(20, currentPos + 3, 180, 50);
         friendsPanel.add(globalSearchButton);
         currentPos += 75;
 
         for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getNickname().contains(searchRequest)) {
+            if (userList.get(i).getNickname().contains(searchRequest) &&
+                    !user.getFriendsList().get(i).getNickname().equals(searchRequest)){
                 foundUser = new GlobalSearchLook(userList.get(i));
                 foundUser.setBounds(7, currentPos, 220, 60);
                 friendsPanel.add(foundUser);

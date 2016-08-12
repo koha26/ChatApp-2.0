@@ -145,17 +145,10 @@ public class Application implements Observer {
 //                friends.add(new Friend("dante"));
                 String searchRequest = mainForm.getFriendSidePanel().getSearchTextField().getText();
                 // В этот метод приходит список Friend от сервера
-//                mainForm.getFriendSidePanel().updateGlobalSearch(friends, searchRequest);
+                //mainForm.getFriendSidePanel().updateGlobalSearch(friends, searchRequest, user);
             }
         });
 
-//        mainForm.getFriendSidePanel().getFoundUser().getAddButton().addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String newFriendNick = mainForm.getFriendSidePanel().getFoundUser().getNickLabel().getText();
-//                client.sendFriendshipRequestCommand(newFriendNick, user.getNickname());
-//            }
-//        });
 
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ
