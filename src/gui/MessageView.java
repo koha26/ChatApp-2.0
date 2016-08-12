@@ -3,6 +3,7 @@ package gui;
 import logic.Message;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -33,8 +34,10 @@ public class MessageView extends JPanel {
 
     public void showOutcomingMessage(Message message) {
         JPanel outMsgPanel = new JPanel();
+        AbstractBorder brdrRight = new MyBorder(Color.PINK, 1, 16, 16);
+
         outMsgPanel.setBackground(new Color(0, 0, 0, 0));
-        outMsgPanel.setLayout(new BorderLayout());
+        outMsgPanel.setLayout(new BorderLayout(15, 0));
         TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), getMessageTime(new Date()),
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.GREEN);
         msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
@@ -43,17 +46,22 @@ public class MessageView extends JPanel {
         text.setBackground(new Color(0, 0, 0, 0));
         text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
         text.setEditable(false);
-        text.setBorder(msgBorder);
+        text.setBorder(null);
         text.setForeground(Color.WHITE);
         text.setLineWrap(true);
         outMsgPanel.add(text, BorderLayout.CENTER);
-        outMsgPanel.setBorder(null);
+        JLabel msgTime = new JLabel(getMessageTime(new Date()));
+        msgTime.setForeground(Color.PINK);
+        msgTime.setFont(Fonts.smallFont);
+        outMsgPanel.add(msgTime, BorderLayout.EAST);
+        outMsgPanel.setBorder(brdrRight);
         messagesPanel.add(outMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 200), 0, 0));
         currentPos++;
         updatePanel(messagesPanel);
     }
 
     public void showIncomingMessage(Message message) {
+        AbstractBorder brdr = new MyBorder(Color.GREEN, 1, 16, 16);
         JPanel inMsgPanel = new JPanel();
         inMsgPanel.setLayout(new BorderLayout());
         inMsgPanel.setBackground(new Color(0, 0, 0, 0));
@@ -66,8 +74,12 @@ public class MessageView extends JPanel {
         text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
         text.setEditable(false);
         text.setForeground(Color.WHITE);
-        text.setBorder(msgBorder);
-        inMsgPanel.add(text, BorderLayout.CENTER);
+        text.setBorder(brdr);
+        JLabel msgTime = new JLabel(" " + getMessageTime(new Date()));
+        msgTime.setForeground(Color.GREEN);
+        msgTime.setFont(Fonts.smallFont);
+        inMsgPanel.add(msgTime, BorderLayout.WEST);
+        inMsgPanel.add(text, BorderLayout.EAST);
         inMsgPanel.setBorder(null);
         messagesPanel.add(inMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 200, 2, 2), 0, 0));
         currentPos++;

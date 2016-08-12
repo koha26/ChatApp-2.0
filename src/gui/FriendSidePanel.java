@@ -5,11 +5,7 @@ import logic.User;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,9 +18,15 @@ public class FriendSidePanel extends JPanel {
     private int currentPos = 7;
     private JTextField searchTextField;
     private JButton cancelButton;
+    private JButton globalSearchButton;
+    private GlobalSearchLook foundUser = new GlobalSearchLook();
 
     private final ImageIcon searchIcon = new ImageIcon("images/mainform/search.png");
     private final ImageIcon cancelSearchIcon = new ImageIcon("images/mainform/cancel_search.png");
+
+    public GlobalSearchLook getFoundUser() {
+        return foundUser;
+    }
 
     public JButton getCancelButton() {
         return cancelButton;
@@ -38,8 +40,12 @@ public class FriendSidePanel extends JPanel {
         return friendsPanel;
     }
 
+    public JButton getGlobalSearchButton() {
+        return globalSearchButton;
+    }
+
     public FriendSidePanel() {
-        this.setBorder(null);
+        setBorder(null);
         setOpaque(false);
         setLayout(null);
 
@@ -86,6 +92,16 @@ public class FriendSidePanel extends JPanel {
         scrollPane.setBorder(new LineBorder(new Color(0, 0, 0, 150), 3));
         scrollPane.setBounds(0, 75, 240, 420);
         add(scrollPane);
+
+        globalSearchButton = new JButton("<html> Search in ChatApp </html>");
+        globalSearchButton.setHorizontalAlignment(SwingConstants.CENTER);
+        globalSearchButton.setForeground(Color.WHITE);
+        globalSearchButton.setFocusPainted(false);
+        globalSearchButton.setContentAreaFilled(false);
+        globalSearchButton.setOpaque(false);
+        globalSearchButton.setFont(Fonts.smallFont);
+        globalSearchButton.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
+        //globalSearchButton.setBackground(new Color(0, 0, 0, 150));
     }
 
     public void updateInfo(User user) {
@@ -104,28 +120,57 @@ public class FriendSidePanel extends JPanel {
     }
 
     public void updateFriendSearch(String searchRequest, User user) {
+        globalSearchButton.setBounds(20, currentPos + 3, 180, 50);
+        friendsPanel.add(globalSearchButton);
+        currentPos += 75;
+
         if (user.getFriendsList().size() > 0) {
            for (int i = 0; i < user.getFriendsList().size(); i++) {
                if (user.getFriendsList().get(i).getNickname().contains(searchRequest)) {
                    FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
                    friend.setBounds(7, currentPos, 220, 60);
                    friendsPanel.add(friend);
-                   currentPos += 65;
                }
            }
         }
-        friendsPanel.repaint();
-        friendsPanel.revalidate();
-        friendsPanel.updateUI();
-        scrollPane.repaint();
-        scrollPane.revalidate();
-        scrollPane.updateUI();
+
+        repaint();
+        revalidate();
+        updateUI();
+    }
+
+    public void updateGlobalSearch(ArrayList<Friend> userList, String searchRequest) {
+        /*
+                Метод, который принимает в себя список пользователей от сервера
+         */
+        globalSearchButton.setBounds(20, currentPos + 3, 180, 50);
+        friendsPanel.add(globalSearchButton);
+        currentPos += 75;
+
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getNickname().contains(searchRequest)) {
+                foundUser = new GlobalSearchLook(userList.get(i));
+                foundUser.setBounds(7, currentPos, 220, 60);
+                friendsPanel.add(foundUser);
+                currentPos += 65;
+            }
+        }
+
+        repaint();
+        revalidate();
+        updateUI();
     }
 
     public void resetPanel() {
         friendsPanel.removeAll();
-        friendsPanel.repaint();
-        friendsPanel.revalidate();
+        repaintPanel(friendsPanel);
         this.currentPos = 7;
+    }
+
+
+    public void repaintPanel(JPanel panel) {
+        panel.repaint();
+        panel.revalidate();
+        panel.updateUI();
     }
 }

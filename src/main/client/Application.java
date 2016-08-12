@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -110,8 +111,12 @@ public class Application implements Observer {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    mainForm.getFriendSidePanel().resetPanel();
-                    mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
+                    if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
+                        Toolkit.getDefaultToolkit().beep();
+                    } else {
+                        mainForm.getFriendSidePanel().resetPanel();
+                        mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
+                    }
                 }
             }
         });
@@ -124,6 +129,33 @@ public class Application implements Observer {
                 mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
             }
         });
+
+        mainForm.getFriendSidePanel().getGlobalSearchButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: 12.08.2016
+                mainForm.getFriendSidePanel().resetPanel();
+                mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
+//                ArrayList<Friend> friends = new ArrayList<Friend>();
+//                friends.add(new Friend("dasdsad"));
+//                friends.add(new Friend("dasdsad1"));
+//                friends.add(new Friend("vlad22"));
+//                friends.add(new Friend("max"));
+//                friends.add(new Friend("max_morcos"));
+//                friends.add(new Friend("dante"));
+                String searchRequest = mainForm.getFriendSidePanel().getSearchTextField().getText();
+                // В этот метод приходит список Friend от сервера
+//                mainForm.getFriendSidePanel().updateGlobalSearch(friends, searchRequest);
+            }
+        });
+
+//        mainForm.getFriendSidePanel().getFoundUser().getAddButton().addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String newFriendNick = mainForm.getFriendSidePanel().getFoundUser().getNickLabel().getText();
+//                client.sendFriendshipRequestCommand(newFriendNick, user.getNickname());
+//            }
+//        });
 
         this.mode = Mode.STARTFROM_ON;
         // УСТАНАВЛИВАЮ СЛУШАТЕЛИ НА СТАРТ ФОРМУ: НА КНОПКУ ЛОГИНА И НА КНОПКУ РЕГИСТРАЦИИ

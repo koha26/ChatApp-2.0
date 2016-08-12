@@ -10,7 +10,6 @@ import java.io.IOException;
 public class FriendSideLook extends JPanel {
 
     private JLabel photoLabel, nickLabel;
-    private JPanel singlePanel;
     private Friend friend;
 
     public Friend getFriend() {
@@ -18,9 +17,10 @@ public class FriendSideLook extends JPanel {
     }
 
     public FriendSideLook(Friend friend) {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(null);
         this.friend = friend;
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setBackground(new Color(0, 0, 0, 100));
+        setBorder(null);
 
         BufferedImage scaled = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = scaled.createGraphics();
@@ -36,12 +36,7 @@ public class FriendSideLook extends JPanel {
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setFont(Fonts.typingFont);
 
-        singlePanel = new JPanel();
-        singlePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        singlePanel.setBorder(null);
-        singlePanel.setBackground(new Color(0, 0, 0, 100));
-        singlePanel.add(photoLabel);
-        singlePanel.add(nickLabel);
-        add(singlePanel);
+        add(photoLabel);
+        add(nickLabel);
     }
 }
