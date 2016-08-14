@@ -33,7 +33,7 @@ public class MainForm extends JFrame {
     private final ImageIcon plusButIconEntered = new ImageIcon("images/mainform/plus_entered.png");
     private final ImageIcon homeButIcon = new ImageIcon("images/mainform/home.png");
     private final ImageIcon homeButIconEntered = new ImageIcon("images/mainform/home_entered.png");
-    private final ImageIcon dialogButIcon = new ImageIcon("images/mainform/msg1.png");
+    private final ImageIcon dialogButIcon = new ImageIcon("images/mainform/msg.png");
     private final ImageIcon dialogButIconEntered = new ImageIcon("images/mainform/msg_entered.png");
     private final ImageIcon friendSideOpenIcon = new ImageIcon("images/mainform/sidepnl_open.png");
     private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
@@ -72,7 +72,7 @@ public class MainForm extends JFrame {
         dialogTabArrayList = new ArrayList<>();
 
         bigPanel = new JPanel(null);
-        bigPanel.setSize(960, 600);
+        bigPanel.setSize(1470, 600);
         bigPanel.setOpaque(false);
         bigPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -147,7 +147,7 @@ public class MainForm extends JFrame {
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
         friendSidePanel.setBounds(970, 75, 240, 500);
-        this.add(friendSidePanel);
+        bigPanel.add(friendSidePanel);
 
         homeButton.setBounds(538, 8, 64, 64);
         topPanel.add(homeButton);

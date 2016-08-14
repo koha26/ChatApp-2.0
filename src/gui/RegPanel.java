@@ -1,6 +1,5 @@
 package gui;
 
-
 import logic.Constants;
 import logic.Sex;
 
@@ -366,7 +365,7 @@ public class RegPanel extends JPanel {
         nicknameField.setBounds(220, 115, 220, 25);
         passwordLabel.setBounds(510, 115, 80, 30);
         passwordField.setBounds(600, 115, 220, 25);
-        confirmPasswordLabel.setBounds(450, 155, 140, 3);
+        confirmPasswordLabel.setBounds(450, 155, 140, 30);
         confirmPasswordField.setBounds(600, 155, 220, 25);
 
         additionalLabel.setBounds(130, 220, 350, 30);

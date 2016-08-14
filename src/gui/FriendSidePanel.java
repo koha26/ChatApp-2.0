@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-
 public class FriendSidePanel extends JPanel {
 
     private JScrollPane scrollPane;
@@ -82,10 +81,10 @@ public class FriendSidePanel extends JPanel {
         searchPanel.setBounds(0, 34, 240, 30);
         add(searchPanel);
 
-        friendsPanel = new JPanel();
+        friendsPanel = new JPanel(null);
         friendsPanel.setOpaque(false);
-        friendsPanel.setLayout(null);
         friendsPanel.setBorder(null);
+        friendsPanel.setPreferredSize(new Dimension(240, 420));
         scrollPane = new JScrollPane(friendsPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -93,8 +92,9 @@ public class FriendSidePanel extends JPanel {
         scrollPane.setBounds(0, 75, 240, 420);
         scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.add(scrollPane);
 
         globalSearchButton = new JButton("<html> Search in ChatApp </html>");
         globalSearchButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -157,7 +157,7 @@ public class FriendSidePanel extends JPanel {
         currentPos += 75;
 
         for (int i = 0; i < userList.size(); i++) {
-            GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
+            final GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
             foundUser.getAddButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

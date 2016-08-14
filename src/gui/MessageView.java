@@ -4,11 +4,7 @@ import logic.Message;
 
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,6 +18,7 @@ public class MessageView extends JPanel {
         setLayout(new GridBagLayout());
         messagesPanel = new JPanel();
         messagesPanel.setBackground(new Color(0, 0, 0, 0));
+        messagesPanel.setPreferredSize(new Dimension(500, 500));
         scrollPane = new JScrollPane(messagesPanel);
         messagesPanel.setBorder(null);
         messagesPanel.setLayout(new GridBagLayout());
