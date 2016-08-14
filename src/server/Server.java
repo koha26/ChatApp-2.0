@@ -1,6 +1,7 @@
 package server;
 
 import logic.Message;
+import logic.PotentialFriend;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
@@ -11,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -91,8 +93,8 @@ public class Server {
         return database.checkUser(nickname, password);
     }
 
-    public User getUser(String nickname){
-        return database.getUser(nickname);
+    public User updateUser(String nickname) {
+        return database.updateUser(nickname);
     }
 
     public boolean isExist(String nickname) { // существует ли кл-т с таким ником
@@ -103,6 +105,10 @@ public class Server {
         return database.modificationUser(changedUser, isInfoChanged, isAvatarChanged);
     }
 
+    public List<PotentialFriend> getResultByGlobalSearch(User host, String nicknamePattern) {
+        return database.getResultByGlobalSearch(host, nicknamePattern);
+    }
+
     public boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
         return database.isOnline(nickname);
     }
@@ -111,8 +117,8 @@ public class Server {
         database.addFriend(nickname_host, nickname_friend);
     }
 
-    public void deleteFriend(String nickname_host, String nickname_friend) {
-        database.deleteFriend(nickname_host, nickname_friend);
+    public boolean deleteFriend(String nickname_host, String nickname_friend) {
+        return database.deleteFriend(nickname_host, nickname_friend);
     }
 
     public Set<String> retainAllFriendOnline(Set<String> comparatedSet) {
@@ -152,12 +158,12 @@ public class Server {
         }
     }
 
-    public LinkedList<Command> loadAwaitingCommands(String nickname){
+    public LinkedList<Command> loadAwaitingCommands(String nickname) {
         return database.loadAwaitingCommands(nickname);
     }
 
-    public void addAwaitingCommand(String nickname, Command command){
-        database.addAwaitingCommand(nickname,command);
+    public void addAwaitingCommand(String nickname, Command command) {
+        database.addAwaitingCommand(nickname, command);
     }
 
     public ServerSocket getServerSocket() {
@@ -177,7 +183,7 @@ public class Server {
         private Command lastCommand;  // последняя полученая команда
         private Connection connection;  // соединение между сервером и клиентом
         private User user;  // запись о клиенте
-        private ArrayList<Stack<HistoryPacketCommand>> histories;
+        private List<Stack<HistoryPacketCommand>> histories;
 
         public ClientThread(Socket socket) throws IOException {
             this.connection = new Connection(socket);
@@ -205,14 +211,14 @@ public class Server {
                             RegistrationStatusCommand rsCommand;
                             user = registerUser(rCommand.getRegModel(), connection); //рега через Database
 
-                            if (rCommand.getRegModel().getAvatarAsBufImage() != null){
+                            if (rCommand.getRegModel().getAvatarAsBufImage() != null) {
                                 modificationUser(user, false, true);
                             }
 
                             if (user != null) { //если рега успешна - отправка полученого объекта User
                                 rsCommand = new RegistrationStatusCommand(true, user);
                             } else { //если не успешна - то отправляем причину
-                                String exceptionDescription = "Такой никнейм уже зарегестрирован! Извините, попробуйте другой.";
+                                String exceptionDescription = "This nickname is already registered! Sorry, try another.";
                                 rsCommand = new RegistrationStatusCommand(false, exceptionDescription);
                             }
 
@@ -236,14 +242,14 @@ public class Server {
 
                                         lsCommand.setUnreadMessagesFrom(unreadMessagesFrom);
 
-                                        histories = (ArrayList<Stack<HistoryPacketCommand>>) Collections.synchronizedList(new ArrayList<Stack<HistoryPacketCommand>>());
+                                        histories = Collections.synchronizedList(new ArrayList<Stack<HistoryPacketCommand>>());
                                         for (String nicknameFriend : unreadMessagesFrom) {
                                             histories.add(loadHistory(user.getNickname(), nicknameFriend)); //загружаем историю с каждым собеседником в наборе
                                         }
                                     }
                                 } else {
                                     lsCommand = new LoginStatusCommand();
-                                    lsCommand.setExceptionDescription("Неверный логин или пароль!");
+                                    lsCommand.setExceptionDescription("Wrong login or password!");
                                 }
 
                                 send(lsCommand);// отправка логин статуса
@@ -283,7 +289,7 @@ public class Server {
                                         broadcastOnlineFriend(user.getNickname());
 
                                         LinkedList<Command> missingCommands = loadAwaitingCommands(user.getNickname());
-                                        for (Command command :missingCommands) {
+                                        for (Command command : missingCommands) {
                                             send(command);
                                         }
                                     }
@@ -291,7 +297,7 @@ public class Server {
 
                             } else {
                                 lsCommand = new LoginStatusCommand();
-                                lsCommand.setExceptionDescription("Устаревшая версия программы. Обновите пожалуйста!");
+                                lsCommand.setExceptionDescription("An outdated version of the program. Update please!");
                                 send(lsCommand);
                             }
 
@@ -302,10 +308,10 @@ public class Server {
                             if (isExist(srCommand.getNickname_From()) && isExist(srCommand.getNickname_To()) &&
                                     isOnline(srCommand.getNickname_From())) {//если есть такой и он в сети
 
-                                if (isOnline(srCommand.getNickname_To())){
+                                if (isOnline(srCommand.getNickname_To())) {
                                     sendTo(srCommand.getNickname_To(), srCommand);
                                 } else {
-                                    addAwaitingCommand(srCommand.getNickname_To(),srCommand);
+                                    addAwaitingCommand(srCommand.getNickname_To(), srCommand);
                                 }
 
                             } else {
@@ -324,26 +330,44 @@ public class Server {
                                 if (acCommand.isAccept())
                                     addFriend(acCommand.getNickname_To(), acCommand.getNickname_From());//наоборот ОТ и КОМУ, потому что на клиенте меняется сторонами это
 
-
-                                if (isOnline(acCommand.getNickname_To())){
+                                if (isOnline(acCommand.getNickname_To())) { // отправка ответа тому, кто-то изначально запросил дружбу
                                     sendTo(acCommand.getNickname_To(), acCommand);
                                 } else {
                                     addAwaitingCommand(acCommand.getNickname_To(), acCommand);
                                 }
 
-                                User sendedUser_To = Server.this.getUser(acCommand.getNickname_To());
-                                User sendedUser_From = Server.this.getUser(acCommand.getNickname_From());
+                                acCommand.setNickname_From(acCommand.getNickname_To());
+                                acCommand.setNickname_To(user.getNickname());
 
-                                if (isOnline(acCommand.getNickname_To())){
-                                    sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                if (isOnline(acCommand.getNickname_To())) { // отправка ответа тому, кто только что ее подтвердил
+                                    send(acCommand);
                                 } else {
-                                    addAwaitingCommand(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
+                                    addAwaitingCommand(acCommand.getNickname_To(), acCommand);
                                 }
 
-                                if (isOnline(acCommand.getNickname_From())){
-                                    sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+                                User u1 = updateUser(acCommand.getNickname_To());
+                                User userForTo = new User(u1.getName(), u1.getSurname(), u1.getCountry(), u1.getCity(), u1.getDateOfBirth(), u1.getSex(),
+                                        u1.getNickname(), u1.getPassword(), u1.getIpAddress(), u1.getUniqueID(),
+                                        (new ArrayList<>(u1.getFriendsList())), u1.getAvatar());
+
+                                User u2 = updateUser(acCommand.getNickname_From());
+                                User userForFrom = new User(u2.getName(), u2.getSurname(), u2.getCountry(), u2.getCity(), u2.getDateOfBirth(), u2.getSex(),
+                                        u2.getNickname(), u2.getPassword(), u2.getIpAddress(), u2.getUniqueID(),
+                                        (new ArrayList<>(u2.getFriendsList())), u2.getAvatar());
+
+                                ChangingUserInfoStatusCommand cuisCommand = new ChangingUserInfoStatusCommand(userForTo);
+
+                                if (isOnline(acCommand.getNickname_To())) {
+                                    sendTo(acCommand.getNickname_To(), cuisCommand);
                                 } else {
-                                    addAwaitingCommand(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));
+                                    addAwaitingCommand(acCommand.getNickname_To(), cuisCommand);
+                                }
+
+                                cuisCommand = new ChangingUserInfoStatusCommand(userForFrom);
+                                if (isOnline(acCommand.getNickname_From())) {
+                                    sendTo(acCommand.getNickname_From(), cuisCommand);
+                                } else {
+                                    addAwaitingCommand(acCommand.getNickname_From(), cuisCommand);
                                 }
                                 /*sendTo(acCommand.getNickname_To(), new ChangingUserInfoStatusCommand(sendedUser_To));
                                 sendTo(acCommand.getNickname_From(), new ChangingUserInfoStatusCommand(sendedUser_From));*/
@@ -396,11 +420,63 @@ public class Server {
                         } else if (lastCommand instanceof ChangingUserInfoCommand) {
 
                             ChangingUserInfoCommand cuiCommand = (ChangingUserInfoCommand) lastCommand;
-                            User changedUser = modificationUser(cuiCommand.getChangedUser(), cuiCommand.isInfoChanged(), cuiCommand.isAvatarChanged());
+                            User u = modificationUser(cuiCommand.getChangedUser(), cuiCommand.isInfoChanged(), cuiCommand.isAvatarChanged());
+
+                            User changedUser = new User(u.getName(), u.getSurname(), u.getCountry(), u.getCity(), u.getDateOfBirth(), u.getSex(),
+                                    u.getNickname(), u.getPassword(), u.getIpAddress(), u.getUniqueID(),
+                                    (new ArrayList<>(u.getFriendsList())), u.getAvatar());
 
                             ChangingUserInfoStatusCommand cuisCommand = new ChangingUserInfoStatusCommand(changedUser);
                             send(cuisCommand);
 
+                        } else if (lastCommand instanceof SearchCommand) {
+
+                            SearchCommand sCommand = (SearchCommand) lastCommand;
+                            List<PotentialFriend> resultList = getResultByGlobalSearch(user, sCommand.getNicknamePattern());
+
+                            SearchStatusCommand ssCommand = new SearchStatusCommand(resultList);
+                            send(ssCommand);
+
+                        } else if (lastCommand instanceof FriendshipEndCommand) {
+
+                            FriendshipEndCommand feCommand = (FriendshipEndCommand) lastCommand;
+
+                            boolean deleted = deleteFriend(feCommand.getNicknameHost(), feCommand.getNicknameCompanion());
+
+                            User u1 = updateUser(feCommand.getNicknameHost());
+                            User userForHost = new User(u1.getName(), u1.getSurname(), u1.getCountry(), u1.getCity(), u1.getDateOfBirth(), u1.getSex(),
+                                    u1.getNickname(), u1.getPassword(), u1.getIpAddress(), u1.getUniqueID(),
+                                    (new ArrayList<>(u1.getFriendsList())), u1.getAvatar());
+
+                            User u2 = updateUser(feCommand.getNicknameCompanion());
+                            User userForCompanion = new User(u2.getName(), u2.getSurname(), u2.getCountry(), u2.getCity(), u2.getDateOfBirth(), u2.getSex(),
+                                    u2.getNickname(), u2.getPassword(), u2.getIpAddress(), u2.getUniqueID(),
+                                    (new ArrayList<>(u2.getFriendsList())), u2.getAvatar());
+
+                            String descriptionHost;
+                            String descriptionCompanion;
+
+                            if (deleted) {
+                                descriptionHost = "You have deleted " + feCommand.getNicknameCompanion() + " from your friend list";
+                                descriptionCompanion = "You had been deleted from friend list by " + feCommand.getNicknameHost();
+                            } else {
+                                descriptionHost = "There was error while removing. Sorry.";
+                                descriptionCompanion = "There was error while removing. Sorry.";
+                            }
+
+                            FriendshipEndStatusCommand fesCommand = new FriendshipEndStatusCommand(userForHost, descriptionHost);
+                            if (isOnline(feCommand.getNicknameHost())) {
+                                send(fesCommand);
+                            } else {
+                                addAwaitingCommand(feCommand.getNicknameHost(), fesCommand);
+                            }
+
+                            fesCommand = new FriendshipEndStatusCommand(userForCompanion, descriptionCompanion);
+                            if (isOnline(feCommand.getNicknameCompanion())) {
+                                sendTo(feCommand.getNicknameCompanion(), fesCommand);
+                            } else {
+                                addAwaitingCommand(feCommand.getNicknameCompanion(), fesCommand);
+                            }
                         }
 
                     } else close();
@@ -418,13 +494,10 @@ public class Server {
 
         public synchronized void send(Command command) { // м-д для отправки комманд между сервером и к-том
             try {
-                this.connection.sendCommand(command);
+                if (connection.isOpen())
+                    this.connection.sendCommand(command);
             } catch (IOException e) {
                 System.out.println("Ошибка отправки!");
-                /*if (command instanceof MessageCommand) {
-                    Message message = ((MessageCommand) command).showIncomingMessage();
-                    saveMessageInReceiverHistory(message, message.getNickname_From(), message.getNickname_To(), false);
-                }*/
             }
         }
 
@@ -439,9 +512,9 @@ public class Server {
 
         public void broadcastOfflineFriend(String nicknameFriend) {
             for (ClientThread clientThread : clients) {
-                if (clientThread.user != null && clientThread != this) {
+                if (isOnline(clientThread.user.getNickname()) && clientThread.user != null && clientThread != this) {
                     if (clientThread.user.hasFriend(nicknameFriend)) {
-                        send(new FriendOfflineCommand(nicknameFriend));
+                        clientThread.send(new FriendOfflineCommand(nicknameFriend));
                     }
                 }
             }
@@ -449,9 +522,9 @@ public class Server {
 
         public void broadcastOnlineFriend(String nicknameFriend) {
             for (ClientThread clientThread : clients) {
-                if (clientThread.user != null && clientThread != this) {
+                if (isOnline(clientThread.user.getNickname()) && clientThread.user != null && clientThread != this) {
                     if (clientThread.user.hasFriend(nicknameFriend)) {
-                        send(new FriendOnlineCommand(nicknameFriend));
+                        clientThread.send(new FriendOnlineCommand(nicknameFriend));
                     }
                 }
             }
@@ -466,6 +539,4 @@ public class Server {
             }
         }
     }
-
-
 }

@@ -9,7 +9,7 @@ public class User extends Human {
     private String password;
     private InetAddress ipAddress;
     private int uniqueID;
-    private ArrayList<Friend> friends;
+    private List<Friend> friends;
     private ImageSerializable avatar;
 
     public User() {
@@ -25,7 +25,7 @@ public class User extends Human {
         this.password = password;
         this.ipAddress = ipAddress;
         this.uniqueID = uniqueID;
-        this.friends = new ArrayList<>(0);
+        this.friends = Collections.synchronizedList(new ArrayList<Friend>(0));
         this.avatar = null;
     }
 
@@ -35,7 +35,7 @@ public class User extends Human {
         this.password = regModel.getPassword();
         this.ipAddress = ipAddress;
         this.uniqueID = uniqueID;
-        this.friends = new ArrayList<>(0);
+        this.friends = Collections.synchronizedList(new ArrayList<Friend>(0));
         this.avatar = regModel.getAvatar();
         super.setName(regModel.getName());
         super.setSurname(regModel.getSurname());
@@ -43,6 +43,26 @@ public class User extends Human {
         super.setCity(regModel.getCity());
         super.setCountry(regModel.getCountry());
         super.setSex(regModel.getSex());
+    }
+
+    public User(String name, String surname, String country, String city, String dateOfBirth, Sex sex, String nickname, String password, InetAddress ipAddress, int uniqueID, List<Friend> friends, ImageSerializable avatar) {
+        super(name, surname, country, city, dateOfBirth, sex);
+        this.nickname = nickname;
+        this.password = password;
+        this.ipAddress = ipAddress;
+        this.uniqueID = uniqueID;
+        this.friends = friends;
+        this.avatar = avatar;
+    }
+
+    public User(User u) {
+        super(u.getName(), u.getSurname(), u.getCountry(), u.getCity(), u.getDateOfBirth(), u.getSex());
+        this.nickname = u.nickname;
+        this.password = u.password;
+        this.ipAddress = u.ipAddress;
+        this.uniqueID = u.uniqueID;
+        this.friends = u.friends;
+        this.avatar = u.avatar;
     }
 
     public String getNickname() {
@@ -95,7 +115,7 @@ public class User extends Human {
 
     public Set<String> getFriendsSet() {
         Set<String> resultSet = new HashSet<>();
-        for (Friend friend :friends) {
+        for (Friend friend : friends) {
             resultSet.add(friend.getNickname());
         }
         return resultSet;
@@ -113,7 +133,7 @@ public class User extends Human {
         return resultList;
     }
 
-    public void setFriends(ArrayList<Friend> friends) {
+    public void setFriends(List<Friend> friends) {
         this.friends = friends;
     }
 
@@ -163,10 +183,36 @@ public class User extends Human {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
+
         if (uniqueID != user.uniqueID) return false;
+        if (!avatar.equals(user.avatar)) return false;
+        if (!ipAddress.equals(user.ipAddress)) return false;
+        if (!nickname.equals(user.nickname)) return false;
+        if (!password.equals(user.password)) return false;
+
+        if (friends.size() != user.getFriendsList().size()) return false;
+        if (!friends.containsAll(user.getFriendsList())) return false;
+        if (!user.getFriendsList().containsAll(friends)) return false;
+
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = nickname.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + ipAddress.hashCode();
+        result = 31 * result + uniqueID;
+        result = 31 * result + friends.hashCode();
+        result = 31 * result + avatar.hashCode();
+        return result;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
     }
 }

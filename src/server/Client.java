@@ -11,17 +11,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.rmi.UnknownHostException;
 import java.util.Observable;
-import java.util.Scanner;
 
 public class Client extends Observable {
 
     private Command lastCommand;
-    private User user;
     private Connection connection;
     private String host;
     private int port;
+    private Thread receiverThread;
 
     public Client(String host, int port) {
         this.host = host;
@@ -37,7 +35,8 @@ public class Client extends Observable {
         InputStream is = socket.getInputStream();
         this.connection = new Connection(socket, os, is);
 
-        new Thread(new Receiver()).start();
+        receiverThread = new Thread(new Receiver());
+        receiverThread.start();
     }
 
     /**
@@ -81,9 +80,21 @@ public class Client extends Observable {
         send(srCommand);
     }
 
-    public void sendChangingUserInfoCommand(User changedUser, boolean isInfoChanged, boolean isAvatarChanged){
-        ChangingUserInfoCommand cuiCommand = new ChangingUserInfoCommand(changedUser,isInfoChanged,isAvatarChanged);
+    public void sendChangingUserInfoCommand(User changedUser, boolean isInfoChanged, boolean isAvatarChanged) {
+        ChangingUserInfoCommand cuiCommand = new ChangingUserInfoCommand(changedUser, isInfoChanged, isAvatarChanged);
         send(cuiCommand);
+    }
+
+    public void sendSearchCommand(String nicknamePattern) {
+        SearchCommand sCommand = new SearchCommand(nicknamePattern);
+        send(sCommand);
+    }
+
+    public void sendHistoryPacketCommand(String nicknameHost, String nicknameCompanion) {
+        HistoryPacketCommand hpCommand = new HistoryPacketCommand();
+        hpCommand.setNickname_host(nicknameHost);
+        hpCommand.setNickname_companion(nicknameCompanion);
+        send(hpCommand);
     }
 
     public void sendDisconnectCommand() {
@@ -95,35 +106,11 @@ public class Client extends Observable {
             this.connection.sendCommand(command);
         } catch (IOException e) {
             System.out.println("Ошибка отправки!");
-        }
-    }
 
-    public void run() { // для тестов
-        try {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("nick: ");
-            String nick = sc.nextLine();
-            System.out.println("pass: ");
-            String pass = sc.nextLine();
-            RegistrationCommand rCommand = new RegistrationCommand(nick, pass);
+            receiverThread.interrupt();
 
-            connection.sendCommand(rCommand); //для теста
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            //new Client("localhost", 8621).run();
-            Client client = new Client(Constants.HOST, Constants.PORT);
-            client.start();
-            client.run();
-        } catch (IOException e) {
-            //e.printStackTrace();
-            System.out.println("Oops!");
+            setChanged();
+            notifyObservers(new DisconnectCommand());
         }
     }
 
@@ -135,68 +122,25 @@ public class Client extends Observable {
                 try {
                     lastCommand = connection.receiveCommand();
                 } catch (IOException e) {
-                    e.printStackTrace();
+
+                    setChanged();
+                    notifyObservers(new DisconnectCommand());
+                    close();
+                    break;
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+
+                    setChanged();
+                    notifyObservers(new DisconnectCommand());
+                    close();
+                    break;
                 }
                 if (lastCommand != null) {
 
-                    if (lastCommand instanceof LoginStatusCommand) {
-
-                        LoginStatusCommand lsCommand = (LoginStatusCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(lsCommand);
-                    } else if (lastCommand instanceof RegistrationStatusCommand) {
-                        RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) lastCommand;
-                        if (rsCommand.isRegistered()) {
-                            user = rsCommand.getUser();
-                            System.out.println(user);
-
-                            setChanged();
-                            notifyObservers(rsCommand);
-                        } else {
-                            setChanged();
-                            notifyObservers(rsCommand);
-                        }
-                    } else if (lastCommand instanceof MessageCommand) {
-
-                        MessageCommand mCommand = (MessageCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(mCommand);
-                    } else if (lastCommand instanceof AcceptFriendshipCommand) {
-
-                        AcceptFriendshipCommand afCommand = (AcceptFriendshipCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(afCommand);
-                    } else if (lastCommand instanceof FriendshipRequestCommand) {
-
-                        FriendshipRequestCommand frCommand = (FriendshipRequestCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(frCommand);
-                    } else if (lastCommand instanceof DisconnectCommand) {
+                    if (lastCommand instanceof DisconnectCommand) {
                         close();
-                    } else if (lastCommand instanceof HistoryPacketCommand) {
-
-                        HistoryPacketCommand hpCommand = (HistoryPacketCommand) lastCommand;
-
+                    } else {
                         setChanged();
-                        notifyObservers(hpCommand);
-                    } else if (lastCommand instanceof FriendOfflineCommand){
-
-                        FriendOfflineCommand foCommand = (FriendOfflineCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(foCommand);
-                    } else if (lastCommand instanceof ChangingUserInfoStatusCommand){
-
-                        ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) lastCommand;
-
-                        setChanged();
-                        notifyObservers(cuisCommand);
+                        notifyObservers(lastCommand);
                     }
                 }
             }
@@ -205,10 +149,9 @@ public class Client extends Observable {
         public synchronized void close() {
             try {
                 connection.close();
+                receiverThread.interrupt();
             } catch (IOException e) {
                 //TODO
-            } finally {
-                user = null;
             }
         }
     }

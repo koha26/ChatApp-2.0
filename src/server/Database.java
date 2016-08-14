@@ -3,6 +3,7 @@ package server;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import logic.Message;
+import logic.PotentialFriend;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.Command;
@@ -68,8 +69,8 @@ public class Database {
         this.userOnline.remove(nickname);
     }
 
-    public User getUser(String nickname){
-        return userMap.get(nickname);
+    public User updateUser(String nickname) {
+        return new User(userMap.get(nickname));
     }
 
     public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException {
@@ -132,7 +133,13 @@ public class Database {
     }
 
     public boolean isNickAvailable(String nickname) {
-        return !userMap.containsKey(nickname);
+        for (String nick : userMap.keySet()) {
+            if (nick.toLowerCase().equals(nickname.toLowerCase())) {
+                return false;
+            }
+        }
+        return true;
+        //return !userMap.containsKey(nickname);
     }
 
     public int getLastUserId() {
@@ -171,18 +178,39 @@ public class Database {
         updateData();
     }
 
-    public void deleteFriend(String nickname_host, String nickname_friend) {
-        User editedUser = userMap.get(nickname_host);
-        boolean contained = editedUser.deleteFriend(nickname_friend);
-        if (contained) {
-            userMap.put(nickname_host, editedUser);
+    public boolean deleteFriend(String nickname_host, String nickname_friend) {
+        User editedUser_host = userMap.get(nickname_host);
+        User editedUser_friend = userMap.get(nickname_friend);
+
+        boolean isHostFriend = editedUser_host.deleteFriend(nickname_friend);
+        boolean isFriendFriend = editedUser_friend.deleteFriend(nickname_host);
+
+        if (isHostFriend && isFriendFriend) {
+            userMap.put(nickname_host, editedUser_host);
+            userMap.put(nickname_friend, editedUser_friend);
             updateData();
-        }
+            return true;
+        } else
+            return false;
     }
 
     public Set<String> retainAllFriendOnline(Set<String> comparatedSet) { // возврат друзей онлайн
         comparatedSet.retainAll(this.userOnline.keySet());
         return comparatedSet;
+    }
+
+    public List<PotentialFriend> getResultByGlobalSearch(User host, String nicknamePattern) {
+        ArrayList<PotentialFriend> list = new ArrayList<>();
+        //Pattern pattern = Pattern.compile(".*"+nicknamePattern+".*");
+        Pattern pattern = Pattern.compile(nicknamePattern);
+        Matcher matcher;
+        for (User user : userMap.values()) {
+            matcher = pattern.matcher(user.getNickname().toLowerCase());
+            if (matcher.find() && !host.hasFriend(user.getNickname()) && !host.getNickname().equals(user.getNickname())) {
+                list.add(new PotentialFriend(user));
+            }
+        }
+        return list;
     }
 
     // ДЛЯ РАБОТЫ С ДИРИКТОРИЯМИ
@@ -203,7 +231,7 @@ public class Database {
             }
 
             File avatarFile;
-            File defaultImageFile = new File("images/avatar/default.png");
+            File defaultImageFile = new File("images/avatar/default_avatarBIG.jpg");
 
             for (User u : userMap.values()) {
                 avatarFile = new File(dataPath + "/user_" + u.getUniqueID() + "/avatar/avatar.jpg");
@@ -340,7 +368,7 @@ public class Database {
 
     public boolean addFriendAsUnreadMesFrom(String nickname_host, String nickname_friend) { //добавление ника друга, от которого пропущено смс
         Set<String> unreadMesFrom = getSetOfFriendUnreadMes(nickname_host);
-        if (unreadMesFrom == null || unreadMesFrom.size()==0 || !unreadMesFrom.contains(nickname_friend)) {
+        if (unreadMesFrom == null || unreadMesFrom.size() == 0 || !unreadMesFrom.contains(nickname_friend)) {
             String dirPath = dataPath + "/user_" + userMap.get(nickname_host).getUniqueID();
             String filePath = dirPath + "/unread_messages_from.dat";
             File dir = new File(dirPath);
@@ -408,7 +436,7 @@ public class Database {
         User user_To = userMap.get(nickname_receiver);                                                //КОМУ - тот, кому отослали
         User user_From = userMap.get(nickname_sender);                                              //ОТ - тот, кто отослал
 
-        String history_dirPath  = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID();
+        String history_dirPath = Config.DATA_PATH + "/user_" + user_From.getUniqueID() + "/history/user_" + user_To.getUniqueID();
         String history_filePath = history_dirPath + "/messages.dat";
         File historyDir_From = new File(history_dirPath);
         File historyFile_From = new File(history_filePath);//папка истории переписки ОТ с КОМУ
@@ -659,15 +687,15 @@ public class Database {
 
     //ДЛЯ РАБОТЫ С ОФФ-ЛАЙН запросами
 
-    public LinkedList<Command> loadAwaitingCommands(String nickname){
+    public LinkedList<Command> loadAwaitingCommands(String nickname) {
         User user = userMap.get(nickname);
 
-        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+        File awaitingCommandFile = new File(dataPath + "/user_" + user.getUniqueID() + "/awaiting_command/commands.xml");
 
-        if (awaitingCommandFile.exists() && awaitingCommandFile.isFile() && awaitingCommandFile.length()>0){
+        if (awaitingCommandFile.exists() && awaitingCommandFile.isFile() && awaitingCommandFile.length() > 0) {
             XStream xStream = new XStream(new DomDriver());
             LinkedList<Command> commands = new LinkedList<>();
-            try{
+            try {
                 InputStream inputStream = new FileInputStream(awaitingCommandFile);
                 commands = (LinkedList<Command>) xStream.fromXML(inputStream);
                 awaitingCommandFile.delete();
@@ -681,14 +709,14 @@ public class Database {
         return new LinkedList<Command>();
     }
 
-    public void addAwaitingCommand(String nickname, Command command){
+    public void addAwaitingCommand(String nickname, Command command) {
         User user = userMap.get(nickname);
 
-        File awaitingCommandFile = new File(dataPath +"/user_"+user.getUniqueID()+"/awaiting_command/commands.xml");
+        File awaitingCommandFile = new File(dataPath + "/user_" + user.getUniqueID() + "/awaiting_command/commands.xml");
         LinkedList<Command> commands = loadAwaitingCommands(nickname);
         commands.push(command);
 
-        try(FileOutputStream outputStream = new FileOutputStream(awaitingCommandFile)) {
+        try (FileOutputStream outputStream = new FileOutputStream(awaitingCommandFile)) {
 
             XStream xStream = new XStream(new DomDriver());
             xStream.toXML(commands, outputStream);

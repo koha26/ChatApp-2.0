@@ -1,7 +1,7 @@
 package logic.command;
 
 
-public class FriendshipRequestCommand extends Command {
+public class FriendshipRequestCommand extends FriendshipCommand {
 
     private String nickname_To;
     private String nickname_From;

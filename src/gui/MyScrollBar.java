@@ -5,6 +5,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
 public class MyScrollBar extends BasicScrollBarUI {
+    private final int WIDTH_SCROLLBAR = 8;
     private JButton b = new JButton() {
         @Override
         public Dimension getPreferredSize() {
@@ -24,28 +25,37 @@ public class MyScrollBar extends BasicScrollBarUI {
 
     @Override
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-        g.translate(thumbBounds.x, thumbBounds.y);
+        /*g.translate(thumbBounds.x, thumbBounds.y);
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, thumbBounds.width, thumbBounds.height);
-    }
+        g.fillRect(0, 0, thumbBounds.width, thumbBounds.height);*/
 
+        g.translate(thumbBounds.x,thumbBounds.y);
+        g.setColor(Color.WHITE);
+        g.fillRect(2,2,thumbBounds.width-4,thumbBounds.height-4);
+    }
 
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        //g.fillRect(0,0,trackBounds.width,trackBounds.height);
+        //g.setColor(new Color(Color.BLACK.getTransparency()));
+        //g.setColor(new Color(21, 44, 21, 179));
+
         g.translate(trackBounds.x, trackBounds.y);
-        g.setColor(new Color(255, 255, 255, 0));
-        g.drawRect(0, 0, trackBounds.width, trackBounds.height);
+        //g.setColor(new Color(35, 45, 25, 255));
+        g.setColor(new Color(0, 0, 0, 255));
+        g.fillRect(0,0,trackBounds.width,trackBounds.height);//квадрат
+
     }
 
     @Override
     public Dimension getPreferredSize(JComponent c) {
         Dimension dim = super.getPreferredSize(c);
-        return new Dimension(8, dim.height);
+        return new Dimension(WIDTH_SCROLLBAR, dim.height);
     }
 
     @Override
     public Dimension getMaximumSize(JComponent c) {
         Dimension dim = super.getPreferredSize(c);
-        return new Dimension(8, dim.height);
+        return new Dimension(WIDTH_SCROLLBAR, dim.height);
     }
 }
