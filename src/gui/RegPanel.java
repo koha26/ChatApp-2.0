@@ -16,9 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static logic.Constants.SCRDIM_KX;
-import static logic.Constants.SCRDIM_KY;
-
 public class RegPanel extends JPanel {
     private JLabel nickLabel, passwordLabel, confirmPasswordLabel, dateOfBirthLabel, nameLabel, surnameLabel, sexLabel, mainLabel, additionalLabel;
     private JTextField nicknameField, nameField, surnameField;
@@ -29,7 +26,7 @@ public class RegPanel extends JPanel {
     private static JButton regButton;
     private JButton backButton;
     private static JButton openButton;
-    private Font font = new Font("Century Gothic", Font.PLAIN, (int) (16 * SCRDIM_KX));
+    private Font font = new Font("Century Gothic", Font.PLAIN, 16);
     private final ImageIcon regButIcon = new ImageIcon("images/loginform/regbut.png");
     private final ImageIcon regButIconEntered = new ImageIcon("images/loginform/regbut_entered.png");
     private boolean isEntered;
@@ -75,11 +72,11 @@ public class RegPanel extends JPanel {
         monthBox.setVisible(isEntered);
         dayBox.setVisible(isEntered);
         if (isEntered) {
-            regButton.setBounds((int) (390 * SCRDIM_KX), (int) (570 * SCRDIM_KY), (int) (180 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-            backButton.setBounds((int) (285 * SCRDIM_KX), (int) (620 * SCRDIM_KY), (int) (380 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
+            regButton.setBounds(390, 570, 180, 50);
+            backButton.setBounds(285, 620, 380, 30);
         } else {
-            regButton.setBounds((int) (390 * SCRDIM_KX), (int) (260 * SCRDIM_KY), (int) (180 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-            backButton.setBounds((int) (285 * SCRDIM_KX), (int) (310 * SCRDIM_KY), (int) (380 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
+            regButton.setBounds(390, 260, 180, 50);
+            backButton.setBounds(285, 310, 380, 30);
         }
     }
 
@@ -147,10 +144,10 @@ public class RegPanel extends JPanel {
             e.printStackTrace();
         }
 
-        BufferedImage scaledDefault = new BufferedImage((int) (256 * SCRDIM_KX), (int) (256 * SCRDIM_KY), BufferedImage.TYPE_INT_RGB);
+        BufferedImage scaledDefault = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g = scaledDefault.createGraphics();
-        g.drawImage(bufImage, 0, 0, (int) (256 * SCRDIM_KX), (int) (256 * SCRDIM_KY), null);
+        g.drawImage(bufImage, 0, 0, 256, 256, null);
         g.dispose();
 
         avatar = new JLabel(new ImageIcon(bufImage));
@@ -160,7 +157,7 @@ public class RegPanel extends JPanel {
 
         mainLabel = new JLabel("Main Information");
         mainLabel.setForeground(Color.RED);
-        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX) - 1));
+        mainLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
 
         nickLabel = new JLabel("Nickname");
         passwordLabel = new JLabel("Password");
@@ -219,7 +216,7 @@ public class RegPanel extends JPanel {
 
         additionalLabel = new JLabel("Additional Information");
         additionalLabel.setForeground(Color.RED);
-        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX) - 1));
+        additionalLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
 
         additionalCheckBox = new JCheckBox();
         additionalCheckBox.setBackground(new Color(0, 0, 0, 0));
@@ -245,7 +242,7 @@ public class RegPanel extends JPanel {
                     final File file = fileopen.getSelectedFile();
                     if (getFileExtension(file).toLowerCase().equals("jpg")) {
                         ImageIcon img = new ImageIcon(file.getAbsolutePath());
-                        if (img.getIconHeight() >= 250 || img.getIconWidth() >= 260) {
+                        if (img.getIconHeight() >= 250 && img.getIconWidth() >= 260) {
                             regButton.setEnabled(false);
                             openButton.setEnabled(false);
                             SwingUtilities.invokeLater(new Runnable() {
@@ -259,10 +256,10 @@ public class RegPanel extends JPanel {
                                 }
                             });
                         } else {
-                            JOptionPane.showMessageDialog(null, "Very small picture. Choose 260x260px or bigger!");
+                            StartForm.showNotificationLabel("Very small picture. Choose 260x260px or bigger!", Color.RED);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Choose JPEG File please!");
+                        StartForm.showNotificationLabel("Choose JPEG File please!", Color.RED);
                     }
                 }
 
@@ -328,19 +325,19 @@ public class RegPanel extends JPanel {
 
         yearBox = new JComboBox(new DefaultComboBoxModel(yearsList.toArray()));
         yearBox.setBackground(Color.WHITE);
-        yearBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
+        yearBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 
         monthBox = new JComboBox(monthsList);
         monthBox.setBackground(Color.WHITE);
-        monthBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
+        monthBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 
         dayBox = new JComboBox(daysList.toArray());
         dayBox.setBackground(Color.WHITE);
-        dayBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
+        dayBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 
         sexBox = new JComboBox(Sex.values());
         sexBox.setBackground(Color.WHITE);
-        sexBox.setFont(new Font("Century Gothic", Font.PLAIN, (int) (14 * SCRDIM_KX)));
+        sexBox.setFont(new Font("Century Gothic", Font.PLAIN, 14));
 
         avatar.setBorder(new LineBorder(Color.WHITE, 1));
 
@@ -348,7 +345,7 @@ public class RegPanel extends JPanel {
 
         backButton = GUIStandartOperations.ButtonStartOperations(null, null, false);
         backButton.setText("Back to login form");
-        backButton.setFont(new Font("Century Gothic", Font.PLAIN, (int) (12 * SCRDIM_KX)));
+        backButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
         backButton.setForeground(Color.WHITE);
 
         avatar.setVisible(isEntered);
@@ -364,31 +361,31 @@ public class RegPanel extends JPanel {
         monthBox.setVisible(isEntered);
         dayBox.setVisible(isEntered);
 
-        mainLabel.setBounds((int) (130 * SCRDIM_KX), (int) (70 * SCRDIM_KY), (int) (280 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        nickLabel.setBounds((int) (130 * SCRDIM_KX), (int) (115 * SCRDIM_KY), (int) (80 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        nicknameField.setBounds((int) (220 * SCRDIM_KX), (int) (115 * SCRDIM_KY), (int) (220 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        passwordLabel.setBounds((int) (510 * SCRDIM_KX), (int) (115 * SCRDIM_KY), (int) (80 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        passwordField.setBounds((int) (600 * SCRDIM_KX), (int) (115 * SCRDIM_KY), (int) (220 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        confirmPasswordLabel.setBounds((int) (450 * SCRDIM_KX), (int) (155 * SCRDIM_KY), (int) (140 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        confirmPasswordField.setBounds((int) (600 * SCRDIM_KX), (int) (155 * SCRDIM_KY), (int) (220 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
+        mainLabel.setBounds(130, 70, 280, 30);
+        nickLabel.setBounds(130, 115, 80, 30);
+        nicknameField.setBounds(220, 115, 220, 25);
+        passwordLabel.setBounds(510, 115, 80, 30);
+        passwordField.setBounds(600, 115, 220, 25);
+        confirmPasswordLabel.setBounds(450, 155, 140, 3);
+        confirmPasswordField.setBounds(600, 155, 220, 25);
 
-        additionalLabel.setBounds((int) (130 * SCRDIM_KX), (int) (220 * SCRDIM_KY), (int) (350 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        additionalCheckBox.setBounds((int) (495 * SCRDIM_KX), (int) (215 * SCRDIM_KY), (int) (50 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-        avatar.setBounds((int) (130 * SCRDIM_KX), (int) (270 * SCRDIM_KY), (int) (260 * SCRDIM_KX), (int) (260 * SCRDIM_KY));
-        openButton.setBounds((int) (225 * SCRDIM_KX), (int) (535 * SCRDIM_KY), (int) (80 * SCRDIM_KX), (int) (20 * SCRDIM_KY));
-        nameLabel.setBounds((int) (450 * SCRDIM_KX), (int) (270 * SCRDIM_KY), (int) (140 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        nameField.setBounds((int) (600 * SCRDIM_KX), (int) (270 * SCRDIM_KY), (int) (220 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        surnameLabel.setBounds((int) (450 * SCRDIM_KX), (int) (310 * SCRDIM_KY), (int) (140 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        surnameField.setBounds((int) (600 * SCRDIM_KX), (int) (310 * SCRDIM_KY), (int) (220 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        sexLabel.setBounds((int) (450 * SCRDIM_KX), (int) (350 * SCRDIM_KY), (int) (140 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        sexBox.setBounds((int) (600 * SCRDIM_KX), (int) (350 * SCRDIM_KY), (int) (100 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        dateOfBirthLabel.setBounds((int) (450 * SCRDIM_KX), (int) (390 * SCRDIM_KY), (int) (140 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        yearBox.setBounds((int) (600 * SCRDIM_KX), (int) (390 * SCRDIM_KY), (int) (70 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        monthBox.setBounds((int) (675 * SCRDIM_KX), (int) (390 * SCRDIM_KY), (int) (100 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
-        dayBox.setBounds((int) (780 * SCRDIM_KX), (int) (390 * SCRDIM_KY), (int) (40 * SCRDIM_KX), (int) (25 * SCRDIM_KY));
+        additionalLabel.setBounds(130, 220, 350, 30);
+        additionalCheckBox.setBounds(495, 215, 50, 50);
+        avatar.setBounds(130, 270, 260, 260);
+        openButton.setBounds(225, 535, 80, 20);
+        nameLabel.setBounds(450, 270, 140, 30);
+        nameField.setBounds(600, 270, 220, 25);
+        surnameLabel.setBounds(450, 310, 140, 30);
+        surnameField.setBounds(600, 310, 220, 25);
+        sexLabel.setBounds(450, 350, 140, 30);
+        sexBox.setBounds(600, 350, 100, 25);
+        dateOfBirthLabel.setBounds(450, 390, 140, 30);
+        yearBox.setBounds(600, 390, 70, 25);
+        monthBox.setBounds(675, 390, 100, 25);
+        dayBox.setBounds(780, 390, 40, 25);
 
-        regButton.setBounds((int) (390 * SCRDIM_KX), (int) (260 * SCRDIM_KY), (int) (180 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-        backButton.setBounds((int) (285 * SCRDIM_KX), (int) (310 * SCRDIM_KY), (int) (380 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
+        regButton.setBounds(390, 260, 180, 50);
+        backButton.setBounds(285, 310, 380, 30);
 
         this.add(mainLabel);
         this.add(nickLabel);

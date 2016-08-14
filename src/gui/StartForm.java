@@ -11,9 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static logic.Constants.SCRDIM_KX;
-import static logic.Constants.SCRDIM_KY;
-
 public class StartForm extends JFrame {
     private RegPanel regPanel;
     private LoginPanel loginPanel;
@@ -27,12 +24,12 @@ public class StartForm extends JFrame {
 
     public void changeSize() {
         if (!isChanged) {
-            this.setSize((int) (960 * SCRDIM_KX), (int) (860 * SCRDIM_KY));
-            exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (760 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
+            this.setSize(960, 860);
+            exitButton.setBounds(430, 760, 100, 50);
             this.setLocationRelativeTo(null);
         } else {
-            setSize((int) (960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
-            exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
+            setSize(960, 550);
+            exitButton.setBounds(430, 450, 100, 50);
             this.setLocationRelativeTo(null);
         }
     }
@@ -47,7 +44,7 @@ public class StartForm extends JFrame {
 
     public StartForm() {
         GUIStandartOperations.FrameStartOperations(this);
-        setSize((int) (960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
+        setSize(960, 550);
         setLocationRelativeTo(null);
         setLayout(null);
 
@@ -112,12 +109,12 @@ public class StartForm extends JFrame {
         });
 
         helloLabel = new JLabel("Hello!");
-        helloLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (72 * SCRDIM_KX)));
+        helloLabel.setFont(new Font("Century Gothic", Font.PLAIN, 72));
         helloLabel.setForeground(Color.WHITE);
         helloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         exitButton = new JButton("Exit ChatApp");
-        exitButton.setFont(new Font("Century Gothic", Font.PLAIN, (int) (12 * SCRDIM_KX)));
+        exitButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
         exitButton.setForeground(Color.WHITE);
         exitButton.setOpaque(false);
         exitButton.setBorder(null);
@@ -132,20 +129,19 @@ public class StartForm extends JFrame {
         });
 
         notificationTextField = new JTextField();
-        notificationTextField.setBounds(0, (int) (120 * SCRDIM_KY), (int)(960 * SCRDIM_KX), (int) (35 * SCRDIM_KY));
+        notificationTextField.setBounds(0, 120, 960, 35);
         notificationTextField.setFont(Fonts.typingFont);
         notificationTextField.setHorizontalAlignment(JTextField.CENTER);
         notificationTextField.setBackground(new Color(0, 0, 0, 150));
         notificationTextField.setEditable(false);
         notificationTextField.setFocusable(false);
-       // notificationTextField.setForeground(Color.RED);
         notificationTextField.setBorder(null);
         notificationTextField.setVisible(false);
 
-        helloLabel.setBounds((int)(330 * SCRDIM_KX), (int) (15 * SCRDIM_KY), (int)(300 * SCRDIM_KX), (int) (90 * SCRDIM_KY));
-        exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-        loginPanel.setBounds(0, (int) (120 * SCRDIM_KY), (int)(1000 * SCRDIM_KX), (int) (1000 * SCRDIM_KY));
-        regPanel.setBounds(0, (int) (120 * SCRDIM_KY), (int)(1000 * SCRDIM_KX), (int) (1000 * SCRDIM_KY));
+        helloLabel.setBounds(330, 15, 300, 90);
+        exitButton.setBounds(430, 450, 100, 50);
+        loginPanel.setBounds(0, 120, 1000, 1000);
+        regPanel.setBounds(0, 120, 1000, 1000);
 
         add(helloLabel);
         add(loginPanel);
@@ -163,8 +159,8 @@ public class StartForm extends JFrame {
     void setLoginMode(String nickname) {
         loginPanel.setVisible(true);
         regPanel.setVisible(false);
-        this.setSize((int)(960 * SCRDIM_KX), (int) (550 * SCRDIM_KY));
-        exitButton.setBounds((int)(430 * SCRDIM_KX), (int) (450 * SCRDIM_KY), (int)(100 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
+        this.setSize(960, 550);
+        exitButton.setBounds(430, 450, 100, 50);
         this.setLocationRelativeTo(null);
         loginPanel.getNickField().setText(nickname);
         mode = Mode.LOGIN_ON;

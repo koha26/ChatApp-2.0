@@ -90,7 +90,7 @@ public class FriendSidePanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new LineBorder(new Color(0, 0, 0, 150), 3));
-        scrollPane.setBounds(0, 75, 240, 375);
+        scrollPane.setBounds(0, 75, 240, 420);
         scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -105,6 +105,10 @@ public class FriendSidePanel extends JPanel {
         globalSearchButton.setFont(Fonts.smallFont);
         globalSearchButton.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
         //globalSearchButton.setBackground(new Color(0, 0, 0, 150));
+
+        RepaintPanel repaintPanel = new RepaintPanel(this);
+        Thread thread = new Thread(repaintPanel);
+        thread.start();
     }
 
     public void updateInfo(User user) {
@@ -143,33 +147,39 @@ public class FriendSidePanel extends JPanel {
         updateUI();
     }
 
-    public void updateGlobalSearch(ArrayList<PotentialFriend> userList, final String searchRequest, final User user, final Client client) {
+    public void updateGlobalSearch(ArrayList<PotentialFriend> userList, final User user, final Client client) {
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */
+        globalSearchButton.setBounds(20, currentPos + 3, 180, 50);
         friendsPanel.add(globalSearchButton);
+        globalSearchButton.setText("<html> Search in ChatApp </html>");
         currentPos += 75;
 
         for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getNickname().contains(searchRequest) &&
-                    !user.getFriendsList().get(i).getNickname().equals(searchRequest)){
-                GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
-                foundUser.getAddButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        client.sendFriendshipRequestCommand(searchRequest, user.getNickname());
-                    }
-                });
-                foundUser.setBounds(7, currentPos, 220, 60);
-                friendsPanel.add(foundUser);
-                currentPos += 65;
-            }
+            GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
+            foundUser.getAddButton().addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    client.sendFriendshipRequestCommand(foundUser.getNickLabel().getText(), user.getNickname());
+                    foundUser.getAddButton().setEnabled(false);
+                }
+            });
+            foundUser.setBounds(7, currentPos, 220, 60);
+            friendsPanel.add(foundUser);
+            currentPos += 65;
         }
 
         repaint();
         revalidate();
         updateUI();
     }
+
+    public void userIsNotFound() {
+        globalSearchButton.setText("<html> User is not found. Try again </html>");
+        friendsPanel.add(globalSearchButton);
+    }
+
 
     public void resetPanel() {
         friendsPanel.removeAll();

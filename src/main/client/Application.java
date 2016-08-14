@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -136,6 +137,7 @@ public class Application implements Observer {
                     } else {
                         mainForm.getFriendSidePanel().resetPanel();
                         mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
+                        mainForm.getFriendSidePanel().getGlobalSearchButton().setText("<html> Search in ChatApp </html>");
                     }
                 }
             }
@@ -154,10 +156,13 @@ public class Application implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO: 12.08.2016
-                mainForm.getFriendSidePanel().resetPanel();
-                mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
-                //mainForm.getFriendSidePanel().updateGlobalSearch( СЮДА ПЕРЕДАТЬ ЛИСТ ОТ СЕРВЕРА,
-                // mainForm.getFriendSidePanel().getSearchTextField().getText();, user, client);
+                if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
+                    Toolkit.getDefaultToolkit().beep();
+                } else {
+                    mainForm.getFriendSidePanel().resetPanel();
+                    mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
+                    client.sendSearchCommand(mainForm.getFriendSidePanel().getSearchTextField().getText());
+                }
             }
         });
 
@@ -385,7 +390,9 @@ public class Application implements Observer {
 
             SearchStatusCommand ssCommand = (SearchStatusCommand) arg;
             if (ssCommand.getResultList().size() > 0) {
-                //mainForm.getFriendSidePanel().updateGlobalSearch(ssCommand.getResultList(),user,client);
+                mainForm.getFriendSidePanel().updateGlobalSearch((ArrayList<PotentialFriend>) ssCommand.getResultList(),user,client);
+            } else {
+                mainForm.getFriendSidePanel().userIsNotFound();
             }
 
         } else if (arg instanceof FriendOfflineCommand) {
