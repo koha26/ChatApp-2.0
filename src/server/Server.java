@@ -158,6 +158,10 @@ public class Server {
         }
     }
 
+    public boolean deleteFileWithUnreadMessage(String nickname_asker, String nickname_companion) {
+        return database.deleteFileWithUnreadMessage(nickname_asker, nickname_companion);
+    }
+
     public LinkedList<Command> loadAwaitingCommands(String nickname) {
         return database.loadAwaitingCommands(nickname);
     }
@@ -271,10 +275,21 @@ public class Server {
                                         EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
                                             @Override
                                             public void run() {
+                                                if (!toWritting.empty()) {
+                                                    String nickname_asker = toWritting.peek().getNickname_host();
+                                                    String nickname_friend = toWritting.peek().getNickname_companion();
+
+                                                    if (deleteFileWithUnreadMessage(nickname_asker, nickname_friend)) {
+                                                        deleteFileWithUnreadMessage(nickname_asker, nickname_friend);
+                                                    }
+
+                                                }
+
                                                 while (!toWritting.empty()) {
                                                     HistoryPacketCommand packetCommand = toWritting.pop();
+
                                                     for (Message message : packetCommand.getHistoryPart()) {
-                                                        saveMessageInReceiverHistory(message, packetCommand.getNickname_host(), packetCommand.getNickname_companion(), true);
+                                                        saveMessageInReceiverHistory(message, packetCommand.getNickname_companion(), packetCommand.getNickname_host(), true);
                                                     }
                                                 }
 
@@ -376,8 +391,8 @@ public class Server {
                         } else if (lastCommand instanceof MessageCommand) { // перенаправляет сообщение
 
                             MessageCommand mCommand = (MessageCommand) lastCommand;
-                            mCommand.getMessage().setDate(new Date()); //установка времени, когда пришло сообщение
                             Message message = mCommand.getMessage();
+                            message.setDate(new Date());//установка времени, когда пришло сообщение
                             if (isExist(message.getNickname_From()) && isExist(message.getNickname_To()) &&
                                     isOnline(message.getNickname_From())) {
 

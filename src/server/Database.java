@@ -578,17 +578,14 @@ public class Database {
         HistoryPacketCommand packet = new HistoryPacketCommand();
 
         User user_asker = userMap.get(nickname_asker);
-        User user_companion = userMap.get(nickname_companion);
+            User user_companion = userMap.get(nickname_companion);
 
-        if (user_asker != null && user_companion != null) {
+            if (user_asker != null && user_companion != null) {
 
-            String history_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/messages.dat";//or unread_messagges.dat
-            File historyFile = new File(history_filePath);
-            String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/unread.dat";
-            File unreadMessagesFile = new File(unreadMessages_filePath);
-            if (!(historyFile.isFile() && historyFile.exists()) || historyFile.length() == 0) {
-                return null;
-            }
+                String history_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/messages.dat";//or unread_messagges.dat
+                File historyFile = new File(history_filePath);
+                String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/unread.dat";
+                File unreadMessagesFile = new File(unreadMessages_filePath);
 
             int numFiles = 1;
 
@@ -605,7 +602,11 @@ public class Database {
 
             for (int i = 0; i < numFiles; i++) { //0 - history; 1 - unread messages
                 if (i == 0) {
-                    reader = new BufferedReader(new FileReader(historyFile));
+                    if (!(historyFile.isFile() && historyFile.exists()) || historyFile.length() == 0) {
+                        continue;
+                    } else {
+                        reader = new BufferedReader(new FileReader(historyFile));
+                    }
                 } else {
                     reader = new BufferedReader(new FileReader(unreadMessagesFile));
                 }
@@ -613,6 +614,11 @@ public class Database {
                 while ((inputString = reader.readLine()) != null) {
                     matcher = pattern.matcher(inputString);
                     int tagNumber = 1; //1 - <NICK>; 2 - <TEXT>; 3 - <DATE> & <TIME>
+
+                    String date = "01.01.2016";
+                    String time = "00:00:01";
+                    String[] datePart = date.split("\\.");
+                    String[] timePart = time.split(":");
 
                     while (matcher.find()) { //проверка есть ли во входящей строке такая строка == моему патерну
 
@@ -634,21 +640,25 @@ public class Database {
                                 tagNumber = 3;
                                 break;
                             case 3:
-                                String date = matcher.group();
-                                String time = matcher.group();
-
-                                String[] datePart = date.split("."); //0 - day; 1 - month; 2 - year;
-                                String[] timePart = time.split(":"); //0 - hour, 1 - min, 2 - sec;
+                                date = matcher.group();
+                                datePart = date.split("\\."); //0 - day; 1 - month; 2 - year;
+                                tagNumber = 4;
+                                break;
+                            case 4:
+                                time = matcher.group();
+                                timePart = time.split(":"); //0 - hour, 1 - min, 2 - sec;
 
                                 GregorianCalendar calendar = new GregorianCalendar(); //буду всоввывать в конструктор по формату yyyy.MM.dd Hh:mm:ss
-                                if (datePart.length == 3 && timePart.length == 2) {
+                                if (datePart.length == 3 && timePart.length == 3) {
                                     calendar = new GregorianCalendar(Integer.parseInt(datePart[0]), Integer.parseInt(datePart[1]) - 1,
                                             Integer.parseInt(datePart[2]), Integer.parseInt(timePart[0]), Integer.parseInt(timePart[1]),
                                             Integer.parseInt(datePart[2]));
-
+                                    message.setDate(calendar.getTime());
+                                } else {
+                                    message.setDate(new Date());
                                 }
 
-                                message.setDate(calendar.getTime());
+
 
                                 tagNumber = 1;
 
@@ -683,6 +693,26 @@ public class Database {
             }
         }
         return history;
+    }
+
+    public boolean deleteFileWithUnreadMessage(String nickname_asker, String nickname_companion){
+        User user_asker = userMap.get(nickname_asker);
+        User user_companion = userMap.get(nickname_companion);
+
+        String unreadMessages_filePath = Config.DATA_PATH + "/user_" + user_asker.getUniqueID() + "/history/user_" + user_companion.getUniqueID() + "/unread.dat";
+        File unreadMessagesFile = new File(unreadMessages_filePath);
+
+        if (unreadMessagesFile.isFile() && unreadMessagesFile.exists() || unreadMessagesFile.length() != 0) {
+            int count = 0;
+            while (count < 10) {
+                if (unreadMessagesFile.delete()) {
+                    return true;
+                }
+                count++;
+            }
+            return false;
+        }
+        return true;
     }
 
     //ДЛЯ РАБОТЫ С ОФФ-ЛАЙН запросами
