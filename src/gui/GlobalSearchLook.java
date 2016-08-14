@@ -51,8 +51,8 @@ public class GlobalSearchLook extends JPanel {
         addButton = new JButton("    ");
         addButton.setContentAreaFilled(false);
         addButton.setForeground(Color.GREEN);
-        addButton.setIcon(new ImageIcon("add.png"));
-        addButton.setDisabledIcon(new ImageIcon("add_disabled.png"));
+        addButton.setIcon(new ImageIcon("images/mainform/add.png"));
+        addButton.setDisabledIcon(new ImageIcon("images/mainform/add_disabled.png"));
         addButton.setFocusPainted(false);
         addButton.setBorder(null);
         addButton.setFont(Fonts.typingFont);
