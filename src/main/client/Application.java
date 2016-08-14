@@ -2,6 +2,7 @@ package main.client;
 
 import gui.*;
 import gui.Notifications.FriendshipRequestNotification;
+import gui.Sound;
 import logic.*;
 import logic.command.*;
 import server.Client;
@@ -21,6 +22,8 @@ public class Application implements Observer {
      * MAINFORM_ON - мейн форма
      * LOGIN_ON - отображение панели входа на старт форме
      * REGISTRATION_ON - отображение панели регистрации на старт форме
+     * DIALOG - панель диалогов, вкладки
+     * HOME_PANEL - домашняя панель с личной информацией и списком друзей
      * <p/>
      * Хранение объекта клиента и пользователя будет находиться здесь. Хотя, вероятно, лучше будет юзера передать в менй форм
      */
@@ -49,7 +52,8 @@ public class Application implements Observer {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 final FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
-                mainForm.changeModeToDialog();
+                mainForm.changeMode(mode);
+                mode = Mode.DIALOG;
                 if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname())) {
                     mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
                         @Override
@@ -65,16 +69,26 @@ public class Application implements Observer {
                             }
                         }
                     });
+                    final DialogTab dialogTab = mainForm.getCurrentDialogTab();
+                    dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (mainForm.closeDialog(dialogTab)) {
+                                mainForm.changeMode(mode);
+                                mode = Mode.HOME_PANEL;
+                            }
+                        }
+                    });
                 }
-
-                Application.this.mode = Mode.DIALOG;
             }
         });
 
         mainForm.getHomeButton().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainForm.changeModeToHomePanel();
+                mainForm.changeMode(mode);
+                if (mode == Mode.DIALOG) mode = Mode.HOME_PANEL;
+                else if (mode == Mode.HOME_PANEL) mode = Mode.DIALOG;
             }
         });
 
@@ -83,7 +97,6 @@ public class Application implements Observer {
             public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
-                    mainForm.changeModeToDialog();
                     if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendSideLook.getFriend().getAvatarAsBufImage(), friendSideLook.getFriend().getNickname())) {
                         mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
                             @Override
@@ -99,10 +112,53 @@ public class Application implements Observer {
                                 }
                             }
                         });
-                    }
 
-                    Application.this.mode = Mode.DIALOG;
+                        final DialogTab dialogTab = mainForm.getCurrentDialogTab();
+                        dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (mainForm.closeDialog(dialogTab)) {
+                                    mainForm.changeMode(mode);
+                                    mode = Mode.HOME_PANEL;
+                                }
+                            }
+                        });
+                    }
                 }
+            }
+        });
+
+        mainForm.getFriendSidePanel().getSearchTextField().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
+                        Toolkit.getDefaultToolkit().beep();
+                    } else {
+                        mainForm.getFriendSidePanel().resetPanel();
+                        mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
+                    }
+                }
+            }
+        });
+
+        mainForm.getFriendSidePanel().getCancelButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainForm.getFriendSidePanel().resetPanel();
+                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
+            }
+        });
+
+        mainForm.getFriendSidePanel().getGlobalSearchButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: 12.08.2016
+                mainForm.getFriendSidePanel().resetPanel();
+                mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
+                //mainForm.getFriendSidePanel().updateGlobalSearch( СЮДА ПЕРЕДАТЬ ЛИСТ ОТ СЕРВЕРА,
+                // mainForm.getFriendSidePanel().getSearchTextField().getText();, user, client);
             }
         });
 
@@ -244,10 +300,38 @@ public class Application implements Observer {
         } else if (arg instanceof MessageCommand) {
             MessageCommand mCommand = (MessageCommand) arg;
             Message message = mCommand.getMessage();
-            mainForm.changeModeToDialog();
             Friend friend = user.getFriend(message.getNickname_From());
             if (message.getNickname_To().equals(user.getNickname()))
-                this.mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage());
+                if (!(mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage()) == null)) {
+                    mainForm.getDialogPanelArrayList().get(mainForm.getDialogPanelArrayList().size() - 1).getMessageArea().addKeyListener(new KeyAdapter() {
+                        @Override
+                        public void keyPressed(KeyEvent e) {
+                            if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                                Message myMesseage = new Message();
+                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMesseage.setNickname_From(user.getNickname());
+                                myMesseage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
+                                client.sendMessageCommand(myMesseage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                mainForm.getCurrentDialogPanel().getMessageArea().setText("");
+                            }
+                        }
+                    });
+
+                    final DialogTab dialogTab = mainForm.getDialogTabArrayList().get(mainForm.getDialogTabArrayList().size() - 1);
+                    dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (mainForm.closeDialog(dialogTab)) {
+                                mainForm.changeMode(mode);
+                                mode = Mode.HOME_PANEL;
+                            }
+                        }
+                    });
+                }
+            if (mode == Mode.HOME_PANEL) {
+                mainForm.getDialogTabsPanel().setVisible(false);
+            }
         } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
@@ -279,7 +363,6 @@ public class Application implements Observer {
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
                 mainForm.getHomePanel().updateInfo(user);
-                mainForm.getFriendSidePanel().updateInfo(user);
                 mainForm.getFriendSidePanel().updateInfo(user);
             }
         } else if (arg instanceof ChangingUserInfoStatusCommand) {

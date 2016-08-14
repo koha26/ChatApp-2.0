@@ -58,6 +58,7 @@ public class DialogPanel extends JPanel {
 
     public void showIncomingMessage(Message message) {
         messageView.showIncomingMessage(message);
+        Sound.playSound(Sound.Sounds.NEW_MESSAGE);
     }
 
     public void updateInfo(BufferedImage myPhoto, BufferedImage friendPhoto) throws IOException {

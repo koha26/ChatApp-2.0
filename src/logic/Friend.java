@@ -12,6 +12,11 @@ public class Friend extends Human{
         this.avatar = avatar;
     }
 
+    public Friend(String nickname) { // создал конструктор для теста поиска
+        super();
+        this.nickname = nickname;
+    }
+
     public Friend(String nickname, ImageSerializable avatar) {
         super();
         this.nickname = nickname;

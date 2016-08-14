@@ -3,6 +3,7 @@ package gui;
 import logic.Message;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -32,56 +33,61 @@ public class MessageView extends JPanel {
     }
 
     public void showOutcomingMessage(Message message) {
+        AbstractBorder msgBorder = new MyBorder(Color.PINK, 1, 16, 16);
+
         JPanel outMsgPanel = new JPanel();
         outMsgPanel.setBackground(new Color(0, 0, 0, 0));
-        outMsgPanel.setLayout(new BorderLayout());
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.GREEN, 2), getMessageTime(new Date()),
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.GREEN);
-        msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
-        msgBorder.setTitlePosition(TitledBorder.BOTTOM);
-        JTextArea text = new JTextArea(message.getMessageText());
-        text.setBackground(new Color(0, 0, 0, 0));
-        text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        text.setEditable(false);
-        text.setBorder(msgBorder);
-        text.setForeground(Color.WHITE);
-        text.setLineWrap(true);
-        outMsgPanel.add(text, BorderLayout.CENTER);
-        outMsgPanel.setBorder(null);
+        outMsgPanel.setLayout(new BorderLayout(15, 0));
+        outMsgPanel.setBorder(msgBorder);
+
+        JTextArea msgText = new JTextArea(message.getMessageText());
+        msgText.setBackground(new Color(0, 0, 0, 0));
+        msgText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        msgText.setEditable(false);
+        msgText.setBorder(null);
+        msgText.setForeground(Color.WHITE);
+        msgText.setLineWrap(true);
+
+        JLabel msgTime = new JLabel(getMessageTime(new Date()));
+        msgTime.setForeground(Color.PINK);
+        msgTime.setFont(Fonts.smallFont);
+
+        outMsgPanel.add(msgText, BorderLayout.CENTER);
+        outMsgPanel.add(msgTime, BorderLayout.EAST);
         messagesPanel.add(outMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(2, 2, 2, 200), 0, 0));
+
         currentPos++;
         updatePanel(messagesPanel);
     }
 
     public void showIncomingMessage(Message message) {
+        AbstractBorder msgBorder = new MyBorder(Color.GREEN, 1, 16, 16);
+
         JPanel inMsgPanel = new JPanel();
         inMsgPanel.setLayout(new BorderLayout());
         inMsgPanel.setBackground(new Color(0, 0, 0, 0));
-        JTextArea text = new JTextArea(message.getMessageText());
-        TitledBorder msgBorder = BorderFactory.createTitledBorder(new LineBorder(Color.BLUE, 2), getMessageTime(message.getDate())
-                , TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, Fonts.typingFont, Color.BLUE);
-        msgBorder.setTitleFont(new Font("Century Gothic", Font.PLAIN, 12));
-        msgBorder.setTitlePosition(TitledBorder.BOTTOM);
-        text.setBackground(new Color(0, 0, 0, 0));
-        text.setFont(new Font("Century Gothic", Font.PLAIN, 16));
-        text.setEditable(false);
-        text.setForeground(Color.WHITE);
-        text.setBorder(msgBorder);
-        inMsgPanel.add(text, BorderLayout.CENTER);
-        inMsgPanel.setBorder(null);
+        inMsgPanel.setBorder(msgBorder);
+
+        JTextArea msgText = new JTextArea(message.getMessageText());
+        msgText.setBackground(new Color(0, 0, 0, 0));
+        msgText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+        msgText.setEditable(false);
+        msgText.setForeground(Color.WHITE);
+        msgText.setBorder(null);
+
+        JLabel msgTime = new JLabel(getMessageTime(new Date()));
+
+        msgTime.setForeground(Color.GREEN);
+        msgTime.setFont(Fonts.smallFont);
+
+        inMsgPanel.add(msgTime, BorderLayout.WEST);
+        inMsgPanel.add(msgText, BorderLayout.EAST);
+
         messagesPanel.add(inMsgPanel, new GridBagConstraints(0, currentPos, 1, 1, 1, 0, GridBagConstraints.EAST, GridBagConstraints.BOTH, new Insets(2, 200, 2, 2), 0, 0));
         currentPos++;
         updatePanel(messagesPanel);
     }
 
-    public static Dimension messageToPixels(String message) { // метод, который возвращает из строки пиксели
-        AffineTransform affineTransform = new AffineTransform();
-        FontRenderContext frc = new FontRenderContext(affineTransform, true, true);
-        Font font = new Font("Century Gothic", Font.PLAIN, 16);
-        int msgWidth = (int) (font.getStringBounds(message, frc).getWidth());
-        int msgHeight = (int) (font.getStringBounds(message, frc).getHeight());
-        return new Dimension(msgWidth, msgHeight);
-    }
 
     public static String getMessageTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -90,6 +96,7 @@ public class MessageView extends JPanel {
     }
 
     void updatePanel(JPanel panel) {
+        panel.repaint();
         panel.revalidate();
         panel.updateUI();
     }
