@@ -2,7 +2,7 @@ package logic;
 
 import java.awt.image.BufferedImage;
 
-public class Friend extends Human{
+public class Friend extends Human {
     private String nickname;
     private ImageSerializable avatar;
 
@@ -18,8 +18,8 @@ public class Friend extends Human{
         this.avatar = avatar;
     }
 
-    public Friend(User user){
-        super(user.getName(),user.getSurname(),user.getCountry(),user.getCity(),user.getDateOfBirth(),user.getSex());
+    public Friend(User user) {
+        super(user.getName(), user.getSurname(), user.getCountry(), user.getCity(), user.getDateOfBirth(), user.getSex());
         this.nickname = user.getNickname();
         this.avatar = user.getAvatar();
     }
@@ -40,11 +40,11 @@ public class Friend extends Human{
         this.avatar = avatar;
     }
 
-    public BufferedImage getAvatarAsBufImage(){
+    public BufferedImage getAvatarAsBufImage() {
         return avatar.getBufferedImage();
     }
 
-    public void setAvatar(BufferedImage bufImage){
+    public void setAvatar(BufferedImage bufImage) {
         avatar = new ImageSerializable(bufImage);
     }
 }

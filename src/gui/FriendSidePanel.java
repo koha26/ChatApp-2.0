@@ -1,16 +1,10 @@
 package gui;
 
-import logic.Friend;
 import logic.User;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class FriendSidePanel extends JPanel {
 
@@ -36,6 +30,9 @@ public class FriendSidePanel extends JPanel {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new LineBorder(new Color(0, 0, 0, 150), 3));
         scrollPane.setBounds(0, 75, 240, 375);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane);
     }
 

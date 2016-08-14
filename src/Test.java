@@ -1,4 +1,8 @@
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Test {
     public static void main(String[] args) throws IOException {
@@ -23,6 +27,22 @@ public class Test {
             System.out.println(matcher3.group());
         }*/
 
+        Map<String, String > map = new HashMap<>();
+        map.put("one", "Maxxx");
+        map.put("two", "BigMax");
+        map.put("three", "asdasMaXxx");
+        map.put("four", "Maox");
+        map.put("five", "koatys");
+
+        String nickname = ".*Max.*";
+        Pattern pattern = Pattern.compile(nickname.toLowerCase());
+        Matcher matcher;
+        for (String nick:map.values()) {
+            matcher = pattern.matcher(nick.toLowerCase());
+            if (matcher.find()){
+                System.out.println(nick);
+            }
+        }
     }
 
 }

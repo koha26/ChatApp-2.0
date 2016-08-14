@@ -84,6 +84,9 @@ public class HomePanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         topPanel.setBounds(30, 10, 900, 320);
         scrollPane.setBounds(170, 350, 620, 150);

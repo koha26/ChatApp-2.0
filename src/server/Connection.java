@@ -1,6 +1,6 @@
 package server;
 
-import logic.command.*;
+import logic.command.Command;
 
 import java.io.*;
 import java.net.Socket;
@@ -47,7 +47,7 @@ public class Connection {
     }
 
     public void close() throws IOException {
-        if (!socket.isClosed()){
+        if (!socket.isClosed()) {
             socket.close();
         }
     }
@@ -55,10 +55,8 @@ public class Connection {
     public boolean isOpen() {
         if (!socket.isConnected()) {
             return false;
-        } else {
-            if (socket.isClosed()) {
-                return false;
-            }
+        } else if (socket.isClosed()) {
+            return false;
         }
         return true;
     }
@@ -70,7 +68,7 @@ public class Connection {
 
     public Command receiveCommand() throws IOException, ClassNotFoundException {
         Object receiveObject = inputStream.readObject();
-        if (receiveObject instanceof Command){
+        if (receiveObject instanceof Command) {
             return (Command) receiveObject;
         } else
             return null;

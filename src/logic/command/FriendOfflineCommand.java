@@ -2,7 +2,8 @@ package logic.command;
 
 public class FriendOfflineCommand extends Command {
     private String nicknameFriend;
-    public FriendOfflineCommand(String nicknameFriend){
+
+    public FriendOfflineCommand(String nicknameFriend) {
         this.nicknameFriend = nicknameFriend;
     }
 

@@ -224,6 +224,7 @@ public class Application implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof LoginStatusCommand) {
+
             LoginStatusCommand lsCommand = (LoginStatusCommand) arg;
             if (lsCommand.getUser() != null) {
                 user = lsCommand.getUser();
@@ -232,7 +233,9 @@ public class Application implements Observer {
             } else {
                 startForm.showNotificationLabel(lsCommand.getExceptionDescription(), Color.RED);
             }
+
         } else if (arg instanceof RegistrationStatusCommand) {
+
             RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) arg;
             if (rsCommand.isRegistered() && rsCommand.getUser() != null) {
                 user = rsCommand.getUser();
@@ -241,13 +244,16 @@ public class Application implements Observer {
             } else {
                 startForm.showNotificationLabel(rsCommand.getExceptionDescription(), Color.RED);
             }
+
         } else if (arg instanceof MessageCommand) {
+
             MessageCommand mCommand = (MessageCommand) arg;
             Message message = mCommand.getMessage();
             mainForm.changeModeToDialog();
             Friend friend = user.getFriend(message.getNickname_From());
             if (message.getNickname_To().equals(user.getNickname()))
                 this.mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage());
+
         } else if (arg instanceof FriendshipRequestCommand) {
 
             FriendshipRequestCommand srCommand = (FriendshipRequestCommand) arg;
@@ -274,7 +280,9 @@ public class Application implements Observer {
             });
 
             mainForm.addNotificationPanel(notification);
+
         } else if (arg instanceof AcceptFriendshipCommand) {
+
             AcceptFriendshipCommand acCommand = (AcceptFriendshipCommand) arg;
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
@@ -282,12 +290,41 @@ public class Application implements Observer {
                 mainForm.getFriendSidePanel().updateInfo(user);
                 mainForm.getFriendSidePanel().updateInfo(user);
             }
+
         } else if (arg instanceof ChangingUserInfoStatusCommand) {
+
             ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) arg;
             user = cuisCommand.getChangedUser();
             mainForm.getHomePanel().updateInfo(user);
             mainForm.getFriendSidePanel().updateInfo(user);
+
+        } else if (arg instanceof SearchStatusCommand) {
+
+            SearchStatusCommand ssCommand = (SearchStatusCommand) arg;
+            if (ssCommand.getResultList().size() > 0) {
+                //mainForm.getFriendSidePanel().updateGlobalSearch(ssCommand.getResultList(),user,client);
+            }
+
+        } else if (arg instanceof FriendOfflineCommand) {
+            //TODO сделать друга оффлайн
+        } else if (arg instanceof FriendOnlineCommand) {
+            //TODO сделать друга онлайн
+        } else if (arg instanceof HistoryPacketCommand) {
+
+            HistoryPacketCommand historyPacket = (HistoryPacketCommand) arg;
+            //TODO добавление этой истории в MessageView
+
+        } else if (arg instanceof FriendshipEndStatusCommand) {
+
+            FriendshipEndStatusCommand fesCommand = (FriendshipEndStatusCommand) arg;
+            //TODO обновить юзера + вывести описание
+
+        } else if (arg instanceof DisconnectCommand) {
+
+            //TODO Оповещение пользователя и закрытие программы или выход ее в меню регистрации
+
         }
+
     }
 
     public static void main(String[] args) throws IOException {
