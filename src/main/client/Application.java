@@ -2,6 +2,7 @@ package main.client;
 
 import gui.*;
 import gui.Notifications.FriendshipRequestNotification;
+import gui.Sound;
 import logic.*;
 import logic.command.*;
 import server.Client;

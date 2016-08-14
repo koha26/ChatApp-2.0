@@ -1,5 +1,7 @@
 package gui.Notifications;
 
+import gui.Fonts;
+
 import javax.swing.*;
 import java.awt.*;
 
