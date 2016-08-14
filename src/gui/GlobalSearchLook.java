@@ -30,7 +30,7 @@ public class GlobalSearchLook extends JPanel {
     public GlobalSearchLook(Friend friend) {
         this.friend = friend;
 
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout(10, 0));
         setBackground(new Color(0, 0, 0, 100));
         setBorder(null);
 
@@ -48,15 +48,17 @@ public class GlobalSearchLook extends JPanel {
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setFont(Fonts.typingFont);
 
-        addButton = new JButton("+");
+        addButton = new JButton("    ");
         addButton.setContentAreaFilled(false);
-        addButton.setForeground(Color.WHITE);
+        addButton.setForeground(Color.GREEN);
+        addButton.setIcon(new ImageIcon("add.png"));
+        addButton.setDisabledIcon(new ImageIcon("add_disabled.png"));
         addButton.setFocusPainted(false);
         addButton.setBorder(null);
         addButton.setFont(Fonts.typingFont);
 
-        add(photoLabel);
-        add(nickLabel);
-        add(addButton);
+        add(photoLabel, BorderLayout.WEST);
+        add(nickLabel, BorderLayout.CENTER);
+        add(addButton, BorderLayout.EAST);
     }
 }
