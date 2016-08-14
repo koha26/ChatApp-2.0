@@ -33,7 +33,7 @@ public class MainForm extends JFrame {
     private final ImageIcon plusButIconEntered = new ImageIcon("images/mainform/plus_entered.png");
     private final ImageIcon homeButIcon = new ImageIcon("images/mainform/home.png");
     private final ImageIcon homeButIconEntered = new ImageIcon("images/mainform/home_entered.png");
-    private final ImageIcon dialogButIcon = new ImageIcon("images/mainform/msg.png");
+    private final ImageIcon dialogButIcon = new ImageIcon("images/mainform/msg1.png");
     private final ImageIcon dialogButIconEntered = new ImageIcon("images/mainform/msg_entered.png");
     private final ImageIcon friendSideOpenIcon = new ImageIcon("images/mainform/sidepnl_open.png");
     private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
@@ -489,7 +489,6 @@ public class MainForm extends JFrame {
     public FriendSidePanel getFriendSidePanel() {
         return friendSidePanel;
     }
-
 
     public ArrayList<DialogPanel> getDialogPanelArrayList() {
         return dialogPanelArrayList;

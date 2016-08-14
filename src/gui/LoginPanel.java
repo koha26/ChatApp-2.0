@@ -7,9 +7,6 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import static logic.Constants.SCRDIM_KX;
-import static logic.Constants.SCRDIM_KY;
-
 public class LoginPanel extends JPanel {
     private JLabel nickLabel, passwordLabel;
     private JTextField nickField;
@@ -41,13 +38,13 @@ public class LoginPanel extends JPanel {
         this.setOpaque(false);
 
         nickLabel = new JLabel("Enter your nick");
-        nickLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
+        nickLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
         nickLabel.setBackground(new Color(0, 0, 0, 0));
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         passwordLabel = new JLabel("Enter your password");
-        passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, (int) (32 * SCRDIM_KX)));
+        passwordLabel.setFont(new Font("Century Gothic", Font.PLAIN, 32));
         passwordLabel.setBackground(new Color(0, 0, 0, 0));
         passwordLabel.setForeground(Color.WHITE);
         passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,15 +81,15 @@ public class LoginPanel extends JPanel {
 
         regButton = GUIStandartOperations.ButtonStartOperations(null, null, true);
         regButton.setText("Don't have an account yet? Click here for registration");
-        regButton.setFont(new Font("Century Gothic", Font.PLAIN, (int) (12 * SCRDIM_KX)));
+        regButton.setFont(new Font("Century Gothic", Font.PLAIN, 12));
         regButton.setForeground(Color.WHITE);
 
-        nickLabel.setBounds((int) (165 * SCRDIM_KX), (int) (75 * SCRDIM_KY), (int) (250 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        passwordLabel.setBounds((int) (120 * SCRDIM_KX), (int) (130 * SCRDIM_KY), (int) (340 * SCRDIM_KX), (int) (35 * SCRDIM_KY));
-        nickField.setBounds((int) (480 * SCRDIM_KX), (int) (75 * SCRDIM_KY), (int) (240 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        passwordField.setBounds((int) (480 * SCRDIM_KX), (int) (130 * SCRDIM_KY), (int) (240 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
-        loginButton.setBounds((int) (380 * SCRDIM_KX), (int) (180 * SCRDIM_KY), (int) (185 * SCRDIM_KX), (int) (50 * SCRDIM_KY));
-        regButton.setBounds((int) (270 * SCRDIM_KX), (int) (240 * SCRDIM_KY), (int) (380 * SCRDIM_KX), (int) (30 * SCRDIM_KY));
+        nickLabel.setBounds(165, 75, 250, 30);
+        passwordLabel.setBounds(120, 130, 340, 35);
+        nickField.setBounds(480, 75, 240, 30);
+        passwordField.setBounds(480, 130, 240, 30);
+        loginButton.setBounds(380, 180, 185, 50);
+        regButton.setBounds(270, 240, 380, 30);
 
         this.add(nickLabel);
         this.add(passwordLabel);
