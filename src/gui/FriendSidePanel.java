@@ -157,7 +157,7 @@ public class FriendSidePanel extends JPanel {
         currentPos += 75;
 
         for (int i = 0; i < userList.size(); i++) {
-            GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
+            final GlobalSearchLook foundUser = new GlobalSearchLook(userList.get(i));
             foundUser.getAddButton().addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
