@@ -42,7 +42,7 @@ public class MyScrollBar extends BasicScrollBarUI {
 
         g.translate(trackBounds.x, trackBounds.y);
         //g.setColor(new Color(35, 45, 25, 255));
-        g.setColor(new Color(0, 0, 0, 255));
+        g.setColor(new Color(0, 0, 0, 200));
         g.fillRect(0,0,trackBounds.width,trackBounds.height);//квадрат
 
     }

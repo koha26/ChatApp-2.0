@@ -75,7 +75,7 @@ public class MainForm extends JFrame {
         dialogTabArrayList = new ArrayList<>();
 
         bigPanel = new JPanel(null);
-        bigPanel.setSize(1470, 600);
+        bigPanel.setSize(1210, 600);
         bigPanel.setOpaque(false);
         bigPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -492,7 +492,6 @@ public class MainForm extends JFrame {
             }
             repaint();
         }
-
     }
 
     public void friendPanelMode() {

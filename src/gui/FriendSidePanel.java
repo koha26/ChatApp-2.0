@@ -84,7 +84,6 @@ public class FriendSidePanel extends JPanel {
         friendsPanel = new JPanel(null);
         friendsPanel.setOpaque(false);
         friendsPanel.setBorder(null);
-        friendsPanel.setPreferredSize(new Dimension(240, 420));
         scrollPane = new JScrollPane(friendsPanel);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -121,6 +120,8 @@ public class FriendSidePanel extends JPanel {
             }
         }
 
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
+
         repaint();
         revalidate();
         updateUI();
@@ -142,12 +143,14 @@ public class FriendSidePanel extends JPanel {
             }
         }
 
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
+
         repaint();
         revalidate();
         updateUI();
     }
 
-    public void updateGlobalSearch(ArrayList<PotentialFriend> userList, final User user, final Client client) {
+    public void updateGlobalSearch(final ArrayList<PotentialFriend> userList, final User user, final Client client) {
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */
@@ -165,10 +168,23 @@ public class FriendSidePanel extends JPanel {
                     foundUser.getAddButton().setEnabled(false);
                 }
             });
+
+            final int finalI = i;
+            foundUser.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    MiniFriendLook miniFriendLook = new MiniFriendLook(userList.get(finalI));
+                    miniFriendLook.setVisible(true);
+                }
+            });
+
             foundUser.setBounds(7, currentPos, 220, 60);
             friendsPanel.add(foundUser);
             currentPos += 65;
         }
+
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
 
         repaint();
         revalidate();

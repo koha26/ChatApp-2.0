@@ -52,8 +52,7 @@ public class RegPanel extends JPanel {
     }
 
     public static void setBufImage(BufferedImage bufImage2) {
-        bufImage = bufImage2;
-        avatar.setIcon(new ImageIcon(bufImage));
+        avatar.setIcon(new ImageIcon(bufImage2));
     }
 
     public void changeView() {
@@ -409,5 +408,21 @@ public class RegPanel extends JPanel {
         this.add(dayBox);
         this.add(regButton);
         this.add(backButton);
+    }
+
+    public void clearRegPanel() {
+        avatar.setIcon(new ImageIcon(bufImage));
+        nicknameField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        nameField.setText("");
+        surnameField.setText("");
+        sexBox.setSelectedIndex(0);
+        yearBox.setSelectedIndex(0);
+        monthBox.setSelectedIndex(0);
+        dayBox.setSelectedIndex(0);
+        isEntered = true;
+        changeView();
+        additionalCheckBox.setSelected(false);
     }
 }

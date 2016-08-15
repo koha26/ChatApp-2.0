@@ -92,6 +92,28 @@ public class Application implements Observer {
             }
         });
 
+      /*  mainForm.getFriendSidePanel().getFriendsPanel().addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                boolean isEntered = false;
+                System.out.println(e.getPoint());
+                System.out.println(e.getComponent().getComponentAt(e.getPoint().getLocation()));
+                if (e.getX()>e.getComponent().getComponentAt(e.getPoint()).getX()){
+                    isEntered = true;
+                }
+                while(!isEntered) {
+                    FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+                    Friend potentialFriend = friendSideLook.getFriend();
+                    PotentialFriendLook potentialFriendLook = new PotentialFriendLook(potentialFriend);
+                    potentialFriendLook.setVisible(true);
+                    potentialFriendLook.setLocation(e.getLocationOnScreen());
+                    System.out.println("Зашло");
+                    System.out.println(e.getLocationOnScreen());
+                }
+            }
+        });*/
+
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -291,7 +313,7 @@ public class Application implements Observer {
                 showInfoMessage(startForm, "You entered as " + user.getNickname() + "! Your ID: " + user.getUniqueID());
                 setMode(Mode.MAINFROM_ON); // есди вошли удачно - то меняем режим работы на мейн форм
             } else {
-                startForm.showNotificationLabel(lsCommand.getExceptionDescription(), Color.RED);
+                StartForm.showNotificationLabel(lsCommand.getExceptionDescription(), Color.RED);
             }
 
         } else if (arg instanceof RegistrationStatusCommand) {
@@ -299,10 +321,11 @@ public class Application implements Observer {
             RegistrationStatusCommand rsCommand = (RegistrationStatusCommand) arg;
             if (rsCommand.isRegistered() && rsCommand.getUser() != null) {
                 user = rsCommand.getUser();
-                startForm.showNotificationLabel("Your account is registered! Your ID " + user.getUniqueID() + ". Please, log in using your nickname and password!", Color.GREEN);
+                StartForm.showNotificationLabel("Your account is registered! Your ID " + user.getUniqueID() + ". Please, log in using your nickname and password!", Color.GREEN);
                 startForm.setMode(Mode.LOGIN_ON, user.getNickname());
+                startForm.getRegPanel().clearRegPanel();
             } else {
-                startForm.showNotificationLabel(rsCommand.getExceptionDescription(), Color.RED);
+                StartForm.showNotificationLabel(rsCommand.getExceptionDescription(), Color.RED);
             }
 
         } else if (arg instanceof MessageCommand) {
@@ -390,7 +413,7 @@ public class Application implements Observer {
 
             SearchStatusCommand ssCommand = (SearchStatusCommand) arg;
             if (ssCommand.getResultList().size() > 0) {
-                mainForm.getFriendSidePanel().updateGlobalSearch((ArrayList<PotentialFriend>) ssCommand.getResultList(),user,client);
+                mainForm.getFriendSidePanel().updateGlobalSearch((ArrayList<PotentialFriend>) ssCommand.getResultList(), user, client);
             } else {
                 mainForm.getFriendSidePanel().userIsNotFound();
             }
