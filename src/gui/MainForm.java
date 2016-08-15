@@ -22,6 +22,7 @@ public class MainForm extends JFrame {
     private JPanel bigPanel;
     private NotificationPanel notificationPanel;
     private JPanel dialogTabsPanel;
+    private JPanel noConversationsPanel;
     private Point mouseDownCompCoords = new Point();
     private final ImageIcon settingsButIcon = new ImageIcon("images/mainform/settings_button.png");
     private final ImageIcon settingsButIconEntered = new ImageIcon("images/mainform/settings_button_entered.png");
@@ -35,6 +36,8 @@ public class MainForm extends JFrame {
     private final ImageIcon homeButIconEntered = new ImageIcon("images/mainform/home_entered.png");
     private final ImageIcon dialogButIcon = new ImageIcon("images/mainform/msg.png");
     private final ImageIcon dialogButIconEntered = new ImageIcon("images/mainform/msg_entered.png");
+    private final ImageIcon newDialogButIcon = new ImageIcon("images/mainform/new_msg.png");
+    private final ImageIcon newDialogButIconEntered = new ImageIcon("images/mainform/new_msg_entered.png");
     private final ImageIcon friendSideOpenIcon = new ImageIcon("images/mainform/sidepnl_open.png");
     private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
     private final ImageIcon friendSideOpenIconEntered = new ImageIcon("images/mainform/sidepnl_open_entr.png");
@@ -131,23 +134,39 @@ public class MainForm extends JFrame {
             }
         });
 
-        settingsButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (currentDialogPanel.isVisible()) {
-                    currentDialogPanel.setVisible(false);
-                    currentDialogTab.setVisible(false);
-                } else {
-                    currentDialogPanel.setVisible(true);
-                    currentDialogTab.setVisible(true);
-                }
-            }
-        });
-
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
         friendSidePanel.setBounds(970, 75, 240, 500);
         bigPanel.add(friendSidePanel);
+
+        noConversationsPanel = new JPanel(null);
+        noConversationsPanel.setOpaque(false);
+        noConversationsPanel.setBackground(new Color(0, 0, 0, 0));
+        noConversationsPanel.setBounds(0, 0, 960, 600);
+        JLabel noConversationLabel = new JLabel("You have no active conversations now...");
+        noConversationLabel.setFont(Fonts.nickFont);
+        noConversationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        noConversationLabel.setForeground(Color.WHITE);
+        noConversationLabel.setBackground(new Color(0, 0, 0, 0));
+        noConversationLabel.setBounds(0, 300, 960, 50);
+
+        JButton noConversationsButton = GUIStandartOperations.ButtonStartOperations(null, null, false);
+        noConversationsButton.setText("<HTML><U>It's time to begin, isn't it?</U></HTML>");
+        noConversationsButton.setFont(Fonts.nickFont);
+        noConversationsButton.setBounds(0, 350, 960, 50);
+        noConversationsButton.setHorizontalAlignment(SwingConstants.CENTER);
+        noConversationsButton.setForeground(Color.RED);
+        noConversationsButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isFriendPanelOpened = true;
+                friendPanelMode();
+            }
+        });
+
+        noConversationsPanel.add(noConversationsButton);
+        noConversationsPanel.add(noConversationLabel);
+        noConversationsPanel.setVisible(false);
 
         homeButton.setBounds(538, 8, 64, 64);
         topPanel.add(homeButton);
@@ -169,8 +188,8 @@ public class MainForm extends JFrame {
         dialogTabsPanel.setVisible(false);
 
         bigPanel.add(dialogTabsPanel);
-
         bigPanel.add(homePanel);
+        bigPanel.add(noConversationsPanel);
 
         this.add(bigPanel);
 
@@ -322,10 +341,27 @@ public class MainForm extends JFrame {
             }
         });
 
+        noConversationsPanel.setVisible(false);
+
         return true;
     }
 
-    public DialogPanel receiveIncomingMessage(Message message, BufferedImage myPhoto, BufferedImage friendPhoto) {
+    public DialogPanel receiveIncomingMessage(Message message, BufferedImage myPhoto, BufferedImage friendPhoto, Mode mode) {
+        if (mode == Mode.HOME_PANEL) {
+            homeButton.setIcon(newDialogButIcon);
+            homeButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    homeButton.setIcon(newDialogButIconEntered);
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    homeButton.setIcon(newDialogButIcon);
+                }
+            });
+        }
+
         for (int i = 0; i < dialogTabArrayList.size(); i++) {
             if (message.getNickname_From().equals(dialogTabArrayList.get(i).getNickButton().getText())) {
                 if (dialogTabArrayList.get(i).equals(currentDialogTab)) {
@@ -380,21 +416,43 @@ public class MainForm extends JFrame {
             }
         });
         dialogPanel.showIncomingMessage(message);
+
+        noConversationsPanel.setVisible(false);
+
         return dialogPanel;
     }
 
     public void changeMode(Mode mode) {
         if (mode == Mode.DIALOG) {
-            homeButton.setIcon(dialogButIcon);
+            boolean newMessages = false;
+            for (int i = 0; i < dialogTabArrayList.size(); i++) {
+                if (dialogTabArrayList.get(i).getNewMessageLabel().isVisible()) {
+                    newMessages = true;
+                }
+            }
+            if (newMessages) {
+                homeButton.setIcon(newDialogButIcon);
+            } else {
+                homeButton.setIcon(dialogButIcon);
+            }
+            final boolean finalNewMessages = newMessages;
             homeButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
-                    homeButton.setIcon(dialogButIconEntered);
+                    if (finalNewMessages) {
+                        homeButton.setIcon(newDialogButIconEntered);
+                    } else {
+                        homeButton.setIcon(dialogButIconEntered);
+                    }
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    homeButton.setIcon(dialogButIcon);
+                    if (finalNewMessages) {
+                        homeButton.setIcon(newDialogButIcon);
+                    } else {
+                        homeButton.setIcon(dialogButIcon);
+                    }
                 }
             });
 
@@ -404,8 +462,11 @@ public class MainForm extends JFrame {
             homePanel.setVisible(true);
             dialogTabsPanel.setVisible(false);
             isFriendPanelOpened = false;
+            noConversationsPanel.setVisible(false);
             friendPanelMode();
-        } else if (mode == Mode.HOME_PANEL) {
+        } else if (mode == Mode.HOME_PANEL)
+
+        {
             homeButton.setIcon(homeButIcon);
             homeButton.addMouseListener(new MouseAdapter() {
                 @Override
@@ -423,12 +484,15 @@ public class MainForm extends JFrame {
             homePanel.setVisible(false);
             if (dialogTabArrayList.size() > 0) {
                 dialogTabsPanel.setVisible(true);
+            } else {
+                noConversationsPanel.setVisible(true);
             }
             if (!(currentDialogPanel == null)) {
                 currentDialogPanel.setVisible(true);
             }
             repaint();
         }
+
     }
 
     public void friendPanelMode() {

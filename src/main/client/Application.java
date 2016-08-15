@@ -312,7 +312,7 @@ public class Application implements Observer {
             Friend friend = user.getFriend(message.getNickname_From());
             if (message.getNickname_To().equals(user.getNickname()))
 
-                if (!(mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage()) == null)) {
+                if (!(mainForm.receiveIncomingMessage(message, user.getAvatarAsBufImage(), friend.getAvatarAsBufImage(), mode) == null)) {
                     mainForm.getDialogPanelArrayList().get(mainForm.getDialogPanelArrayList().size() - 1).getMessageArea().addKeyListener(new KeyAdapter() {
                         @Override
                         public void keyPressed(KeyEvent e) {
