@@ -26,11 +26,11 @@ public class StartForm extends JFrame {
         if (!isChanged) {
             this.setSize(960, 860);
             exitButton.setBounds(430, 760, 100, 50);
-            this.setLocationRelativeTo(null);
+            this.setLocation(this.getLocationOnScreen());
         } else {
             setSize(960, 550);
             exitButton.setBounds(430, 450, 100, 50);
-            this.setLocationRelativeTo(null);
+            this.setLocation(this.getLocationOnScreen());
         }
     }
 
@@ -163,6 +163,7 @@ public class StartForm extends JFrame {
         exitButton.setBounds(430, 450, 100, 50);
         this.setLocationRelativeTo(null);
         loginPanel.getNickField().setText(nickname);
+        loginPanel.getPasswordField().setText("");
         mode = Mode.LOGIN_ON;
     }
 

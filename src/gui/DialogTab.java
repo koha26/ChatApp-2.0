@@ -26,6 +26,9 @@ public class DialogTab extends JPanel {
         nickButton.setFocusPainted(false);
         nickButton.setContentAreaFilled(false);
 
+      /*  FontMetrics fontMetrics = nickButton.getGraphics().getFontMetrics();
+        System.out.println(fontMetrics);*/
+
         newMessageLabel.setBackground(new Color(0, 0, 0, 0));
         newMessageLabel.setOpaque(false);
         newMessageLabel.setBorder(null);

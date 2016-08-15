@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
-
 public class MyBorder extends AbstractBorder {
 
     private Color color;

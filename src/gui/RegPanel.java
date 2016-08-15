@@ -1,6 +1,5 @@
 package gui;
 
-
 import logic.Constants;
 import logic.Sex;
 
@@ -53,8 +52,7 @@ public class RegPanel extends JPanel {
     }
 
     public static void setBufImage(BufferedImage bufImage2) {
-        bufImage = bufImage2;
-        avatar.setIcon(new ImageIcon(bufImage));
+        avatar.setIcon(new ImageIcon(bufImage2));
     }
 
     public void changeView() {
@@ -366,7 +364,7 @@ public class RegPanel extends JPanel {
         nicknameField.setBounds(220, 115, 220, 25);
         passwordLabel.setBounds(510, 115, 80, 30);
         passwordField.setBounds(600, 115, 220, 25);
-        confirmPasswordLabel.setBounds(450, 155, 140, 3);
+        confirmPasswordLabel.setBounds(450, 155, 140, 30);
         confirmPasswordField.setBounds(600, 155, 220, 25);
 
         additionalLabel.setBounds(130, 220, 350, 30);
@@ -410,5 +408,21 @@ public class RegPanel extends JPanel {
         this.add(dayBox);
         this.add(regButton);
         this.add(backButton);
+    }
+
+    public void clearRegPanel() {
+        avatar.setIcon(new ImageIcon(bufImage));
+        nicknameField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
+        nameField.setText("");
+        surnameField.setText("");
+        sexBox.setSelectedIndex(0);
+        yearBox.setSelectedIndex(0);
+        monthBox.setSelectedIndex(0);
+        dayBox.setSelectedIndex(0);
+        isEntered = true;
+        changeView();
+        additionalCheckBox.setSelected(false);
     }
 }

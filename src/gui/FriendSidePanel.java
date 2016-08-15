@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-
 public class FriendSidePanel extends JPanel {
 
     private JScrollPane scrollPane;
@@ -82,9 +81,8 @@ public class FriendSidePanel extends JPanel {
         searchPanel.setBounds(0, 34, 240, 30);
         add(searchPanel);
 
-        friendsPanel = new JPanel();
+        friendsPanel = new JPanel(null);
         friendsPanel.setOpaque(false);
-        friendsPanel.setLayout(null);
         friendsPanel.setBorder(null);
         scrollPane = new JScrollPane(friendsPanel);
         scrollPane.setOpaque(false);
@@ -93,8 +91,9 @@ public class FriendSidePanel extends JPanel {
         scrollPane.setBounds(0, 75, 240, 420);
         scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        this.add(scrollPane);
 
         globalSearchButton = new JButton("<html> Search in ChatApp </html>");
         globalSearchButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -121,6 +120,8 @@ public class FriendSidePanel extends JPanel {
             }
         }
 
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
+
         repaint();
         revalidate();
         updateUI();
@@ -142,12 +143,14 @@ public class FriendSidePanel extends JPanel {
             }
         }
 
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
+
         repaint();
         revalidate();
         updateUI();
     }
 
-    public void updateGlobalSearch(ArrayList<PotentialFriend> userList, final User user, final Client client) {
+    public void updateGlobalSearch(final ArrayList<PotentialFriend> userList, final User user, final Client client) {
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */
@@ -165,10 +168,23 @@ public class FriendSidePanel extends JPanel {
                     foundUser.getAddButton().setEnabled(false);
                 }
             });
+
+            final int finalI = i;
+            foundUser.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    MiniFriendLook miniFriendLook = new MiniFriendLook(userList.get(finalI));
+                    miniFriendLook.setVisible(true);
+                }
+            });
+
             foundUser.setBounds(7, currentPos, 220, 60);
             friendsPanel.add(foundUser);
             currentPos += 65;
         }
+
+        friendsPanel.setPreferredSize(new Dimension(240, user.getFriendsList().size() * 65 + 7));
 
         repaint();
         revalidate();
