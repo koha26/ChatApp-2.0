@@ -111,6 +111,12 @@ public class MainForm extends JFrame {
         plusButton = GUIStandartOperations.ButtonStartOperations(plusButIcon, plusButIconEntered, true);
         homeButton = GUIStandartOperations.ButtonStartOperations(dialogButIcon, dialogButIconEntered, true);
 
+        changeAccButton.setToolTipText("Change account");
+        settingsButton.setToolTipText("Your personal settings");
+        contactsButton.setToolTipText("Contacts");
+        exitButton.setToolTipText("Exit ChatApp");
+        homeButton.setToolTipText("Dialog page / Home");
+
         friendPanelButton = new JButton();
         friendPanelButton.setOpaque(false);
         friendPanelButton.setBorder(null);
@@ -171,21 +177,20 @@ public class MainForm extends JFrame {
         noConversationsPanel.add(noConversationLabel);
         noConversationsPanel.setVisible(false);
 
-        final int shiftRight = 60;
+        final int shiftRight = 90;
 
-        changeAccButton.setBounds(375 + shiftRight, 6, 64, 64);
+        changeAccButton.setBounds(420 + shiftRight, 6, 64, 64);
         topPanel.add(changeAccButton);
-        homeButton.setBounds(450 + shiftRight, 6, 64, 64);
+        homeButton.setBounds(650 + shiftRight, 6, 64, 64);
         topPanel.add(homeButton);
-        settingsButton.setBounds(525 + shiftRight, 0, 64, 64);
+        settingsButton.setBounds(550 + shiftRight, 0, 64, 64);
         topPanel.add(settingsButton);
         contactsButton.setBounds(600 + shiftRight, 0, 64, 64);
         topPanel.add(contactsButton);
-        exitButton.setBounds(675 + shiftRight, 0, 64, 64);
+        exitButton.setBounds(470 + shiftRight, 0, 64, 64);
         topPanel.add(exitButton);
-        friendPanelButton.setBounds(750 + shiftRight, 6, 64, 64);
+        friendPanelButton.setBounds(730 + shiftRight, 6, 64, 64);
         topPanel.add(friendPanelButton);
-
 
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
