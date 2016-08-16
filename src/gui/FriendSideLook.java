@@ -4,6 +4,7 @@ import logic.Friend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,13 @@ public class FriendSideLook extends JPanel {
     private JLabel photoLabel, nickLabel;
     private Friend friend;
     private MiniFriendLook friendLook;
+    private JButton deleteButton;
+    private ImageIcon deleteButIcon = new ImageIcon("images/mainform/delete.png");
+    private ImageIcon deleteButIconEntered = new ImageIcon("images/mainform/delete_entered.png");
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
 
     public Friend getFriend() {
         return friend;
@@ -21,7 +29,7 @@ public class FriendSideLook extends JPanel {
 
     public FriendSideLook(Friend friend) {
         this.friend = friend;
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout(15, 0));
         setBackground(new Color(0, 0, 0, 100));
         setBorder(null);
 
@@ -39,13 +47,34 @@ public class FriendSideLook extends JPanel {
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setFont(Fonts.typingFont);
 
-        add(photoLabel);
-        add(nickLabel);
+        deleteButton = new JButton();
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.setIcon(new ImageIcon("delete.png"));
+        deleteButton.setBorder(null);
+        deleteButton.setFocusPainted(false);
+        deleteButton.setOpaque(false);
+        deleteButton.setBackground(new Color(0, 0, 0, 150));
+        deleteButton.setForeground(Color.RED);
+        deleteButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                deleteButton.setIcon(deleteButIconEntered);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                deleteButton.setIcon(deleteButIcon);
+            }
+        });
+
+        add(photoLabel, BorderLayout.WEST);
+        add(nickLabel, BorderLayout.CENTER);
+        add(deleteButton, BorderLayout.EAST);
 
         friendLook = new MiniFriendLook(friend);
         friendLook.setVisible(false);
 
-        this.addMouseMotionListener(new MouseMotionAdapter() {
+        photoLabel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
@@ -62,5 +91,17 @@ public class FriendSideLook extends JPanel {
 
     private Point getLocationOfLook() {
         return this.getLocationOnScreen();
+    }
+
+    public JLabel getPhotoLabel() {
+        return photoLabel;
+    }
+
+    public JLabel getNickLabel() {
+        return nickLabel;
+    }
+
+    public MiniFriendLook getFriendLook() {
+        return friendLook;
     }
 }

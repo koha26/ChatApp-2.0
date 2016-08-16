@@ -116,7 +116,7 @@ public class Application implements Observer {
 
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
                     if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendSideLook.getFriend().getAvatarAsBufImage(), friendSideLook.getFriend().getNickname())) {
@@ -169,7 +169,7 @@ public class Application implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainForm.getFriendSidePanel().resetPanel();
-                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().updateInfo(user, client);
                 mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
             }
         });
@@ -287,7 +287,7 @@ public class Application implements Observer {
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
                         mainForm.getHomePanel().updateInfo(user);
-                        mainForm.getFriendSidePanel().updateInfo(user);
+                        mainForm.getFriendSidePanel().updateInfo(user, client);
                         Application.this.mode = Mode.HOME_PANEL;
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();
@@ -399,7 +399,7 @@ public class Application implements Observer {
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
                 mainForm.getHomePanel().updateInfo(user);
-                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().updateInfo(user, client);
             }
 
         } else if (arg instanceof ChangingUserInfoStatusCommand) {
@@ -407,7 +407,7 @@ public class Application implements Observer {
             ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) arg;
             user = cuisCommand.getChangedUser();
             mainForm.getHomePanel().updateInfo(user);
-            mainForm.getFriendSidePanel().updateInfo(user);
+            mainForm.getFriendSidePanel().updateInfo(user, client);
 
         } else if (arg instanceof SearchStatusCommand) {
 
@@ -430,7 +430,12 @@ public class Application implements Observer {
         } else if (arg instanceof FriendshipEndStatusCommand) {
 
             FriendshipEndStatusCommand fesCommand = (FriendshipEndStatusCommand) arg;
-            //TODO обновить юзера + вывести описание
+            user = fesCommand.getChangedUser();
+            String description = fesCommand.getDescription();
+            JOptionPane.showMessageDialog(mainForm, description);
+            mainForm.getHomePanel().updateInfo(user);
+            mainForm.getFriendSidePanel().resetPanel();
+            mainForm.getFriendSidePanel().updateInfo(user, client);
 
         } else if (arg instanceof DisconnectCommand) {
 

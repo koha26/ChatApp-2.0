@@ -8,10 +8,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class FriendSidePanel extends JPanel {
@@ -88,7 +85,7 @@ public class FriendSidePanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new LineBorder(new Color(0, 0, 0, 150), 3));
-        scrollPane.setBounds(0, 75, 240, 420);
+        scrollPane.setBounds(0, 75, 247, 420);
         scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -110,10 +107,23 @@ public class FriendSidePanel extends JPanel {
         thread.start();
     }
 
-    public void updateInfo(User user) {
+    public void updateInfo(User user, Client client) {
         if (user.getFriendsList().size() > 0) {
             for (int i = 0; i < user.getFriendsList().size(); i++) {
                 FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
+                friend.getDeleteButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int selectedOption = JOptionPane.showConfirmDialog(null,
+                                "Are you sure you want to delete " + friend.getNickLabel().getText() + "?",
+                                "Choose",
+                                JOptionPane.YES_NO_OPTION);
+                        if (selectedOption == JOptionPane.YES_OPTION) {
+                            client.sendFriendshipEndCommand(user.getNickname(), friend.getNickLabel().getText());
+                            updateInfo(user, client);
+                        }
+                    }
+                });
                 friend.setBounds(7, currentPos, 220, 60);
                 friendsPanel.add(friend);
                 currentPos += 65;
@@ -148,6 +158,10 @@ public class FriendSidePanel extends JPanel {
         repaint();
         revalidate();
         updateUI();
+    }
+
+    public Point getLocationOfLook() {
+        return this.getLocationOnScreen();
     }
 
     public void updateGlobalSearch(final ArrayList<PotentialFriend> userList, final User user, final Client client) {

@@ -4,6 +4,7 @@ import gui.Notifications.Notification;
 import logic.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
@@ -84,13 +85,13 @@ public class MainForm extends JFrame {
 
         JPanel topPanel = new JPanel(null);
         topPanel.setBackground(new Color(0, 0, 0, 150));
-        topPanel.setBounds(0, 20, 960, 65);
-        topPanel.setBorder(new LineBorder(Color.WHITE));
+        topPanel.setBounds(30, 20, 900, 65);
+        topPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
         bigPanel.add(topPanel);
 
         notificationPanel = new NotificationPanel();
-        notificationPanel.setBounds(0, 0, 500, 65);
-        notificationPanel.setBorder(new LineBorder(Color.WHITE));
+        notificationPanel.setBounds(5, 0, 500, 65);
+        notificationPanel.setBorder(null);
         topPanel.add(notificationPanel);
 
         RepaintPanel repaintPanel = new RepaintPanel(notificationPanel);
@@ -124,7 +125,6 @@ public class MainForm extends JFrame {
                 friendPanelButton.setIcon(friendSideOpenIcon);
             }
         });
-        friendPanelButton.setVisible(false);
 
         friendPanelButton.addActionListener(new ActionListener() {
             @Override
@@ -136,7 +136,7 @@ public class MainForm extends JFrame {
 
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
-        friendSidePanel.setBounds(970, 75, 240, 500);
+        friendSidePanel.setBounds(970, 75, 260, 500);
         bigPanel.add(friendSidePanel);
 
         noConversationsPanel = new JPanel(null);
@@ -168,17 +168,17 @@ public class MainForm extends JFrame {
         noConversationsPanel.add(noConversationLabel);
         noConversationsPanel.setVisible(false);
 
-        homeButton.setBounds(538, 8, 64, 64);
+        final int shiftRight = 45;
+
+        homeButton.setBounds(450 + shiftRight, 8, 64, 64);
         topPanel.add(homeButton);
-        plusButton.setBounds(612, 0, 64, 64);
-        topPanel.add(plusButton);
-        settingsButton.setBounds(686, 0, 64, 64);
+        settingsButton.setBounds(525 + shiftRight, 0, 64, 64);
         topPanel.add(settingsButton);
-        contactsButton.setBounds(760, 0, 64, 64);
+        contactsButton.setBounds(600 + shiftRight, 0, 64, 64);
         topPanel.add(contactsButton);
-        exitButton.setBounds(834, 0, 64, 64);
+        exitButton.setBounds(675 + shiftRight, 0, 64, 64);
         topPanel.add(exitButton);
-        friendPanelButton.setBounds(900, 10, 40, 45);
+        friendPanelButton.setBounds(750 + shiftRight, 6, 64, 64);
         topPanel.add(friendPanelButton);
 
         homePanel = new HomePanel();
@@ -456,7 +456,6 @@ public class MainForm extends JFrame {
                 }
             });
 
-            friendPanelButton.setVisible(false);
             if (!(currentDialogTab == null))
                 currentDialogPanel.setVisible(false);
             homePanel.setVisible(true);
@@ -563,5 +562,9 @@ public class MainForm extends JFrame {
 
     public JButton getHomeButton() {
         return homeButton;
+    }
+
+    public JPanel getBigPanel() {
+        return bigPanel;
     }
 }

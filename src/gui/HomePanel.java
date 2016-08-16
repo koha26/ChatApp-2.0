@@ -38,7 +38,7 @@ public class HomePanel extends JPanel {
         personaInfo.setFont(Fonts.nickFont);
         personaInfo.setForeground(Color.WHITE);
         personaInfo.setHorizontalAlignment(SwingConstants.CENTER);
-        personaInfo.setBorder(new LineBorder(Color.WHITE, 5));
+        personaInfo.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.WHITE));
 
         namePanel = new JLabel("Name: ");
         surnamePanel = new JLabel("Surname: ");
@@ -92,7 +92,7 @@ public class HomePanel extends JPanel {
         scrollPane.setBounds(170, 350, 620, 150);
         yourPhoto.setBounds(20, 15, 256, 256);
         nickLabel.setBounds(20, 281, 256, 29);
-        personaInfo.setBounds(301, 15, 599, 70);
+        personaInfo.setBounds(330, 15, 515, 60);
         namePanel.setBounds(311, 90, 240, 70);
         surnamePanel.setBounds(311, 140, 240, 70);
         dateOfBirthPanel.setBounds(311, 190, 240, 70);
