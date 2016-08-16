@@ -43,7 +43,9 @@ public class MainForm extends JFrame {
     private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
     private final ImageIcon friendSideOpenIconEntered = new ImageIcon("images/mainform/sidepnl_open_entr.png");
     private final ImageIcon friendSideCloseIconEntered = new ImageIcon("images/mainform/sidepnl_close_entr.png");
-    private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
+    private final ImageIcon changeAccButIcon = new ImageIcon("images/mainform/changeacc.png");
+    private final ImageIcon changeAccButIconEntered = new ImageIcon("images/mainform/changeacc_entered.png");
+    private JButton changeAccButton, settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
     private FriendSidePanel friendSidePanel;
     private boolean isFriendPanelOpened;
     private ArrayList<DialogPanel> dialogPanelArrayList;
@@ -102,6 +104,7 @@ public class MainForm extends JFrame {
         Thread thread2 = new Thread(repaintPanel2);
         thread2.start();
 
+        changeAccButton = GUIStandartOperations.ButtonStartOperations(changeAccButIcon, changeAccButIconEntered, true);
         settingsButton = GUIStandartOperations.ButtonStartOperations(settingsButIcon, settingsButIconEntered, true);
         contactsButton = GUIStandartOperations.ButtonStartOperations(contactsButIcon, contactsButIconEntered, true);
         exitButton = GUIStandartOperations.ButtonStartOperations(exitButIcon, exitButIconEntered, true);
@@ -168,9 +171,11 @@ public class MainForm extends JFrame {
         noConversationsPanel.add(noConversationLabel);
         noConversationsPanel.setVisible(false);
 
-        final int shiftRight = 45;
+        final int shiftRight = 60;
 
-        homeButton.setBounds(450 + shiftRight, 8, 64, 64);
+        changeAccButton.setBounds(375 + shiftRight, 6, 64, 64);
+        topPanel.add(changeAccButton);
+        homeButton.setBounds(450 + shiftRight, 6, 64, 64);
         topPanel.add(homeButton);
         settingsButton.setBounds(525 + shiftRight, 0, 64, 64);
         topPanel.add(settingsButton);
@@ -180,6 +185,7 @@ public class MainForm extends JFrame {
         topPanel.add(exitButton);
         friendPanelButton.setBounds(750 + shiftRight, 6, 64, 64);
         topPanel.add(friendPanelButton);
+
 
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
@@ -566,5 +572,9 @@ public class MainForm extends JFrame {
 
     public JPanel getBigPanel() {
         return bigPanel;
+    }
+
+    public JButton getChangeAccButton() {
+        return changeAccButton;
     }
 }

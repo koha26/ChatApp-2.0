@@ -83,6 +83,18 @@ public class Application implements Observer {
             }
         });
 
+        mainForm.getChangeAccButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedOption = JOptionPane.showConfirmDialog(mainForm, "Are you sure?", "Choose",
+                        JOptionPane.YES_NO_OPTION);
+                if (selectedOption == JOptionPane.YES_OPTION) {
+                    //client.sendDisconnectCommand();
+                    setMode(Mode.STARTFROM_ON);
+                }
+            }
+        });
+
         mainForm.getHomeButton().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -440,7 +452,6 @@ public class Application implements Observer {
         } else if (arg instanceof DisconnectCommand) {
 
             //TODO Оповещение пользователя и закрытие программы или выход ее в меню регистрации
-
         }
 
     }
