@@ -361,6 +361,7 @@ public class MainForm extends JFrame {
     public DialogPanel receiveIncomingMessage(Message message, BufferedImage myPhoto, BufferedImage friendPhoto, Mode mode) {
         if (mode == Mode.HOME_PANEL) {
             homeButton.setIcon(newDialogButIcon);
+            PopUpMenu.displayMessage("You have new message from " + message.getNickname_From());
             homeButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {

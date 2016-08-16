@@ -13,9 +13,9 @@ public class PopUpMenu extends PopupMenu {
 
     private Menu menu;
     private MenuItem exitItem;
-
+    private static TrayIcon trayIcon;
     public void setPopUpMenu() {
-        TrayIcon trayIcon = new TrayIcon(icon.getImage(), Constants.VERSION_ID, new PopUpMenu());
+        trayIcon = new TrayIcon(icon.getImage(), Constants.VERSION_ID, new PopUpMenu());
         trayIcon.setImageAutoSize(true);
         SystemTray tray = SystemTray.getSystemTray();
 
@@ -39,5 +39,9 @@ public class PopUpMenu extends PopupMenu {
 
 
         trayIcon.displayMessage(Constants.VERSION_ID, "ChatApp started.", TrayIcon.MessageType.INFO);
+    }
+
+    public static void displayMessage(String message) {
+        trayIcon.displayMessage(Constants.VERSION_ID, message, TrayIcon.MessageType.INFO);
     }
 }
