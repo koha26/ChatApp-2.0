@@ -108,6 +108,8 @@ public class FriendSidePanel extends JPanel {
     }
 
     public void updateInfo(User user, Client client) {
+        resetPanel();
+
         if (user.getFriendsList().size() > 0) {
             for (int i = 0; i < user.getFriendsList().size(); i++) {
                 FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
@@ -138,6 +140,8 @@ public class FriendSidePanel extends JPanel {
     }
 
     public void updateFriendSearch(String searchRequest, User user) {
+        resetPanel();
+
         globalSearchButton.setBounds(20, currentPos + 3, 180, 50);
         friendsPanel.add(globalSearchButton);
         currentPos += 75;
@@ -165,6 +169,8 @@ public class FriendSidePanel extends JPanel {
     }
 
     public void updateGlobalSearch(final ArrayList<PotentialFriend> userList, final User user, final Client client) {
+        resetPanel();
+
         /*
                 Метод, который принимает в себя список пользователей от сервера
          */

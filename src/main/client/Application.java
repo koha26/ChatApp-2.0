@@ -158,6 +158,7 @@ public class Application implements Observer {
                             }
                         });
                     }
+                    mainForm.changeMode(Mode.HOME_PANEL);
                 }
             }
         });
@@ -169,7 +170,6 @@ public class Application implements Observer {
                     if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
                         Toolkit.getDefaultToolkit().beep();
                     } else {
-                        mainForm.getFriendSidePanel().resetPanel();
                         mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
                         mainForm.getFriendSidePanel().getGlobalSearchButton().setText("<html> Search in ChatApp </html>");
                     }
@@ -180,7 +180,6 @@ public class Application implements Observer {
         mainForm.getFriendSidePanel().getCancelButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainForm.getFriendSidePanel().resetPanel();
                 mainForm.getFriendSidePanel().updateInfo(user, client);
                 mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
             }
@@ -193,7 +192,6 @@ public class Application implements Observer {
                 if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    mainForm.getFriendSidePanel().resetPanel();
                     mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
                     client.sendSearchCommand(mainForm.getFriendSidePanel().getSearchTextField().getText());
                 }
@@ -446,7 +444,6 @@ public class Application implements Observer {
             String description = fesCommand.getDescription();
             JOptionPane.showMessageDialog(mainForm, description);
             mainForm.getHomePanel().updateInfo(user);
-            mainForm.getFriendSidePanel().resetPanel();
             mainForm.getFriendSidePanel().updateInfo(user, client);
 
         } else if (arg instanceof DisconnectCommand) {

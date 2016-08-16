@@ -195,7 +195,7 @@ public class MainForm extends JFrame {
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
 
-        dialogTabsPanel.setBounds(0, 100, 960, 40);
+        dialogTabsPanel.setBounds(30, 100, 900, 40);
         dialogTabsPanel.setVisible(false);
 
         bigPanel.add(dialogTabsPanel);
@@ -223,8 +223,9 @@ public class MainForm extends JFrame {
     public void repaintDialogTabsPanel() {
         dialogTabsPanel.setVisible(false);
         dialogTabsPanel = new JPanel(null);
+        dialogTabsPanel.setBorder(null);
         dialogTabsPanel.setBackground(new Color(0, 0, 0, 150));
-        dialogTabsPanel.setBounds(0, 100, 960, 40);
+        dialogTabsPanel.setBounds(100, 100, 760, 54);
 
         for (int i = 0; i < dialogTabArrayList.size(); i++) {
             dialogTabArrayList.get(i).setBounds(i * 151, 0, 150, 40);
