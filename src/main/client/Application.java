@@ -59,12 +59,12 @@ public class Application implements Observer {
                         @Override
                         public void keyPressed(KeyEvent e) {
                             if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                Message myMesseage = new Message();
-                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                myMesseage.setNickname_From(user.getNickname());
-                                myMesseage.setNickname_To(friendLook.getFriend().getNickname());
-                                client.sendMessageCommand(myMesseage);
-                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                Message myMessage = new Message();
+                                myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMessage.setNickname_From(user.getNickname());
+                                myMessage.setNickname_To(friendLook.getFriend().getNickname());
+                                client.sendMessageCommand(myMessage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                 mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                             }
                         }
@@ -104,29 +104,31 @@ public class Application implements Observer {
             }
         });
 
-      /*  mainForm.getFriendSidePanel().getFriendsPanel().addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                boolean isEntered = false;
-                System.out.println(e.getPoint());
-                System.out.println(e.getComponent().getComponentAt(e.getPoint().getLocation()));
-                if (e.getX()>e.getComponent().getComponentAt(e.getPoint()).getX()){
-                    isEntered = true;
-                }
-                while(!isEntered) {
-                    FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
-                    Friend potentialFriend = friendSideLook.getFriend();
-                    PotentialFriendLook potentialFriendLook = new PotentialFriendLook(potentialFriend);
-                    potentialFriendLook.setVisible(true);
-                    potentialFriendLook.setLocation(e.getLocationOnScreen());
-                    System.out.println("Зашло");
-                    System.out.println(e.getLocationOnScreen());
-                }
-            }
-        });*/
-
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
+            Thread thread;
+
+            @Override
+            public void mouseEntered(final MouseEvent e) {
+                super.mouseMoved(e);
+                thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (true) {
+                            if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendSideLook) {
+                                final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+                                System.out.println(friendSideLook.getNickLabel().getText());
+                            }
+                        }
+                    }
+                });
+                thread.start();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                super.mouseMoved(e);
+                thread.interrupt();
+            }
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -136,12 +138,12 @@ public class Application implements Observer {
                             @Override
                             public void keyPressed(KeyEvent e) {
                                 if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                    Message myMesseage = new Message();
-                                    myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                    myMesseage.setNickname_From(user.getNickname());
-                                    myMesseage.setNickname_To(friendSideLook.getFriend().getNickname());
-                                    client.sendMessageCommand(myMesseage);
-                                    mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                    Message myMessage = new Message();
+                                    myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                    myMessage.setNickname_From(user.getNickname());
+                                    myMessage.setNickname_To(friendSideLook.getFriend().getNickname());
+                                    client.sendMessageCommand(myMessage);
+                                    mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                     mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                                 }
                             }
@@ -350,12 +352,12 @@ public class Application implements Observer {
                         @Override
                         public void keyPressed(KeyEvent e) {
                             if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                Message myMesseage = new Message();
-                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                myMesseage.setNickname_From(user.getNickname());
-                                myMesseage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
-                                client.sendMessageCommand(myMesseage);
-                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                Message myMessage = new Message();
+                                myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMessage.setNickname_From(user.getNickname());
+                                myMessage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
+                                client.sendMessageCommand(myMessage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                 mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                             }
                         }
@@ -449,6 +451,7 @@ public class Application implements Observer {
         } else if (arg instanceof DisconnectCommand) {
 
             //TODO Оповещение пользователя и закрытие программы или выход ее в меню регистрации
+
         }
 
     }

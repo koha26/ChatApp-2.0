@@ -181,9 +181,9 @@ public class MainForm extends JFrame {
 
         changeAccButton.setBounds(420 + shiftRight, 6, 64, 64);
         topPanel.add(changeAccButton);
-        homeButton.setBounds(650 + shiftRight, 6, 64, 64);
+        homeButton.setBounds(550 + shiftRight, 6, 64, 64);
         topPanel.add(homeButton);
-        settingsButton.setBounds(550 + shiftRight, 0, 64, 64);
+        settingsButton.setBounds(650 + shiftRight, 0, 64, 64);
         topPanel.add(settingsButton);
         contactsButton.setBounds(600 + shiftRight, 0, 64, 64);
         topPanel.add(contactsButton);
@@ -191,6 +191,8 @@ public class MainForm extends JFrame {
         topPanel.add(exitButton);
         friendPanelButton.setBounds(730 + shiftRight, 6, 64, 64);
         topPanel.add(friendPanelButton);
+
+        friendPanelButton.setVisible(false);
 
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
@@ -472,6 +474,7 @@ public class MainForm extends JFrame {
             if (!(currentDialogTab == null))
                 currentDialogPanel.setVisible(false);
             homePanel.setVisible(true);
+            friendPanelButton.setVisible(false);
             dialogTabsPanel.setVisible(false);
             isFriendPanelOpened = false;
             noConversationsPanel.setVisible(false);
@@ -502,6 +505,7 @@ public class MainForm extends JFrame {
             if (!(currentDialogPanel == null)) {
                 currentDialogPanel.setVisible(true);
             }
+            friendPanelButton.setVisible(true);
             repaint();
         }
     }

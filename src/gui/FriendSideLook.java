@@ -4,9 +4,7 @@ import logic.Friend;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -15,6 +13,7 @@ public class FriendSideLook extends JPanel {
     private JLabel photoLabel, nickLabel;
     private Friend friend;
     private MiniFriendLook friendLook;
+    private Timer t;
     private JButton deleteButton;
     private ImageIcon deleteButIcon = new ImageIcon("images/mainform/delete.png");
     private ImageIcon deleteButIconEntered = new ImageIcon("images/mainform/delete_entered.png");
@@ -47,6 +46,7 @@ public class FriendSideLook extends JPanel {
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setFont(Fonts.typingFont);
 
+        add(photoLabel);
         deleteButton = new JButton();
         deleteButton.setContentAreaFilled(false);
         deleteButton.setIcon(new ImageIcon("delete.png"));
@@ -74,12 +74,22 @@ public class FriendSideLook extends JPanel {
         friendLook = new MiniFriendLook(friend);
         friendLook.setVisible(false);
 
-        photoLabel.addMouseMotionListener(new MouseMotionAdapter() {
+        this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
+                if (!(t == null))
+                    t.stop();
                 friendLook.setVisible(true);
                 friendLook.setLocation((int) (e.getLocationOnScreen().getX()), (int) (e.getLocationOnScreen().getY() + 10));
+                t = new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        friendLook.setVisible(false);
+                        friendLook.dispose();
+                    }
+                });
+                t.start();
                 if ((e.getLocationOnScreen().getX() <= getLocationOfLook().getX() + 10) || (e.getLocationOnScreen().getX() >= getLocationOfLook().getX() + 207) ||
                         (e.getLocationOnScreen().getY() <= getLocationOfLook().getY() + 11) || (e.getLocationOnScreen().getY() >= getLocationOfLook().getY() + 48)) {
                     friendLook.setVisible(false);

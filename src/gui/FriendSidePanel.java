@@ -107,12 +107,12 @@ public class FriendSidePanel extends JPanel {
         thread.start();
     }
 
-    public void updateInfo(User user, Client client) {
+    public void updateInfo(final User user, final Client client) {
         resetPanel();
 
         if (user.getFriendsList().size() > 0) {
             for (int i = 0; i < user.getFriendsList().size(); i++) {
-                FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
+                final FriendSideLook friend = new FriendSideLook(user.getFriendsList().get(i));
                 friend.getDeleteButton().addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
