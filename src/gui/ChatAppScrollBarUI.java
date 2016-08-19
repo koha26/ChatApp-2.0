@@ -4,8 +4,7 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
-public class MyScrollBar extends BasicScrollBarUI {
-    private final int WIDTH_SCROLLBAR = 8;
+public class ChatAppScrollBarUI extends BasicScrollBarUI{
     private JButton b = new JButton() {
         @Override
         public Dimension getPreferredSize() {
@@ -47,15 +46,4 @@ public class MyScrollBar extends BasicScrollBarUI {
 
     }
 
-    @Override
-    public Dimension getPreferredSize(JComponent c) {
-        Dimension dim = super.getPreferredSize(c);
-        return new Dimension(WIDTH_SCROLLBAR, dim.height);
-    }
-
-    @Override
-    public Dimension getMaximumSize(JComponent c) {
-        Dimension dim = super.getPreferredSize(c);
-        return new Dimension(WIDTH_SCROLLBAR, dim.height);
-    }
 }

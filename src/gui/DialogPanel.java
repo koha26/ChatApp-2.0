@@ -30,7 +30,7 @@ public class DialogPanel extends JPanel {
         messageScrollPane.setOpaque(false);
         messageScrollPane.getViewport().setOpaque(false);
         messageScrollPane.setBorder(null);
-        messageScrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        messageScrollPane.getVerticalScrollBar().setUI(new ChatAppVerticalScrollBarUI());
         messageScrollPane.getVerticalScrollBar().setUnitIncrement(10);
 
         messageView = new MessageView();

@@ -615,7 +615,7 @@ public class Database {
                     matcher = pattern.matcher(inputString);
                     int tagNumber = 1; //1 - <NICK>; 2 - <TEXT>; 3 - <DATE> & <TIME>
 
-                    String date = "01.01.2016";
+                    String date = "2016.01.01";
                     String time = "00:00:01";
                     String[] datePart = date.split("\\.");
                     String[] timePart = time.split(":");
@@ -641,7 +641,7 @@ public class Database {
                                 break;
                             case 3:
                                 date = matcher.group();
-                                datePart = date.split("\\."); //0 - day; 1 - month; 2 - year;
+                                datePart = date.split("\\."); //0 - year; 1 - month; 2 - day;
                                 tagNumber = 4;
                                 break;
                             case 4:

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Server {
+public class Server implements Runnable{
 
     private ServerSocket serverSocket;
     private Thread mainThread;
@@ -53,8 +53,7 @@ public class Server {
                     clients.add(clThread); //добавляем в очередь
                 }
             } catch (IOException e) {
-                //TODO
-
+                //stop();
             }
         }
     }
@@ -69,71 +68,78 @@ public class Server {
         return s;
     }
 
+    public void stop() throws IOException {
+        if (!mainThread.isInterrupted() && mainThread.isAlive()){
+            mainThread.interrupt();
+            serverSocket.close();
+        }
+    }
+
     /**
      * Контроллеры для взаимодействия с объектом класса Database
      */
 
-    public User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException { //для регистрации
+    private User registerUser(RegistrationModel regModel, Connection connection) throws UnknownHostException { //для регистрации
         return this.database.registerUser(regModel, connection);
     }
 
-    public void goOnline(String nickname, Connection connection) { // для хранения онлайн клиентов
+    private void goOnline(String nickname, Connection connection) { // для хранения онлайн клиентов
         this.database.goOnline(nickname, connection);
     }
 
-    public void goOffline(String nickname) {
+    private void goOffline(String nickname) {
         this.database.goOffline(nickname);
     }
 
-    public void deleteUser(String nickname) {
+    private void deleteUser(String nickname) {
         this.database.deleteUser(nickname);
     }
 
-    public User checkUser(String nickname, String password) { // проверка на существования такой связки "ник"-"пароль"
+    private User checkUser(String nickname, String password) { // проверка на существования такой связки "ник"-"пароль"
         return database.checkUser(nickname, password);
     }
 
-    public User updateUser(String nickname) {
+    private User updateUser(String nickname) {
         return database.updateUser(nickname);
     }
 
-    public boolean isExist(String nickname) { // существует ли кл-т с таким ником
+    private boolean isExist(String nickname) { // существует ли кл-т с таким ником
         return database.isExist(nickname);
     }
 
-    public User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged) {
+    private User modificationUser(User changedUser, boolean isInfoChanged, boolean isAvatarChanged) {
         return database.modificationUser(changedUser, isInfoChanged, isAvatarChanged);
     }
 
-    public List<PotentialFriend> getResultByGlobalSearch(User host, String nicknamePattern) {
+    private List<PotentialFriend> getResultByGlobalSearch(User host, String nicknamePattern) {
         return database.getResultByGlobalSearch(host, nicknamePattern);
     }
 
-    public boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
+    private boolean isOnline(String nickname) { // в онлайне ли кл-т с таким ником
         return database.isOnline(nickname);
     }
 
-    public void addFriend(String nickname_host, String nickname_friend) {
+    private void addFriend(String nickname_host, String nickname_friend) {
         database.addFriend(nickname_host, nickname_friend);
     }
 
-    public boolean deleteFriend(String nickname_host, String nickname_friend) {
+    private boolean deleteFriend(String nickname_host, String nickname_friend) {
         return database.deleteFriend(nickname_host, nickname_friend);
     }
 
-    public Set<String> retainAllFriendOnline(Set<String> comparatedSet) {
+    private Set<String> retainAllFriendOnline(Set<String> comparatedSet) {
         return database.retainAllFriendOnline(comparatedSet);
     }
 
-    public Set<String> getSetOfFriendUnreadMes(String nickname_host) {
+    private Set<String> getSetOfFriendUnreadMes(String nickname_host) {
         return database.getSetOfFriendUnreadMes(nickname_host);
     }
 
-    public boolean deleteAndCreateUnreadMesFile(String nickname_host) {
+    private boolean deleteAndCreateUnreadMesFile(String nickname_host) {
         return database.deleteAndCreateUnreadMesFile(nickname_host);
     }
 
-    public void saveMessageInSenderHistory(Message message, String nickname_sender, String nickname_receiver) {
+    private void saveMessageInSenderHistory(Message message, String nickname_sender, String nickname_receiver) {
         try {
             database.saveMessageInSenderHistory(message, nickname_sender, nickname_receiver);
         } catch (IOException e) {
@@ -141,7 +147,7 @@ public class Server {
         }
     }
 
-    public void saveMessageInReceiverHistory(Message message, String nickname_sender, String nickname_receiver, boolean isRead) {
+    private void saveMessageInReceiverHistory(Message message, String nickname_sender, String nickname_receiver, boolean isRead) {
         try {
             database.saveMessageInReceiverHistory(message, nickname_sender, nickname_receiver, isRead);
         } catch (IOException e) {
@@ -149,7 +155,7 @@ public class Server {
         }
     }
 
-    public Stack<HistoryPacketCommand> loadHistory(String nickname_asker, String nickname_companion) {
+    private Stack<HistoryPacketCommand> loadHistory(String nickname_asker, String nickname_companion) {
         try {
             return database.loadHistory(nickname_asker, nickname_companion);
         } catch (IOException e) {
@@ -158,15 +164,15 @@ public class Server {
         }
     }
 
-    public boolean deleteFileWithUnreadMessage(String nickname_asker, String nickname_companion) {
+    private boolean deleteFileWithUnreadMessage(String nickname_asker, String nickname_companion) {
         return database.deleteFileWithUnreadMessage(nickname_asker, nickname_companion);
     }
 
-    public LinkedList<Command> loadAwaitingCommands(String nickname) {
+    private LinkedList<Command> loadAwaitingCommands(String nickname) {
         return database.loadAwaitingCommands(nickname);
     }
 
-    public void addAwaitingCommand(String nickname, Command command) {
+    private void addAwaitingCommand(String nickname, Command command) {
         database.addAwaitingCommand(nickname, command);
     }
 
@@ -272,9 +278,9 @@ public class Server {
                                         }
 
                                         final Stack<HistoryPacketCommand> toWritting = tmp;
-                                        EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
+                                        /*EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
                                             @Override
-                                            public void run() {
+                                            public void run() {*/
                                                 if (!toWritting.empty()) {
                                                     String nickname_asker = toWritting.peek().getNickname_host();
                                                     String nickname_friend = toWritting.peek().getNickname_companion();
@@ -293,22 +299,22 @@ public class Server {
                                                     }
                                                 }
 
-                                            }
-                                        });
+                                            //}
+                                        //});
                                     }
                                 }
 
-                                EventQueue.invokeLater(new Runnable() {
+                                /*EventQueue.invokeLater(new Runnable() {
                                     @Override
-                                    public void run() {
+                                    public void run() {*/
                                         broadcastOnlineFriend(user.getNickname());
 
                                         LinkedList<Command> missingCommands = loadAwaitingCommands(user.getNickname());
                                         for (Command command : missingCommands) {
                                             send(command);
                                         }
-                                    }
-                                });
+                                    //}
+                                //});
 
                             } else {
                                 lsCommand = new LoginStatusCommand();
@@ -507,12 +513,12 @@ public class Server {
             }
         }
 
-        public synchronized void send(Command command) { // м-д для отправки комманд между сервером и к-том
+        private synchronized void send(Command command) { // м-д для отправки комманд между сервером и к-том
             try {
                 if (connection.isOpen())
                     this.connection.sendCommand(command);
             } catch (IOException e) {
-                System.out.println("Ошибка отправки!");
+                System.err.println("Ошибка отправки!");
             }
         }
 
@@ -525,7 +531,7 @@ public class Server {
             }
         }
 
-        public void broadcastOfflineFriend(String nicknameFriend) {
+        private void broadcastOfflineFriend(String nicknameFriend) {
             for (ClientThread clientThread : clients) {
                 if (isOnline(clientThread.user.getNickname()) && clientThread.user != null && clientThread != this) {
                     if (clientThread.user.hasFriend(nicknameFriend)) {
@@ -535,7 +541,7 @@ public class Server {
             }
         }
 
-        public void broadcastOnlineFriend(String nicknameFriend) {
+        private void broadcastOnlineFriend(String nicknameFriend) {
             for (ClientThread clientThread : clients) {
                 if (isOnline(clientThread.user.getNickname()) && clientThread.user != null && clientThread != this) {
                     if (clientThread.user.hasFriend(nicknameFriend)) {

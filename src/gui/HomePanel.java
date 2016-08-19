@@ -84,7 +84,7 @@ public class HomePanel extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        scrollPane.getVerticalScrollBar().setUI(new ChatAppVerticalScrollBarUI());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 

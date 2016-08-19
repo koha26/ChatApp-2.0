@@ -89,7 +89,7 @@ public class FriendSidePanel extends JPanel {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(new LineBorder(new Color(0, 0, 0, 150), 3));
         scrollPane.setBounds(0, 75, 240, 420);
-        scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        scrollPane.getVerticalScrollBar().setUI(new ChatAppVerticalScrollBarUI());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

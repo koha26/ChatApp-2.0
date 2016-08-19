@@ -26,9 +26,11 @@ public class MessageView extends JPanel {
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(null);
-        scrollPane.getVerticalScrollBar().setUI(new MyScrollBar());
+        scrollPane.getVerticalScrollBar().setUI(new ChatAppVerticalScrollBarUI());
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getHorizontalScrollBar().setUI(new ChatAppHorizontalScrollBarUI());
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(10);
 
         this.add(scrollPane, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 2, 2, 2), 0, 0));
     }
