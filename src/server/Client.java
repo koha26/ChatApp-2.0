@@ -97,6 +97,11 @@ public class Client extends Observable {
         send(hpCommand);
     }
 
+    public void sendFriendshipEndCommand(String nicknameHost, String nicknameCompanion) {
+        FriendshipEndCommand feCommand = new FriendshipEndCommand(nicknameHost, nicknameCompanion);
+        send(feCommand);
+    }
+
     public void sendDisconnectCommand() {
         send(new DisconnectCommand());
     }

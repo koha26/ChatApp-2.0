@@ -59,12 +59,12 @@ public class Application implements Observer {
                         @Override
                         public void keyPressed(KeyEvent e) {
                             if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                Message myMesseage = new Message();
-                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                myMesseage.setNickname_From(user.getNickname());
-                                myMesseage.setNickname_To(friendLook.getFriend().getNickname());
-                                client.sendMessageCommand(myMesseage);
-                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                Message myMessage = new Message();
+                                myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMessage.setNickname_From(user.getNickname());
+                                myMessage.setNickname_To(friendLook.getFriend().getNickname());
+                                client.sendMessageCommand(myMessage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                 mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                             }
                         }
@@ -83,6 +83,18 @@ public class Application implements Observer {
             }
         });
 
+        mainForm.getChangeAccButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedOption = JOptionPane.showConfirmDialog(mainForm, "Are you sure?", "Choose",
+                        JOptionPane.YES_NO_OPTION);
+                if (selectedOption == JOptionPane.YES_OPTION) {
+                    //client.sendDisconnectCommand();
+                    setMode(Mode.STARTFROM_ON);
+                }
+            }
+        });
+
         mainForm.getHomeButton().addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,31 +104,33 @@ public class Application implements Observer {
             }
         });
 
-      /*  mainForm.getFriendSidePanel().getFriendsPanel().addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                boolean isEntered = false;
-                System.out.println(e.getPoint());
-                System.out.println(e.getComponent().getComponentAt(e.getPoint().getLocation()));
-                if (e.getX()>e.getComponent().getComponentAt(e.getPoint()).getX()){
-                    isEntered = true;
-                }
-                while(!isEntered) {
-                    FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
-                    Friend potentialFriend = friendSideLook.getFriend();
-                    PotentialFriendLook potentialFriendLook = new PotentialFriendLook(potentialFriend);
-                    potentialFriendLook.setVisible(true);
-                    potentialFriendLook.setLocation(e.getLocationOnScreen());
-                    System.out.println("Зашло");
-                    System.out.println(e.getLocationOnScreen());
-                }
-            }
-        });*/
-
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
+            Thread thread;
+
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseEntered(final MouseEvent e) {
+                super.mouseMoved(e);
+                thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (true) {
+                            if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendSideLook) {
+                                final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+                                System.out.println(friendSideLook.getNickLabel().getText());
+                            }
+                        }
+                    }
+                });
+                thread.start();
+            }
+
+            public void mouseExited(MouseEvent e) {
+                super.mouseMoved(e);
+                thread.interrupt();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
                     if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendSideLook.getFriend().getAvatarAsBufImage(), friendSideLook.getFriend().getNickname())) {
@@ -124,12 +138,12 @@ public class Application implements Observer {
                             @Override
                             public void keyPressed(KeyEvent e) {
                                 if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                    Message myMesseage = new Message();
-                                    myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                    myMesseage.setNickname_From(user.getNickname());
-                                    myMesseage.setNickname_To(friendSideLook.getFriend().getNickname());
-                                    client.sendMessageCommand(myMesseage);
-                                    mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                    Message myMessage = new Message();
+                                    myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                    myMessage.setNickname_From(user.getNickname());
+                                    myMessage.setNickname_To(friendSideLook.getFriend().getNickname());
+                                    client.sendMessageCommand(myMessage);
+                                    mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                     mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                                 }
                             }
@@ -146,6 +160,7 @@ public class Application implements Observer {
                             }
                         });
                     }
+                    mainForm.changeMode(Mode.HOME_PANEL);
                 }
             }
         });
@@ -157,7 +172,6 @@ public class Application implements Observer {
                     if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
                         Toolkit.getDefaultToolkit().beep();
                     } else {
-                        mainForm.getFriendSidePanel().resetPanel();
                         mainForm.getFriendSidePanel().updateFriendSearch(mainForm.getFriendSidePanel().getSearchTextField().getText(), user);
                         mainForm.getFriendSidePanel().getGlobalSearchButton().setText("<html> Search in ChatApp </html>");
                     }
@@ -168,8 +182,7 @@ public class Application implements Observer {
         mainForm.getFriendSidePanel().getCancelButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainForm.getFriendSidePanel().resetPanel();
-                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().updateInfo(user, client);
                 mainForm.getFriendSidePanel().getSearchTextField().setText("Search...");
             }
         });
@@ -181,7 +194,6 @@ public class Application implements Observer {
                 if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    mainForm.getFriendSidePanel().resetPanel();
                     mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
                     client.sendSearchCommand(mainForm.getFriendSidePanel().getSearchTextField().getText());
                 }
@@ -287,7 +299,7 @@ public class Application implements Observer {
                         mainForm.setVisible(false); //оставляем ее невидимой
                     } else if (mode == Mode.MAINFROM_ON && Application.this.mode != Mode.MAINFROM_ON) {
                         mainForm.getHomePanel().updateInfo(user);
-                        mainForm.getFriendSidePanel().updateInfo(user);
+                        mainForm.getFriendSidePanel().updateInfo(user, client);
                         Application.this.mode = Mode.HOME_PANEL;
                         mainForm.setVisible(true); //становится видна старт форма
                         startForm.dispose();
@@ -340,12 +352,12 @@ public class Application implements Observer {
                         @Override
                         public void keyPressed(KeyEvent e) {
                             if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                Message myMesseage = new Message();
-                                myMesseage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                myMesseage.setNickname_From(user.getNickname());
-                                myMesseage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
-                                client.sendMessageCommand(myMesseage);
-                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMesseage);
+                                Message myMessage = new Message();
+                                myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                myMessage.setNickname_From(user.getNickname());
+                                myMessage.setNickname_To(mainForm.getCurrentDialogTab().getNickButton().getText());
+                                client.sendMessageCommand(myMessage);
+                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
                                 mainForm.getCurrentDialogPanel().getMessageArea().setText("");
                             }
                         }
@@ -399,7 +411,7 @@ public class Application implements Observer {
             if (acCommand.isAccept()) {
                 JOptionPane.showMessageDialog(mainForm, acCommand.getNickname_From() + " and you are friends now! Congrats!");
                 mainForm.getHomePanel().updateInfo(user);
-                mainForm.getFriendSidePanel().updateInfo(user);
+                mainForm.getFriendSidePanel().updateInfo(user, client);
             }
 
         } else if (arg instanceof ChangingUserInfoStatusCommand) {
@@ -407,7 +419,7 @@ public class Application implements Observer {
             ChangingUserInfoStatusCommand cuisCommand = (ChangingUserInfoStatusCommand) arg;
             user = cuisCommand.getChangedUser();
             mainForm.getHomePanel().updateInfo(user);
-            mainForm.getFriendSidePanel().updateInfo(user);
+            mainForm.getFriendSidePanel().updateInfo(user, client);
 
         } else if (arg instanceof SearchStatusCommand) {
 
@@ -430,7 +442,11 @@ public class Application implements Observer {
         } else if (arg instanceof FriendshipEndStatusCommand) {
 
             FriendshipEndStatusCommand fesCommand = (FriendshipEndStatusCommand) arg;
-            //TODO обновить юзера + вывести описание
+            user = fesCommand.getChangedUser();
+            String description = fesCommand.getDescription();
+            JOptionPane.showMessageDialog(mainForm, description);
+            mainForm.getHomePanel().updateInfo(user);
+            mainForm.getFriendSidePanel().updateInfo(user, client);
 
         } else if (arg instanceof DisconnectCommand) {
 

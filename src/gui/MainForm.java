@@ -4,6 +4,7 @@ import gui.Notifications.Notification;
 import logic.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
@@ -42,7 +43,9 @@ public class MainForm extends JFrame {
     private final ImageIcon friendSideCloseIcon = new ImageIcon("images/mainform/sidepnl_close.png");
     private final ImageIcon friendSideOpenIconEntered = new ImageIcon("images/mainform/sidepnl_open_entr.png");
     private final ImageIcon friendSideCloseIconEntered = new ImageIcon("images/mainform/sidepnl_close_entr.png");
-    private JButton settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
+    private final ImageIcon changeAccButIcon = new ImageIcon("images/mainform/changeacc.png");
+    private final ImageIcon changeAccButIconEntered = new ImageIcon("images/mainform/changeacc_entered.png");
+    private JButton changeAccButton, settingsButton, contactsButton, exitButton, plusButton, homeButton, friendPanelButton;
     private FriendSidePanel friendSidePanel;
     private boolean isFriendPanelOpened;
     private ArrayList<DialogPanel> dialogPanelArrayList;
@@ -84,13 +87,13 @@ public class MainForm extends JFrame {
 
         JPanel topPanel = new JPanel(null);
         topPanel.setBackground(new Color(0, 0, 0, 150));
-        topPanel.setBounds(0, 20, 960, 65);
-        topPanel.setBorder(new LineBorder(Color.WHITE));
+        topPanel.setBounds(30, 20, 900, 65);
+        topPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 1, 0, Color.WHITE));
         bigPanel.add(topPanel);
 
         notificationPanel = new NotificationPanel();
-        notificationPanel.setBounds(0, 0, 500, 65);
-        notificationPanel.setBorder(new LineBorder(Color.WHITE));
+        notificationPanel.setBounds(5, 0, 500, 65);
+        notificationPanel.setBorder(null);
         topPanel.add(notificationPanel);
 
         RepaintPanel repaintPanel = new RepaintPanel(notificationPanel);
@@ -101,11 +104,18 @@ public class MainForm extends JFrame {
         Thread thread2 = new Thread(repaintPanel2);
         thread2.start();
 
+        changeAccButton = GUIStandartOperations.ButtonStartOperations(changeAccButIcon, changeAccButIconEntered, true);
         settingsButton = GUIStandartOperations.ButtonStartOperations(settingsButIcon, settingsButIconEntered, true);
         contactsButton = GUIStandartOperations.ButtonStartOperations(contactsButIcon, contactsButIconEntered, true);
         exitButton = GUIStandartOperations.ButtonStartOperations(exitButIcon, exitButIconEntered, true);
         plusButton = GUIStandartOperations.ButtonStartOperations(plusButIcon, plusButIconEntered, true);
         homeButton = GUIStandartOperations.ButtonStartOperations(dialogButIcon, dialogButIconEntered, true);
+
+        changeAccButton.setToolTipText("Change account");
+        settingsButton.setToolTipText("Your personal settings");
+        contactsButton.setToolTipText("Contacts");
+        exitButton.setToolTipText("Exit ChatApp");
+        homeButton.setToolTipText("Dialog page / Home");
 
         friendPanelButton = new JButton();
         friendPanelButton.setOpaque(false);
@@ -124,7 +134,6 @@ public class MainForm extends JFrame {
                 friendPanelButton.setIcon(friendSideOpenIcon);
             }
         });
-        friendPanelButton.setVisible(false);
 
         friendPanelButton.addActionListener(new ActionListener() {
             @Override
@@ -136,7 +145,7 @@ public class MainForm extends JFrame {
 
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
-        friendSidePanel.setBounds(970, 75, 240, 500);
+        friendSidePanel.setBounds(970, 75, 260, 500);
         bigPanel.add(friendSidePanel);
 
         noConversationsPanel = new JPanel(null);
@@ -168,23 +177,27 @@ public class MainForm extends JFrame {
         noConversationsPanel.add(noConversationLabel);
         noConversationsPanel.setVisible(false);
 
-        homeButton.setBounds(538, 8, 64, 64);
+        final int shiftRight = 90;
+
+        changeAccButton.setBounds(420 + shiftRight, 6, 64, 64);
+        topPanel.add(changeAccButton);
+        homeButton.setBounds(550 + shiftRight, 6, 64, 64);
         topPanel.add(homeButton);
-        plusButton.setBounds(612, 0, 64, 64);
-        topPanel.add(plusButton);
-        settingsButton.setBounds(686, 0, 64, 64);
+        settingsButton.setBounds(650 + shiftRight, 0, 64, 64);
         topPanel.add(settingsButton);
-        contactsButton.setBounds(760, 0, 64, 64);
+        contactsButton.setBounds(600 + shiftRight, 0, 64, 64);
         topPanel.add(contactsButton);
-        exitButton.setBounds(834, 0, 64, 64);
+        exitButton.setBounds(470 + shiftRight, 0, 64, 64);
         topPanel.add(exitButton);
-        friendPanelButton.setBounds(900, 10, 40, 45);
+        friendPanelButton.setBounds(730 + shiftRight, 6, 64, 64);
         topPanel.add(friendPanelButton);
+
+        friendPanelButton.setVisible(false);
 
         homePanel = new HomePanel();
         homePanel.setBounds(0, 84, 960, 1000);
 
-        dialogTabsPanel.setBounds(0, 100, 960, 40);
+        dialogTabsPanel.setBounds(30, 100, 900, 40);
         dialogTabsPanel.setVisible(false);
 
         bigPanel.add(dialogTabsPanel);
@@ -212,8 +225,9 @@ public class MainForm extends JFrame {
     public void repaintDialogTabsPanel() {
         dialogTabsPanel.setVisible(false);
         dialogTabsPanel = new JPanel(null);
+        dialogTabsPanel.setBorder(null);
         dialogTabsPanel.setBackground(new Color(0, 0, 0, 150));
-        dialogTabsPanel.setBounds(0, 100, 960, 40);
+        dialogTabsPanel.setBounds(100, 100, 760, 54);
 
         for (int i = 0; i < dialogTabArrayList.size(); i++) {
             dialogTabArrayList.get(i).setBounds(i * 151, 0, 150, 40);
@@ -349,6 +363,7 @@ public class MainForm extends JFrame {
     public DialogPanel receiveIncomingMessage(Message message, BufferedImage myPhoto, BufferedImage friendPhoto, Mode mode) {
         if (mode == Mode.HOME_PANEL) {
             homeButton.setIcon(newDialogButIcon);
+            PopUpMenu.displayMessage("You have new message from " + message.getNickname_From());
             homeButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -456,10 +471,10 @@ public class MainForm extends JFrame {
                 }
             });
 
-            friendPanelButton.setVisible(false);
             if (!(currentDialogTab == null))
                 currentDialogPanel.setVisible(false);
             homePanel.setVisible(true);
+            friendPanelButton.setVisible(false);
             dialogTabsPanel.setVisible(false);
             isFriendPanelOpened = false;
             noConversationsPanel.setVisible(false);
@@ -490,6 +505,7 @@ public class MainForm extends JFrame {
             if (!(currentDialogPanel == null)) {
                 currentDialogPanel.setVisible(true);
             }
+            friendPanelButton.setVisible(true);
             repaint();
         }
     }
@@ -563,5 +579,13 @@ public class MainForm extends JFrame {
 
     public JButton getHomeButton() {
         return homeButton;
+    }
+
+    public JPanel getBigPanel() {
+        return bigPanel;
+    }
+
+    public JButton getChangeAccButton() {
+        return changeAccButton;
     }
 }
