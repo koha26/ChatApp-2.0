@@ -51,34 +51,36 @@ public class Application implements Observer {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                final FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
-                mainForm.changeMode(mode);
-                mode = Mode.DIALOG;
-                if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname())) {
-                    mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
-                        @Override
-                        public void keyPressed(KeyEvent e) {
-                            if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
-                                Message myMessage = new Message();
-                                myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
-                                myMessage.setNickname_From(user.getNickname());
-                                myMessage.setNickname_To(friendLook.getFriend().getNickname());
-                                client.sendMessageCommand(myMessage);
-                                mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
-                                mainForm.getCurrentDialogPanel().getMessageArea().setText("");
+                if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendLook) {
+                    final FriendLook friendLook = (FriendLook) e.getComponent().getComponentAt(e.getPoint());
+                    mainForm.changeMode(mode);
+                    mode = Mode.DIALOG;
+                    if (mainForm.startNewDialog(user.getAvatarAsBufImage(), friendLook.getFriend().getAvatarAsBufImage(), friendLook.getFriend().getNickname())) {
+                        mainForm.getCurrentDialogPanel().getMessageArea().addKeyListener(new KeyAdapter() {
+                            @Override
+                            public void keyPressed(KeyEvent e) {
+                                if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                                    Message myMessage = new Message();
+                                    myMessage.setMessageText(mainForm.getCurrentDialogPanel().getMessageArea().getText());
+                                    myMessage.setNickname_From(user.getNickname());
+                                    myMessage.setNickname_To(friendLook.getFriend().getNickname());
+                                    client.sendMessageCommand(myMessage);
+                                    mainForm.getCurrentDialogPanel().showOutcomingMessage(myMessage);
+                                    mainForm.getCurrentDialogPanel().getMessageArea().setText("");
+                                }
                             }
-                        }
-                    });
-                    final DialogTab dialogTab = mainForm.getCurrentDialogTab();
-                    dialogTab.getCloseButton().addActionListener(new AbstractAction() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if (mainForm.closeDialog(dialogTab)) {
-                                mainForm.changeMode(mode);
-                                mode = Mode.HOME_PANEL;
+                        });
+                        final DialogTab dialogTab = mainForm.getCurrentDialogTab();
+                        dialogTab.getCloseButton().addActionListener(new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if (mainForm.closeDialog(dialogTab)) {
+                                    mainForm.changeMode(mode);
+                                    mode = Mode.HOME_PANEL;
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
@@ -104,30 +106,39 @@ public class Application implements Observer {
             }
         });
 
+
+
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
             Thread thread;
 
             @Override
             public void mouseEntered(final MouseEvent e) {
                 super.mouseMoved(e);
-                thread = new Thread(new Runnable() {
+                /*thread = new Thread(new Runnable() {
                     @Override
-                    public void run() {
+                    public void run() {*/
                         while (true) {
+                            System.out.println(e.getComponent().getComponentAt(e.getPoint()));
                             if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendSideLook) {
-                                final FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+                                FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
                                 System.out.println(friendSideLook.getNickLabel().getText());
                             }
+                            try {
+                                Thread.sleep(1);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
                         }
-                    }
+                    /*}
                 });
-                thread.start();
+                thread.start();*/
             }
 
+            /*@Override
             public void mouseExited(MouseEvent e) {
                 super.mouseMoved(e);
                 thread.interrupt();
-            }
+            }*/
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -217,9 +228,11 @@ public class Application implements Observer {
                             client.start();
                         } catch (UnknownHostException e1) {
                             StartForm.showNotificationLabel("Server is not available", Color.RED);
+                            client = null;
                             return;
                         } catch (IOException e1) {
                             StartForm.showNotificationLabel("Unable to connect to server", Color.RED);
+                            client = null;
                             return;
                         }
                     }

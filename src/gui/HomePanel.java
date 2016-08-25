@@ -143,6 +143,8 @@ public class HomePanel extends JPanel {
         surnamePanelInfo.setText(user.getSurname());
         dateOfBirthPanelInfo.setText(user.getDateOfBirth());
 
+        bottomPanel.removeAll();
+
         if (user.getFriendsList().size() > 0) {
             for (int i = 0; i < (user.getFriendsList().size() / 5) + 1; i++) {
                 for (int j = 0; j < 5; j++) {

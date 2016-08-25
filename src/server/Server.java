@@ -5,53 +5,80 @@ import logic.PotentialFriend;
 import logic.RegistrationModel;
 import logic.User;
 import logic.command.*;
+import main.server.ServerApplication;
+import static main.server.ServerApplication.dateFormat;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Server implements Runnable{
+public class Server extends Thread {
 
     private ServerSocket serverSocket;
     private Thread mainThread;
     private volatile Database database;
     private BlockingQueue<ClientThread> clients;
 
+    private StringBuilder logBuffer = new StringBuilder();
+
+    private Observable serverObservable = new Observable() {
+        @Override
+        public void notifyObservers(Object arg) {
+            setChanged();
+            super.notifyObservers(arg);
+        }
+    };
+
     public Server(int port) {
         try {
             this.serverSocket = new ServerSocket(port);
+            logBuffer.append(dateFormat.format(new Date())+" ServerSocket created with port: " + port + "\n");
             this.database = new Database();
-            clients = new LinkedBlockingDeque<ClientThread>();
+            logBuffer.append(dateFormat.format(new Date())+" Database uploaded.\n");
+            clients = new LinkedBlockingDeque<>();
+            logBuffer.append(dateFormat.format(new Date())+" Queue for users thread created.\n");
         } catch (UnknownHostException e) {
-            System.out.println("Неизвестный хост: " + e.getMessage());
+            System.err.println("Неизвестный хост: " + e.getMessage());
+            logBuffer.append(dateFormat.format(new Date())+" Unknown host: " + e.getMessage() + "\n");
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            logBuffer.append(e.getCause() + " " + e.getMessage() + "\n");
+            System.err.println(e.getMessage());
         }
+
     }
 
     public void run() {
-        mainThread = Thread.currentThread();
-        while (true) {
+        logBuffer.append(dateFormat.format(new Date())+" Server is ready to work.\n");
+        serverObservable.notifyObservers(logBuffer.toString());
+        logBuffer.delete(0, logBuffer.length());
+        //mainThread = Thread.currentThread();
+        while (!this.isInterrupted()) {//(true) {
             try {
                 Socket newSocket = getNewConnection(); // получаем соединение с кем-то
-                if (mainThread.isInterrupted()) {
+                if (this.isInterrupted()) {
+                    logBuffer.append(dateFormat.format(new Date())+" Thread interrupted.\n");
                     break;
                 } else if (newSocket != null) {
+                    logBuffer.append(dateFormat.format(new Date())+" Receive new connection from " + newSocket.getInetAddress() + "\n");
                     final ClientThread clThread = new ClientThread(newSocket);
                     final Thread thread = new Thread(clThread); // поток обработки комманд
 
                     thread.setDaemon(true);
                     thread.setPriority(Thread.NORM_PRIORITY);
                     thread.start();
+                    logBuffer.append(dateFormat.format(new Date())+" Thread for working with new client is starting.");
 
                     clients.add(clThread); //добавляем в очередь
                 }
+                serverObservable.notifyObservers(logBuffer.toString());
+                logBuffer.delete(0, logBuffer.length() - 1);
             } catch (IOException e) {
                 //stop();
             }
@@ -68,11 +95,26 @@ public class Server implements Runnable{
         return s;
     }
 
-    public void stop() throws IOException {
+    /*public void stop() throws IOException {
         if (!mainThread.isInterrupted() && mainThread.isAlive()){
             mainThread.interrupt();
             serverSocket.close();
+
         }
+    }*/
+
+    @Override
+    public void interrupt() {
+        super.interrupt();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            //
+        }
+    }
+
+    public void addObserver(Observer o) {
+        serverObservable.addObserver(o);
     }
 
     /**
@@ -226,13 +268,19 @@ public class Server implements Runnable{
                             }
 
                             if (user != null) { //если рега успешна - отправка полученого объекта User
+                                logBuffer.append(dateFormat.format(new Date())+" +New user registered. Nick: " + user.getNickname() + " ID: " + user.getUniqueID() + ".\n");
                                 rsCommand = new RegistrationStatusCommand(true, user);
                             } else { //если не успешна - то отправляем причину
                                 String exceptionDescription = "This nickname is already registered! Sorry, try another.";
+                                logBuffer.append(dateFormat.format(new Date())+" !User didn't register. Cause:" + exceptionDescription + "\n");
                                 rsCommand = new RegistrationStatusCommand(false, exceptionDescription);
                             }
 
                             send(rsCommand);
+
+                            //logBuffer.append(rsCommand.getClass().getCanonicalName()+"sent to client.\n");
+                            serverObservable.notifyObservers(logBuffer.toString());
+                            logBuffer.delete(0, logBuffer.length());
 
                         } else if (lastCommand instanceof LoginCommand) { // клиент отправляет эту команду для входа в систему
 
@@ -241,6 +289,7 @@ public class Server implements Runnable{
                             LoginStatusCommand lsCommand;
                             if (logCommand.getVersion().equals(Config.VERSION_ID)) {
                                 if (user != null) { // если все верно и выдало объект User
+                                    logBuffer.append(dateFormat.format(new Date())+" /User NICK: " + user.getNickname() + " sign in successfully.\n");
                                     goOnline(user.getNickname(), connection);
                                     lsCommand = new LoginStatusCommand(user);
                                     lsCommand.setFriendOnline(retainAllFriendOnline(user.getFriendsSet()));
@@ -260,9 +309,13 @@ public class Server implements Runnable{
                                 } else {
                                     lsCommand = new LoginStatusCommand();
                                     lsCommand.setExceptionDescription("Wrong login or password!");
+                                    logBuffer.append(dateFormat.format(new Date())+" !Unsuccessfully sign in. Cause: " + lsCommand.getExceptionDescription() + "\n");
                                 }
 
                                 send(lsCommand);// отправка логин статуса
+                                //logBuffer.append(lsCommand.getClass().getCanonicalName()+"sent to client.");
+                                serverObservable.notifyObservers(logBuffer.toString());
+                                logBuffer.delete(0, logBuffer.length());
 
                                 if (histories != null) {
                                     for (Stack<HistoryPacketCommand> historyPacketCommands : histories) { // проход истори с каждым собеседником
@@ -278,9 +331,9 @@ public class Server implements Runnable{
                                         }
 
                                         final Stack<HistoryPacketCommand> toWritting = tmp;
-                                        /*EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
+                                        EventQueue.invokeLater(new Runnable() {//запись непрочитанных в прочитанные
                                             @Override
-                                            public void run() {*/
+                                            public void run() {
                                                 if (!toWritting.empty()) {
                                                     String nickname_asker = toWritting.peek().getNickname_host();
                                                     String nickname_friend = toWritting.peek().getNickname_companion();
@@ -299,27 +352,32 @@ public class Server implements Runnable{
                                                     }
                                                 }
 
-                                            //}
-                                        //});
+                                            }
+                                        });
                                     }
                                 }
 
-                                /*EventQueue.invokeLater(new Runnable() {
+                                EventQueue.invokeLater(new Runnable() {
                                     @Override
-                                    public void run() {*/
+                                    public void run() {
                                         broadcastOnlineFriend(user.getNickname());
 
                                         LinkedList<Command> missingCommands = loadAwaitingCommands(user.getNickname());
                                         for (Command command : missingCommands) {
                                             send(command);
                                         }
-                                    //}
-                                //});
+                                    }
+                                });
 
                             } else {
                                 lsCommand = new LoginStatusCommand();
                                 lsCommand.setExceptionDescription("An outdated version of the program. Update please!");
+                                logBuffer.append(dateFormat.format(new Date())+" !Unsuccessfully sign in. Cause: " + lsCommand.getExceptionDescription() + "\n");
                                 send(lsCommand);
+
+                                //logBuffer.append(lsCommand.getClass().getSimpleName()+"sent to client.");
+                                serverObservable.notifyObservers(logBuffer.toString());
+                                logBuffer.delete(0, logBuffer.length());
                             }
 
 
@@ -422,6 +480,20 @@ public class Server implements Runnable{
 
                             HistoryPacketCommand hpCommand = (HistoryPacketCommand) lastCommand;
 
+                            boolean isExist = false;
+                            for (Stack<HistoryPacketCommand> historyPacketCommands : histories) {
+                                if (!historyPacketCommands.empty() &&
+                                        historyPacketCommands.peek().getNickname_host().equals(user.getNickname()) &&
+                                        historyPacketCommands.peek().getNickname_companion().equals(hpCommand.getNickname_companion())) {
+                                    isExist = true;
+                                    break;
+                                }
+                            }
+
+                            if (!isExist) {
+                                histories.add(loadHistory(hpCommand.getNickname_host(), hpCommand.getNickname_companion()));
+                            }
+
                             for (Stack<HistoryPacketCommand> historyPacketCommands : histories) {
                                 if (!historyPacketCommands.empty() &&
                                         historyPacketCommands.peek().getNickname_host().equals(user.getNickname()) &&
@@ -502,13 +574,10 @@ public class Server implements Runnable{
 
                     } else close();
 
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     goOffline(user.getNickname());
                     broadcastOfflineFriend(user.getNickname());
                     close();
-                    //TODO
-                } catch (ClassNotFoundException e) {
-                    //TODO
                 }
             }
         }
@@ -518,6 +587,9 @@ public class Server implements Runnable{
                 if (connection.isOpen())
                     this.connection.sendCommand(command);
             } catch (IOException e) {
+                logBuffer.append(dateFormat.format(new Date())+" !SENDING ERROR: " + ((user != null) ? user.getNickname() : " null ") + command.getClass().getSimpleName() + "\n");
+                serverObservable.notifyObservers(logBuffer.toString());
+                logBuffer.delete(0, logBuffer.length());
                 System.err.println("Ошибка отправки!");
             }
         }
@@ -555,6 +627,10 @@ public class Server implements Runnable{
             clients.remove(this);
             try {
                 connection.close();
+
+                logBuffer.append(dateFormat.format(new Date())+" !CLOSE CONNECTION: " + ((user != null) ? user.getNickname() : " null ") + "\n");
+                serverObservable.notifyObservers(logBuffer.toString());
+                logBuffer.delete(0, logBuffer.length());
             } catch (IOException e) {
                 //TODO
             }

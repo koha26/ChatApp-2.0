@@ -49,7 +49,7 @@ public class FriendSideLook extends JPanel {
         add(photoLabel);
         deleteButton = new JButton();
         deleteButton.setContentAreaFilled(false);
-        deleteButton.setIcon(new ImageIcon("delete.png"));
+        deleteButton.setIcon(new ImageIcon("images/mainform/delete.png"));
         deleteButton.setBorder(null);
         deleteButton.setFocusPainted(false);
         deleteButton.setOpaque(false);

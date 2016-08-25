@@ -1,5 +1,6 @@
 package gui;
 
+import logic.Constants;
 import logic.ImageSerializable;
 import logic.RegistrationModel;
 import logic.Sex;
@@ -12,6 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class StartForm extends JFrame {
+    private JPanel mainPanel;
+    private JScrollPane mainScrollPane;
     private RegPanel regPanel;
     private LoginPanel loginPanel;
     private JLabel helloLabel;
@@ -24,11 +27,21 @@ public class StartForm extends JFrame {
 
     public void changeSize() {
         if (!isChanged) {
-            this.setSize(960, 860);
+            if (Constants.SCRDIM_KY < 1) {
+                mainScrollPane.setSize(960, (int) (860 * Constants.SCRDIM_KY));
+                mainPanel.setPreferredSize(new Dimension(960, 860));
+            }
+            setSize(960, (int) (860 * Constants.SCRDIM_KY));
+            mainPanel.setSize(960, 860);
             exitButton.setBounds(430, 760, 100, 50);
             this.setLocation(this.getLocationOnScreen());
         } else {
-            setSize(960, 550);
+            if (Constants.SCRDIM_KY < 1) {
+                mainScrollPane.setSize(960, (int) (550 * Constants.SCRDIM_KY));
+                mainPanel.setPreferredSize(new Dimension(960, 550));
+            }
+            setSize(960, (int) (550 * Constants.SCRDIM_KY));
+            mainPanel.setSize(960, 550);
             exitButton.setBounds(430, 450, 100, 50);
             this.setLocation(this.getLocationOnScreen());
         }
@@ -44,9 +57,16 @@ public class StartForm extends JFrame {
 
     public StartForm() {
         GUIStandartOperations.FrameStartOperations(this);
-        setSize(960, 550);
         setLocationRelativeTo(null);
+        setSize(960, (int) (550 * Constants.SCRDIM_KY));
         setLayout(null);
+
+        mainPanel = new JPanel(null);
+        mainPanel.setBackground(new Color(0, 0, 0, 0));
+        mainPanel.setOpaque(false);
+        mainPanel.setBounds(0, 0, 960, (int) (550 * Constants.SCRDIM_KY));
+
+        mainScrollPane = null;
 
         popUpMenu = new PopUpMenu();
         popUpMenu.setPopUpMenu();
@@ -143,11 +163,43 @@ public class StartForm extends JFrame {
         loginPanel.setBounds(0, 120, 1000, 1000);
         regPanel.setBounds(0, 120, 1000, 1000);
 
-        add(helloLabel);
-        add(loginPanel);
-        add(exitButton);
-        add(regPanel);
-        add(notificationTextField);
+        mainPanel.add(helloLabel);
+        mainPanel.add(loginPanel);
+        mainPanel.add(exitButton);
+        mainPanel.add(regPanel);
+        mainPanel.add(notificationTextField);
+
+        if (Constants.SCRDIM_KY < 1) {
+            mainPanel.setPreferredSize(new Dimension(960, 550));
+            mainScrollPane = new JScrollPane(mainPanel);
+            mainScrollPane.setBounds(0, 0, 960, 550);
+            mainScrollPane.setOpaque(false);
+            mainScrollPane.getViewport().setOpaque(false);
+            mainScrollPane.setBorder(null);
+            mainScrollPane.getVerticalScrollBar().setUI(new ChatAppVerticalScrollBarUI());
+            mainScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+            mainScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            mainScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            add(mainScrollPane);
+            mainScrollPane.addMouseListener(new MouseAdapter() {
+                public void mouseReleased(MouseEvent e) {
+                    mouseDownCompCoords = null;
+                }
+
+                public void mousePressed(MouseEvent e) {
+                    mouseDownCompCoords = e.getPoint();
+                }
+            });
+
+            mainScrollPane.addMouseMotionListener(new MouseAdapter() {
+                public void mouseDragged(MouseEvent e) {
+                    Point currCoords = e.getLocationOnScreen();
+                    setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+                }
+            });
+        } else {
+            add(mainPanel);
+        }
 
         RepaintFrame repaintFrame = new RepaintFrame(this);
         Thread repaintThread = new Thread(repaintFrame);
@@ -157,9 +209,14 @@ public class StartForm extends JFrame {
     }
 
     void setLoginMode(String nickname) {
+        if (Constants.SCRDIM_KY < 1) {
+            mainPanel.setPreferredSize(new Dimension(960, 550));
+            mainScrollPane.setSize(960, (int) (550 * Constants.SCRDIM_KY));
+        }
         loginPanel.setVisible(true);
         regPanel.setVisible(false);
-        this.setSize(960, 550);
+        this.setSize(960, (int) (550 * Constants.SCRDIM_KY));
+        mainPanel.setSize(960, 550);
         exitButton.setBounds(430, 450, 100, 50);
         this.setLocationRelativeTo(null);
         loginPanel.getNickField().setText(nickname);
@@ -168,6 +225,12 @@ public class StartForm extends JFrame {
     }
 
     void setRegistrationMode() {
+        if (Constants.SCRDIM_KY < 1) {
+            mainPanel.setPreferredSize(new Dimension(960, 550));
+            mainScrollPane.setSize(960, (int) (550 * Constants.SCRDIM_KY));
+        }
+        setSize(960, (int) (550 * Constants.SCRDIM_KY));
+        mainPanel.setSize(960, 550);
         loginPanel.setVisible(false);
         regPanel.setVisible(true);
         mode = Mode.REGISTRATION_ON;
