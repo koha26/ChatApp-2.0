@@ -109,30 +109,30 @@ public class Application implements Observer {
 
 
         mainForm.getFriendSidePanel().getFriendsPanel().addMouseListener(new MouseAdapter() {
-            Thread thread;
-
-            @Override
-            public void mouseEntered(final MouseEvent e) {
-                super.mouseMoved(e);
-                /*thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {*/
-                        while (true) {
-                            System.out.println(e.getComponent().getComponentAt(e.getPoint()));
-                            if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendSideLook) {
-                                FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
-                                System.out.println(friendSideLook.getNickLabel().getText());
-                            }
-                            try {
-                                Thread.sleep(1);
-                            } catch (InterruptedException e1) {
-                                e1.printStackTrace();
-                            }
-                        }
-                    /*}
-                });
-                thread.start();*/
-            }
+//            Thread thread;
+//
+//            @Override
+//            public void mouseEntered(final MouseEvent e) {
+//                super.mouseMoved(e);
+//                /*thread = new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {*/
+//                        while (true) {
+//                            System.out.println(e.getComponent().getComponentAt(e.getPoint()));
+//                            if (e.getComponent().getComponentAt(e.getPoint()) instanceof FriendSideLook) {
+//                                FriendSideLook friendSideLook = (FriendSideLook) e.getComponent().getComponentAt(e.getPoint());
+//                                System.out.println(friendSideLook.getNickLabel().getText());
+//                            }
+//                            try {
+//                                Thread.sleep(1);
+//                            } catch (InterruptedException e1) {
+//                                e1.printStackTrace();
+//                            }
+//                        }
+//                    /*}
+//                });
+//                thread.start();*/
+//            }
 
             /*@Override
             public void mouseExited(MouseEvent e) {
@@ -205,7 +205,7 @@ public class Application implements Observer {
                 if (mainForm.getFriendSidePanel().getSearchTextField().getText().equals("")) {
                     Toolkit.getDefaultToolkit().beep();
                 } else {
-                    mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(20, 10, 180, 50);
+                    mainForm.getFriendSidePanel().getGlobalSearchButton().setBounds(40, 10, 180, 50);
                     client.sendSearchCommand(mainForm.getFriendSidePanel().getSearchTextField().getText());
                 }
             }

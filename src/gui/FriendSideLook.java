@@ -14,9 +14,13 @@ public class FriendSideLook extends JPanel {
     private Friend friend;
     private MiniFriendLook friendLook;
     private Timer t;
-    private JButton deleteButton;
+    private JButton deleteButton, statusButton;
     private ImageIcon deleteButIcon = new ImageIcon("images/mainform/delete.png");
+//    private ImageIcon deleteButIcon = new ImageIcon("images/mainform/remove.png");
     private ImageIcon deleteButIconEntered = new ImageIcon("images/mainform/delete_entered.png");
+    private ImageIcon onlineIcon = new ImageIcon("images/mainform/on.png");
+    private ImageIcon offlineIcon = new ImageIcon("images/mainform/off.png");
+    private JPanel leftPanel, rightPanel;
 
     public JButton getDeleteButton() {
         return deleteButton;
@@ -28,9 +32,23 @@ public class FriendSideLook extends JPanel {
 
     public FriendSideLook(Friend friend) {
         this.friend = friend;
-        setLayout(new BorderLayout(15, 0));
+        setLayout(null);
         setBackground(new Color(0, 0, 0, 100));
         setBorder(null);
+
+        leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
+        leftPanel.setBorder(null);
+
+        rightPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        rightPanel.setOpaque(false);
+        rightPanel.setBorder(null);
+
+        statusButton = new JButton();
+        statusButton.setContentAreaFilled(false);
+        statusButton.setFocusPainted(false);
+        statusButton.setBorder(null);
+        statusButton.setFocusable(false);
 
         BufferedImage scaled = new BufferedImage(50, 50, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = scaled.createGraphics();
@@ -46,7 +64,6 @@ public class FriendSideLook extends JPanel {
         nickLabel.setForeground(Color.WHITE);
         nickLabel.setFont(Fonts.typingFont);
 
-        add(photoLabel);
         deleteButton = new JButton();
         deleteButton.setContentAreaFilled(false);
         deleteButton.setIcon(new ImageIcon("images/mainform/delete.png"));
@@ -67,9 +84,17 @@ public class FriendSideLook extends JPanel {
             }
         });
 
-        add(photoLabel, BorderLayout.WEST);
-        add(nickLabel, BorderLayout.CENTER);
-        add(deleteButton, BorderLayout.EAST);
+
+        leftPanel.add(statusButton);
+        leftPanel.add(photoLabel);
+        leftPanel.add(nickLabel);
+        rightPanel.add(deleteButton);
+
+        leftPanel.setBounds(0, 0, 240, 60);
+        rightPanel.setBounds(210, 10, 64, 64);
+
+        add(leftPanel);
+        add(rightPanel);
 
         friendLook = new MiniFriendLook(friend);
         friendLook.setVisible(false);
@@ -97,6 +122,18 @@ public class FriendSideLook extends JPanel {
                 }
             }
         });
+    }
+
+    public JButton getStatusButton() {
+        return statusButton;
+    }
+
+    public void setOnline() { // установка онлайн иконки для друга
+        statusButton.setIcon(onlineIcon);
+    }
+
+    public void setOffline() { // установка оффлайн иконки для друга
+        statusButton.setIcon(offlineIcon);
     }
 
     private Point getLocationOfLook() {

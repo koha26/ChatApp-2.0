@@ -78,7 +78,7 @@ public class MainForm extends JFrame {
         dialogTabArrayList = new ArrayList<>();
 
         bigPanel = new JPanel(null);
-        bigPanel.setSize(1210, 600);
+        bigPanel.setSize(1300, 600);
         bigPanel.setOpaque(false);
         bigPanel.setBackground(new Color(0, 0, 0, 0));
 
@@ -145,7 +145,7 @@ public class MainForm extends JFrame {
 
         friendSidePanel = new FriendSidePanel();
         friendSidePanel.setBorder(null);
-        friendSidePanel.setBounds(970, 75, 260, 500);
+        friendSidePanel.setBounds(970, 50, 450, 650);
         bigPanel.add(friendSidePanel);
 
         noConversationsPanel = new JPanel(null);
@@ -524,7 +524,7 @@ public class MainForm extends JFrame {
                 }
             });
             friendPanelButton.setIcon(friendSideCloseIcon);
-            setSize(1250, 610);
+            setSize(1300, 610);
         } else {
             setSize(960, 610);
             friendPanelButton.setIcon(friendSideOpenIcon);
